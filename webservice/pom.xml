@@ -49,7 +49,7 @@
                             <wsdlRoot>${basedir}/src/main/resources/wsdl</wsdlRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/wsdl/LibraryService.wsdl</wsdl>
+                                    <wsdl>https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl</wsdl>
                                     <serviceName>WebService</serviceName>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
