@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence">
     
-    <persistence-unit name="kylibrary">
+    <persistence-unit name="kylibrary" transaction-type="RESOURCE_LOCAL">
         
         <!-- [PROVIDER] -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -16,6 +16,9 @@
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernante.format_sql" value="true"/>
+            
+            <!-- Auto detect test -->
+            <property name="hibernate.archive.autodetection" value="class"/>
             
         </properties>
         
