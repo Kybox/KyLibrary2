@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:ws="dd7b026a-d6a2-4089-adb2-596ab0598c73"
+                  name="WebService">
+    
+    <wsdl:types>
+        <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
+            
+            <!-- [USER] -->
+            <xs:element name="User">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ID" type="xs:integer"/>
+                        <xs:element name="firstName" type="xs:string"/>
+                        <xs:element name="lastName" type="xs:string"/>
+                        <xs:element name="birthday" type="xs:date"/>
+                        <xs:element name="postalAddress" type="xs:string"/>
+                        <xs:element name="tel" type="xs:string"/>
+                        <xs:element name="email" type="xs:string"/>
+                        <xs:element ref="ws:BookList"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [USER LIST] -->
+            <xs:element name="UserList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:User" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [LOGIN USER] -->
+            <xs:element name="loginUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="login" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:User"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [BOOK] -->
+            <xs:element name="Book">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ISBN" type="xs:string"/>
+                        <xs:element name="Title" type="xs:string"/>
+                        <xs:element name="Author" type="xs:string"/>
+                        <xs:element name="Publisher" type="xs:string"/>
+                        <xs:element name="PublishDate" type="xs:string"/>
+                        <xs:element name="Summary" type="xs:string"/>
+                        <xs:element name="Genre" type="xs:string"/>
+                        <xs:element name="Available" type="xs:integer"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [BOOK LIST] -->
+            <xs:element name="BookList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:Book" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [SEARCH BOOK] -->
+            <xs:element name="searchBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="keywords" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchBookResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:BookList"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    
+    <!-- [MESSAGES] -->
+    <wsdl:message name="loginUser">
+        <wsdl:part name="parameters" element="ws:loginUser"/>
+    </wsdl:message>
+    <wsdl:message name="loginUserResponse">
+        <wsdl:part name="parameter" element="ws:loginUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchBook">
+        <wsdl:part name="parameters" element="ws:searchBook"/>
+    </wsdl:message>
+    <wsdl:message name="searchBookResponse">
+        <wsdl:part name="parameter" element="ws:searchBookResponse"/>
+    </wsdl:message>
+    
+    <!-- [PORT TYPE] -->
+    <wsdl:portType name="LibraryService">
+        <wsdl:operation name="loginUser">
+            <wsdl:input message="ws:loginUser"/>
+            <wsdl:output message="ws:loginUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchBook">
+            <wsdl:input message="ws:searchBook"/>
+            <wsdl:output message="ws:searchBookResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <!-- [BINDING] -->
+    <wsdl:binding name="LibraryServicePortBinding" type="ws:LibraryService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="loginUser">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchBook">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <!-- [SERVICE] -->
+    <wsdl:service name="WebService">
+        <wsdl:documentation>
+            Provides services from KyLibrary
+        </wsdl:documentation>
+        <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
+            <soap:address location="http://localhost:8080/KyLibrary/WebService"/>
+        </wsdl:port>
+    </wsdl:service>
+    
+</wsdl:definitions>
