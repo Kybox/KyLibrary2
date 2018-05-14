@@ -31,6 +31,12 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
         
+        <!-- [HIBERNATE] -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        
     </dependencies>
     
     <!-- [BUILD] -->
