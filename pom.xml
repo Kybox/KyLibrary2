@@ -17,6 +17,7 @@
     <properties>
         <cxf.version>3.2.4</cxf.version>
         <hibernate.version>5.2.17.Final</hibernate.version>
+        <postgresql.version>42.2.2</postgresql.version>
     </properties>
     
     <!-- [DEPENDENCIES MANAGEMENT] -->
@@ -45,6 +46,13 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
+            </dependency>
+            
+            <!-- [POSTGRESQL] -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
             </dependency>
             
         </dependencies>
