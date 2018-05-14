@@ -8,9 +8,38 @@
     <artifactId>kylibrary</artifactId>
     <version>1.0-SNAPSHOT</version>
     
+    <!-- [MODULES] -->
     <modules>
         <module>webservice</module>
     </modules>
 
+    <!-- [PROPERTIES] -->
+    <properties>
+        <cxf.version>3.2.4</cxf.version>
+    </properties>
+    
+    <!-- [DEPENDENCIES MANAGEMENT] -->
+    <dependencyManagement>
+        <dependencies>
+            
+            <!-- [APACHE CXF] -->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-jaxb</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
 
 </project>
