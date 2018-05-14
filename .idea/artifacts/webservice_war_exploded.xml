@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="webservice:war exploded">
-    <output-path>$PROJECT_DIR$/webservice/target/webservice-1.0-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/webservice/target/KyLibrary</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -38,7 +38,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/webservice/target/webservice-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/webservice/target/KyLibrary/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="webservice/web/Web" />
     </root>
