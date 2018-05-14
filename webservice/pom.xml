@@ -13,5 +13,23 @@
     <artifactId>webservice</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- [DEPENDENCIES] -->
+    <dependencies>
+        
+        <!-- [APACHE CXF] -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+        </dependency>
+        
+    </dependencies>
     
 </project>
