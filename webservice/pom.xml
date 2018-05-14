@@ -37,6 +37,12 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
         
+        <!-- [POSTGRESQL] -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        
     </dependencies>
     
     <!-- [BUILD] -->
