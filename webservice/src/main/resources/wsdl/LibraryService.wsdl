@@ -142,12 +142,12 @@
     </wsdl:binding>
     
     <!-- [SERVICE] -->
-    <wsdl:service name="WebService">
+    <wsdl:service name="LibraryWebService">
         <wsdl:documentation>
             Provides services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
-            <soap:address location="http://localhost:8080/KyLibrary/WebService"/>
+            <soap:address location="http://localhost:8080/KyLibrary/WebService/LibraryWebService"/>
         </wsdl:port>
     </wsdl:service>
     
