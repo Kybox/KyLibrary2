@@ -10,7 +10,7 @@
         <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
             
             <!-- [USER] -->
-            <xs:element name="User">
+            <xs:element name="User" nillable="true">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="ID" type="xs:integer"/>
@@ -21,15 +21,6 @@
                         <xs:element name="tel" type="xs:string"/>
                         <xs:element name="email" type="xs:string"/>
                         <xs:element ref="ws:BookList"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
-            <!-- [USER LIST] -->
-            <xs:element name="UserList">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element ref="ws:User" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -63,6 +54,10 @@
                         <xs:element name="Summary" type="xs:string"/>
                         <xs:element name="Genre" type="xs:string"/>
                         <xs:element name="Available" type="xs:integer"/>
+                        
+                        <!-- // Only for user bookList -->
+                        <xs:element name="ReturnDate" type="xs:date" nillable="true"/>
+                        <xs:element name="Extended" type="xs:boolean" nillable="true"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
