@@ -147,7 +147,7 @@
             Provides services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
-            <soap:address location="http://localhost:8080/KyLibrary/WebService/LibraryWebService"/>
+            <soap:address location="http://localhost:8080/KyLibrary/WebService/SOAP/LibraryWebService"/>
         </wsdl:port>
     </wsdl:service>
     
