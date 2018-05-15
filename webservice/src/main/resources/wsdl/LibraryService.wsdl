@@ -55,7 +55,7 @@
                         <xs:element name="Genre" type="xs:string"/>
                         <xs:element name="Available" type="xs:integer"/>
                         
-                        <!-- // Only for user bookList -->
+                        <!-- Only for user bookList -->
                         <xs:element name="ReturnDate" type="xs:date" nillable="true"/>
                         <xs:element name="Extended" type="xs:boolean" nillable="true"/>
                     </xs:sequence>
