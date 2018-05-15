@@ -20,10 +20,6 @@
         <!-- [APACHE CXF] -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-databinding-jaxb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
         </dependency>
         <dependency>
@@ -43,6 +39,16 @@
             <artifactId>postgresql</artifactId>
         </dependency>
         
+        <!-- [SPRING FRAMEWORK] -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        
     </dependencies>
     
     <!-- [BUILD] -->
@@ -58,11 +64,9 @@
                         <configuration>
                             <encoding>UTF-8</encoding>
                             <sourceRoot>${basedir}/src/main/java</sourceRoot>
-                            <wsdlRoot>${basedir}/src/main/resources/wsdl</wsdlRoot>
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl</wsdl>
-                                    <serviceName>WebService</serviceName>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
                                         <extraarg>fr.kybox.gencode</extraarg>
