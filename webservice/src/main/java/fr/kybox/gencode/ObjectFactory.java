@@ -1,7 +1,10 @@
 
 package fr.kybox.gencode;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -21,6 +24,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _User_QNAME = new QName("dd7b026a-d6a2-4089-adb2-596ab0598c73", "User");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: fr.kybox.gencode
@@ -35,30 +39,6 @@ public class ObjectFactory {
      */
     public User createUser() {
         return new User();
-    }
-
-    /**
-     * Create an instance of {@link BookList }
-     * 
-     */
-    public BookList createBookList() {
-        return new BookList();
-    }
-
-    /**
-     * Create an instance of {@link Book }
-     * 
-     */
-    public Book createBook() {
-        return new Book();
-    }
-
-    /**
-     * Create an instance of {@link UserList }
-     * 
-     */
-    public UserList createUserList() {
-        return new UserList();
     }
 
     /**
@@ -78,6 +58,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Book }
+     * 
+     */
+    public Book createBook() {
+        return new Book();
+    }
+
+    /**
+     * Create an instance of {@link BookList }
+     * 
+     */
+    public BookList createBookList() {
+        return new BookList();
+    }
+
+    /**
      * Create an instance of {@link SearchBook }
      * 
      */
@@ -91,6 +87,15 @@ public class ObjectFactory {
      */
     public SearchBookResponse createSearchBookResponse() {
         return new SearchBookResponse();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", name = "User")
+    public JAXBElement<User> createUser(User value) {
+        return new JAXBElement<User>(_User_QNAME, User.class, null, value);
     }
 
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "loginUserResponse")
 public class LoginUserResponse {
 
-    @XmlElement(name = "User", namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    @XmlElement(name = "User", namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true, nillable = true)
     protected User user;
 
     /**

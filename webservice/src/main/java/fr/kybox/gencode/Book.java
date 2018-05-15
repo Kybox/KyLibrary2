@@ -6,7 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -27,6 +29,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
+ *         &lt;element name="ReturnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="Extended" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -44,7 +48,9 @@ import javax.xml.bind.annotation.XmlType;
     "publishDate",
     "summary",
     "genre",
-    "available"
+    "available",
+    "returnDate",
+    "extended"
 })
 @XmlRootElement(name = "Book")
 public class Book {
@@ -65,6 +71,11 @@ public class Book {
     protected String genre;
     @XmlElement(name = "Available", required = true)
     protected BigInteger available;
+    @XmlElement(name = "ReturnDate", required = true, nillable = true)
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar returnDate;
+    @XmlElement(name = "Extended", required = true, type = Boolean.class, nillable = true)
+    protected Boolean extended;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -256,6 +267,54 @@ public class Book {
      */
     public void setAvailable(BigInteger value) {
         this.available = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété returnDate.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public XMLGregorianCalendar getReturnDate() {
+        return returnDate;
+    }
+
+    /**
+     * Définit la valeur de la propriété returnDate.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public void setReturnDate(XMLGregorianCalendar value) {
+        this.returnDate = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété extended.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isExtended() {
+        return extended;
+    }
+
+    /**
+     * Définit la valeur de la propriété extended.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setExtended(Boolean value) {
+        this.extended = value;
     }
 
 }
