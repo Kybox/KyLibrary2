@@ -1,7 +1,12 @@
 
 package fr.kybox.gencode;
 
+import fr.kybox.entities.AbstractEntity;
+
 import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -53,7 +58,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "extended"
 })
 @XmlRootElement(name = "book")
-public class Book {
+@Entity
+@NamedQueries({
+        @NamedQuery(name = Book.FIND_BOOKS_BY_KEYWORDS, query = "SELECT b FROM Book b WHERE UPPER(:keywords) LIKE UPPER(Book.title)")
+})
+public class Book extends AbstractEntity {
+
+    public static final String FIND_BOOKS_BY_KEYWORDS = "findBookByKeywords";
 
     @XmlElement(name = "ISBN", required = true)
     protected String isbn;
