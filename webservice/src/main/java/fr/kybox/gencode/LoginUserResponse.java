@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}User"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "loginUserResponse")
 public class LoginUserResponse {
 
-    @XmlElement(name = "User", namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true, nillable = true)
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true, nillable = true)
     protected User user;
 
     /**

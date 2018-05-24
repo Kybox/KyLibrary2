@@ -52,7 +52,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "returnDate",
     "extended"
 })
-@XmlRootElement(name = "Book")
+@XmlRootElement(name = "book")
 public class Book {
 
     @XmlElement(name = "ISBN", required = true)

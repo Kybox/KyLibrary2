@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _User_QNAME = new QName("dd7b026a-d6a2-4089-adb2-596ab0598c73", "User");
+    private final static QName _User_QNAME = new QName("dd7b026a-d6a2-4089-adb2-596ab0598c73", "user");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: fr.kybox.gencode
@@ -74,6 +74,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UserBookList }
+     * 
+     */
+    public UserBookList createUserBookList() {
+        return new UserBookList();
+    }
+
+    /**
+     * Create an instance of {@link UserBookListResponse }
+     * 
+     */
+    public UserBookListResponse createUserBookListResponse() {
+        return new UserBookListResponse();
+    }
+
+    /**
      * Create an instance of {@link SearchBook }
      * 
      */
@@ -93,7 +109,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", name = "User")
+    @XmlElementDecl(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", name = "user")
     public JAXBElement<User> createUser(User value) {
         return new JAXBElement<User>(_User_QNAME, User.class, null, value);
     }

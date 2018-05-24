@@ -27,7 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}BookList"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookList"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -64,7 +64,7 @@ public class User {
     protected String tel;
     @XmlElement(required = true)
     protected String email;
-    @XmlElement(name = "BookList", namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected BookList bookList;
 
     /**

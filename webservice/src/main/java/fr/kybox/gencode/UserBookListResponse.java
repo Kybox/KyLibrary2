@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "bookList"
 })
-@XmlRootElement(name = "searchBookResponse")
-public class SearchBookResponse {
+@XmlRootElement(name = "userBookListResponse")
+public class UserBookListResponse {
 
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected BookList bookList;
