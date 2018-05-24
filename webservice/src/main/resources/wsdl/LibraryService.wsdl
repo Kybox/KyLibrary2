@@ -10,7 +10,7 @@
         <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
             
             <!-- [USER] -->
-            <xs:element name="User" nillable="true">
+            <xs:element name="user" nillable="true">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="ID" type="xs:integer"/>
@@ -20,7 +20,7 @@
                         <xs:element name="postalAddress" type="xs:string"/>
                         <xs:element name="tel" type="xs:string"/>
                         <xs:element name="email" type="xs:string"/>
-                        <xs:element ref="ws:BookList"/>
+                        <xs:element ref="ws:bookList"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -37,13 +37,13 @@
             <xs:element name="loginUserResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:User"/>
+                        <xs:element ref="ws:user"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             
             <!-- [BOOK] -->
-            <xs:element name="Book">
+            <xs:element name="book">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="ISBN" type="xs:string"/>
@@ -56,17 +56,33 @@
                         <xs:element name="Available" type="xs:integer"/>
                         
                         <!-- Only for user bookList -->
-                        <xs:element name="ReturnDate" type="xs:date" nillable="true"/>
-                        <xs:element name="Extended" type="xs:boolean" nillable="true"/>
+                        <xs:element name="ReturnDate" type="xs:date" nillable="true" wsdl:required="false"/>
+                        <xs:element name="Extended" type="xs:boolean" nillable="true" wsdl:required="false"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             
             <!-- [BOOK LIST] -->
-            <xs:element name="BookList">
+            <xs:element name="bookList">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:Book" maxOccurs="unbounded"/>
+                        <xs:element ref="ws:book" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [USER BOOK LIST -->
+            <xs:element name="userBookList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:user"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="userBookListResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:bookList"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -82,7 +98,7 @@
             <xs:element name="searchBookResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:BookList"/>
+                        <xs:element ref="ws:bookList"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -94,13 +110,19 @@
         <wsdl:part name="parameters" element="ws:loginUser"/>
     </wsdl:message>
     <wsdl:message name="loginUserResponse">
-        <wsdl:part name="parameter" element="ws:loginUserResponse"/>
+        <wsdl:part name="response" element="ws:loginUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="userBookList">
+        <wsdl:part name="parameter" element="ws:userBookList"/>
+    </wsdl:message>
+    <wsdl:message name="userBookListResponse">
+        <wsdl:part name="response" element="ws:userBookListResponse"/>
     </wsdl:message>
     <wsdl:message name="searchBook">
         <wsdl:part name="parameters" element="ws:searchBook"/>
     </wsdl:message>
     <wsdl:message name="searchBookResponse">
-        <wsdl:part name="parameter" element="ws:searchBookResponse"/>
+        <wsdl:part name="response" element="ws:searchBookResponse"/>
     </wsdl:message>
     
     <!-- [PORT TYPE] -->
@@ -108,6 +130,10 @@
         <wsdl:operation name="loginUser">
             <wsdl:input message="ws:loginUser"/>
             <wsdl:output message="ws:loginUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="userBookList">
+            <wsdl:input message="ws:userBookList"/>
+            <wsdl:output message="ws:userBookListResponse"/>
         </wsdl:operation>
         <wsdl:operation name="searchBook">
             <wsdl:input message="ws:searchBook"/>
@@ -118,6 +144,8 @@
     <!-- [BINDING] -->
     <wsdl:binding name="LibraryServicePortBinding" type="ws:LibraryService">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        
+        <!-- LOGIN USER -->
         <wsdl:operation name="loginUser">
             <wsdl:input>
                 <soap:body use="literal"/>
@@ -126,6 +154,18 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        
+        <!-- USER BOOK LIST -->
+        <wsdl:operation name="userBookList">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <!-- SERACH BOOK -->
         <wsdl:operation name="searchBook">
             <wsdl:input>
                 <soap:body use="literal"/>
