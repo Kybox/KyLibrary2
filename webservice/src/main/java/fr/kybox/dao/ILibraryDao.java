@@ -5,7 +5,7 @@ import fr.kybox.entities.User;
 
 import java.util.List;
 
-public interface IDao {
+public interface ILibraryDao {
 
     User getUser(Integer id);
 
