@@ -16,15 +16,16 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="kylibrary" value="919b6758-775b-490e-b058-18a971172553" />
+          <factory-entry name="kylibrary" value="df3ab495-d3fb-45a6-bfd4-a4cbe8e7c1de" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="Beans" removed="false">
-          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/beans.xml</file>
+        <fileset id="fileset2" name="WebserviceContext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/webserviceContext.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/apache-cxf-services.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -76,6 +77,13 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.0.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:error:unknown" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.0.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.0.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.0.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-dbcp:9.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:9.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.11.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.11.0" level="project" />
   </component>
 </module>
