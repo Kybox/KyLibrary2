@@ -10,15 +10,11 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "user_account", schema = "public")
-@NamedQueries({
-        @NamedQuery(name = User.GET_USER_BY_ID, query = "SELECT u FROM User u WHERE u.id = :id"),
-        @NamedQuery(name = User.GET_USER_BY_LOGIN, query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password")
-})
+@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
 
 public class User extends AbstractEntity {
 
-    public static final String GET_USER_BY_ID = "User.GetUserByID";
-    public static final String GET_USER_BY_LOGIN = "User.GetUserByLogin";
+    public static final String GET_USER_BY_EMAIL = "User.GetUserByEmail";
 
     @Column
     private String email;
