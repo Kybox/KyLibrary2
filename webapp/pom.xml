@@ -14,5 +14,12 @@
     <artifactId>webapp</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <dependencies>
+        
+        <!-- [APACHE STRUTS 2] -->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>

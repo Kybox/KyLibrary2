@@ -22,6 +22,7 @@
         <hibernate.version>5.2.17.Final</hibernate.version>
         <postgresql.version>42.2.2</postgresql.version>
         <spring.version>5.0.6.RELEASE</spring.version>
+        <struts.version>2.5.16</struts.version>
         <tomcat.version>9.0.6</tomcat.version>
         <log4j.version>2.11.0</log4j.version>
         <cxf.version>3.2.4</cxf.version>
@@ -97,6 +98,15 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+            
+            <!-- APACHE STRUTS2 -->
+            <dependency>
+                <groupId>org.apache.struts</groupId>
+                <artifactId>struts2-bom</artifactId>
+                <version>${struts.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             
         </dependencies>
