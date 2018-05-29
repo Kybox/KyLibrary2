@@ -5,6 +5,6 @@
 
     <jaxws:endpoint id="LibraryService"
                     implementor="fr.kybox.service.LibraryServiceImpl"
-                    address="SOAP/LibraryWebService">
+                    address="/LibraryWebService">
     </jaxws:endpoint>
 </beans>
