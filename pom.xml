@@ -22,6 +22,7 @@
         <postgresql.version>42.2.2</postgresql.version>
         <spring.version>5.0.6.RELEASE</spring.version>
         <tomcat.version>9.0.6</tomcat.version>
+        <log4j.version>2.11.0</log4j.version>
         <cxf.version>3.2.4</cxf.version>
         <java.version>1.8</java.version>
     </properties>
@@ -88,6 +89,13 @@
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-dbcp</artifactId>
                 <version>${tomcat.version}</version>
+            </dependency>
+            
+            <!-- APACHE LOG4J -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
             
         </dependencies>
