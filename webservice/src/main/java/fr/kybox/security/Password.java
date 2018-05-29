@@ -1,6 +1,6 @@
 package fr.kybox.security;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * @author Kybox
@@ -8,10 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class Password {
 
-    public static String encode(String password){
+    public static Boolean match(String password, String dbPassword){
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        return encoder.encode(password);
+        return BCrypt.checkpw(password, dbPassword);
     }
 }
