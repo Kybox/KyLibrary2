@@ -165,7 +165,7 @@
             </wsdl:output>
         </wsdl:operation>
         
-        <!-- SERACH BOOK -->
+        <!-- SEARCH BOOK -->
         <wsdl:operation name="searchBook">
             <wsdl:input>
                 <soap:body use="literal"/>
