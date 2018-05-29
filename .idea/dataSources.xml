@@ -9,5 +9,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/kylibrary</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="kylibrary@localhost" uuid="df3ab495-d3fb-45a6-bfd4-a4cbe8e7c1de">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/kylibrary</jdbc-url>
+    </data-source>
   </component>
 </project>
