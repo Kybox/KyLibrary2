@@ -1,6 +1,7 @@
 package fr.kybox.service;
 
 import fr.kybox.dao.LibraryDao;
+import fr.kybox.dao.LibraryDaoImpl;
 import fr.kybox.entities.User;
 import fr.kybox.gencode.LibraryService;
 import fr.kybox.gencode.LoginUser;
@@ -12,7 +13,10 @@ import fr.kybox.gencode.SearchBookResponse;
 import fr.kybox.gencode.BookList;
 import fr.kybox.gencode.Book;
 
+import fr.kybox.security.Password;
 import fr.kybox.utils.Converter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -31,6 +35,8 @@ import java.util.List;
         wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl")
 public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements LibraryService {
 
+    private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
+
     @Autowired
     LibraryDao libraryDao;
 
@@ -38,15 +44,41 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public LoginUserResponse loginUser(LoginUser parameters) {
 
-        User user = libraryDao.getUserByLogin(parameters.getLogin(), parameters.getPassword());
-
         LoginUserResponse loginUserResponse = new LoginUserResponse();
-        loginUserResponse.getUser().setFirstName(user.getFirst_name());
-        loginUserResponse.getUser().setLastName(user.getLast_name());
-        loginUserResponse.getUser().setEmail(user.getEmail());
-        loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(user.getBirthday()));
-        loginUserResponse.getUser().setPostalAddress(user.getPostal_address());
-        loginUserResponse.getUser().setTel(user.getTel());
+
+        if(parameters != null){
+
+            logger.debug("Parameters defined : [OK]");
+
+            if(parameters.getLogin()!= null && parameters.getPassword() != null) {
+
+                logger.debug("Email and password defined : [OK]");
+
+                User user = libraryDao.getUserByEmail(parameters.getLogin());
+
+                if (user != null) {
+
+                    logger.debug("User created : [OK]");
+
+                    if (Password.match(parameters.getPassword(), user.getPassword())) {
+
+                        logger.debug("Password comparison : [OK]");
+
+                        loginUserResponse.setUser(new fr.kybox.gencode.User());
+                        loginUserResponse.getUser().setFirstName(user.getFirst_name());
+                        loginUserResponse.getUser().setLastName(user.getLast_name());
+                        loginUserResponse.getUser().setEmail(user.getEmail());
+                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(user.getBirthday()));
+                        loginUserResponse.getUser().setPostalAddress(user.getPostal_address());
+                        loginUserResponse.getUser().setTel(user.getTel());
+                    }
+                    else logger.error("Password comparison : [NO]");
+                }
+                else logger.error("User created : [NO]");
+            }
+            else logger.error("Email and password defined : [NO]");
+        }
+        else logger.error("Parameters defined : [NO]");
 
         return loginUserResponse;
     }
