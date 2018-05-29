@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface LibraryDao {
 
-    User getUserByID(Integer id);
-
-    User getUserByLogin(String email, String password);
+    User getUserByEmail(String email);
 
     List<Book> getUserBookList(User user);
 
