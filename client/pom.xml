@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>fr.kybox</groupId>
-    <artifactId>webapp</artifactId>
+    <artifactId>client</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>

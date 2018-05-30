@@ -13,7 +13,7 @@
     <!-- [MODULES] -->
     <modules>
         <module>webservice</module>
-        <module>webapp</module>
+        <module>client</module>
     </modules>
 
     <!-- [PROPERTIES] -->
