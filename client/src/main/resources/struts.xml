@@ -29,6 +29,11 @@
             <result name="success" type="redirectAction">index</result>
         </action>
         
+        <!-- [LOGOUT] Action -->
+        <action name="logout" class="fr.kybox.action.AuthAction" method="logout">
+            <result name="success" type="redirectAction">index</result>
+        </action>
+        
     </package>
     
     <package name="private" extends="default">
