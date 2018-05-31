@@ -22,6 +22,13 @@
             <result>jsp/index.jsp</result>
         </action>
         
+        <!-- [LOGIN] Action -->
+        <action name="login" class="fr.kybox.action.AuthAction" method="login">
+            <result name="input">jsp/login.jsp</result>
+            <result name="error">jsp/login.jsp</result>
+            <result name="success" type="redirectAction">index</result>
+        </action>
+        
     </package>
     
     <package name="private" extends="default">
