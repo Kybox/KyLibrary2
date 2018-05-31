@@ -14,7 +14,7 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
     private String login;
     private String password;
-    private String error;
+    private Map<String, Object> session;
 
     public String login(){
 
@@ -42,24 +42,31 @@ public class AuthAction extends ActionSupport implements SessionAware {
                     System.out.println("Birthday = " + user.getBirthday());
                     System.out.println("Address = " + user.getPostalAddress());
 
+                    this.session.put("user", user);
+
                     result = ActionSupport.SUCCESS;
 
                 }
                 else{
                     this.addActionError("Identifiants d'authentification incorrects !");
-                    error = "Identifiants d'authentification incorrects !";
                     result = ActionSupport.ERROR;
                 }
             }
             else {
                 this.addActionError("Aucun des champs ne doit être vide !");
-                error = "Aucun des champs ne doit être vide !";
                 result = ActionSupport.ERROR;
             }
         }
 
         return result;
 
+    }
+
+    public String logout(){
+
+        this.session.remove("user");
+
+        return ActionSupport.SUCCESS;
     }
 
     public String getLogin() {
@@ -78,12 +85,8 @@ public class AuthAction extends ActionSupport implements SessionAware {
         this.password = password;
     }
 
-    public String getError(){
-        return error;
-    }
-
     @Override
     public void setSession(Map<String, Object> session) {
-
+        this.session = session;
     }
 }
