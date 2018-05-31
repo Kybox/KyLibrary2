@@ -33,11 +33,11 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
         
-        <!-- [APACHE LOG4J] -->
+        <!-- [APACHE LOG4J] --><!--
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-        </dependency>
+        </dependency>-->
         
     </dependencies>
     

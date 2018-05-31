@@ -57,6 +57,5 @@
     <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-ws-policy:3.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.neethi:neethi:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-transports-http:3.2.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.11.0" level="project" />
   </component>
 </module>
