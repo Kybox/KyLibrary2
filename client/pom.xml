@@ -58,6 +58,7 @@
                                 <wsdlOption>
                                     <wsdl>https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl</wsdl>
                                     <extraargs>
+                                        <extraarg>-client</extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>fr.kybox.gencode</extraarg>
                                     </extraargs>
