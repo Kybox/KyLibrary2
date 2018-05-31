@@ -1,17 +1,25 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Kybox
-  Date: 29/05/2018
-  Time: 17:01
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>
     <title>KyLibrary - Client</title>
+    <%@ include file="include/head.jsp" %>
 </head>
 <body>
-<h2>KyLibrary - Client Homepage</h2>
+<%@ include file="include/header.jsp" %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-6 col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <h2>Rechercher un livre :</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
