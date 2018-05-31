@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <title>KyLibrary - Client</title>
     <%@ include file="include/head.jsp" %>

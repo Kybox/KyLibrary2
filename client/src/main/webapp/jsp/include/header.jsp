@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <div style="padding-left: 10px;">
     <h2>
         <a href="index.action" style="text-decoration: none !important;">
