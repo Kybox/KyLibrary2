@@ -1,5 +1,10 @@
 package fr.kybox.entities;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -12,15 +17,15 @@ import java.util.List;
 
 @Entity
 @Table(name = "book", schema = "public")
-@NamedQuery(name = Book.GET_USER_BOOKLIST, query = "SELECT b FROM BorrowedBooks b WHERE User.id = :userId")
+@NaturalIdCache
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Book extends AbstractEntity {
 
-    public static final String GET_USER_BOOKLIST = "Book.getUserBookList";
-
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowedBooks> borrowedBooksList = new ArrayList<>();
+    private List<BorrowedBooks> users = new ArrayList<>();
 
     @Column
+    @NaturalId
     private String isbn;
 
     @Column
@@ -49,6 +54,8 @@ public class Book extends AbstractEntity {
 
     @Column
     private Date returndate;
+
+    public Book() {}
 
     public String getIsbn() {
         return isbn;
@@ -130,11 +137,11 @@ public class Book extends AbstractEntity {
         this.returndate = returndate;
     }
 
-    public List<BorrowedBooks> getBorrowedBooksList() {
-        return borrowedBooksList;
+    public List<BorrowedBooks> getUsers() {
+        return users;
     }
 
-    public void setBorrowedBooksList(List<BorrowedBooks> borrowedBooksList) {
-        this.borrowedBooksList = borrowedBooksList;
+    public void setUsers(List<BorrowedBooks> users) {
+        this.users = users;
     }
 }

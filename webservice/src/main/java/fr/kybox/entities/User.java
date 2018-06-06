@@ -12,14 +12,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_account", schema = "public")
-@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
-
 public class User extends AbstractEntity {
 
-    public static final String GET_USER_BY_EMAIL = "User.GetUserByEmail";
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowedBooks> borrowedBooksList = new ArrayList<>();
+    private List<BorrowedBooks> books = new ArrayList<>();
 
     @Column
     private String email;
@@ -41,6 +37,8 @@ public class User extends AbstractEntity {
 
     @Column
     private String tel;
+
+    public User() {}
 
     public String getEmail() {
         return email;
@@ -98,11 +96,11 @@ public class User extends AbstractEntity {
         this.tel = tel;
     }
 
-    public List<BorrowedBooks> getBorrowedBooksList() {
-        return borrowedBooksList;
+    public List<BorrowedBooks> getBooks() {
+        return books;
     }
 
-    public void setBorrowedBooksList(List<BorrowedBooks> borrowedBooksList) {
-        this.borrowedBooksList = borrowedBooksList;
+    public void setBooks(List<BorrowedBooks> books) {
+        this.books = books;
     }
 }
