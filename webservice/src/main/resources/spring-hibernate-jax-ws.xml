@@ -2,7 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!-- Active annotations in beans -->
     <context:annotation-config/>
@@ -13,27 +21,31 @@
     <!-- Turn on Spring transaction manager -->
     <tx:annotation-driven transaction-manager="txManager"/>
     
+    <!-- JPA base package and entity manager factory reference -->
+    <jpa:repositories base-package="fr.kybox.dao" entity-manager-factory-ref="emf"/>
+    
     <!-- Transaction Manager -->
-    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
+    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
     </bean>
     
-    <!-- Session Factory -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <!-- Create default configuration for Hibernate -->
+    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    
+    <!-- EntityManager Bean Factory -->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="fr.kybox"/>
-        <property name="annotatedClasses">
-            <list>
-                <value>fr.kybox.gencode.Book</value>
-                <value>fr.kybox.gencode.User</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
+        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+        <property name="packagesToScan" value="fr.kybox.entities"/>
+        <property name="jpaProperties">
             <props>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</prop>
             </props>
+        </property>
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
         </property>
     </bean>
     
@@ -43,6 +55,28 @@
         <property name="username" value="postgres"/>
         <property name="password" value=""/>
     </bean>
+    
+    <!-- Transaction Manager -->
+    <!--
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    -->
+    <!-- Session Factory -->
+    <!--
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="fr.kybox.gencode"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</prop>
+            </props>
+        </property>
+    </bean>
+    -->
+    
     
     
     
