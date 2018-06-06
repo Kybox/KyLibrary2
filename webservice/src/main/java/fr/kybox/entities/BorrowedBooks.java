@@ -11,16 +11,17 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "borrowed_books", schema = "public")
-public class BorrowedBooks implements Serializable {
+public class BorrowedBooks {
 
-    @Id
+    @EmbeddedId
+    private BorrowedBooksPK borrowedBooksPK = new BorrowedBooksPK();
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @MapsId("userId")
     private User user;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @MapsId("bookId")
     private Book book;
 
     @Column(name = "return_date")
@@ -28,6 +29,16 @@ public class BorrowedBooks implements Serializable {
 
     @Column
     private Boolean extended;
+
+    public BorrowedBooks() {}
+
+    public BorrowedBooksPK getBorrowedBooksPK() {
+        return borrowedBooksPK;
+    }
+
+    public void setBorrowedBooksPK(BorrowedBooksPK borrowedBooksPK) {
+        this.borrowedBooksPK = borrowedBooksPK;
+    }
 
     public User getUser() {
         return user;
