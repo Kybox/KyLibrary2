@@ -19,6 +19,7 @@
     <!-- [PROPERTIES] -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.data.version>2.0.7.RELEASE</spring.data.version>
         <hibernate.version>5.2.17.Final</hibernate.version>
         <postgresql.version>42.2.2</postgresql.version>
         <spring.version>5.0.6.RELEASE</spring.version>
@@ -84,6 +85,13 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
                 <version>5.0.5.RELEASE</version>
+            </dependency>
+            
+            <!-- SPRING DATA -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring.data.version}</version>
             </dependency>
     
             <!-- APACHE TOMCAT -->
