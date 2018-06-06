@@ -48,8 +48,23 @@ public class LibraryDaoImpl implements LibraryDao {
     }
 
     @Override
+    @Transactional(value = "txManager")
     public List<Book> getUserBookList(User user) {
-        return null;
+
+        List bookList = null;
+
+        if(user != null){
+            try{
+                bookList = sessionFactory.getCurrentSession().createNamedQuery(Book.GET_USER_BOOKLIST)
+                        .setParameter("user", user)
+                        .getResultList();
+            }
+            catch (NoResultException e){
+                logger.warn("No result exception : No borrowed books from this user");
+            }
+        }
+
+        return bookList;
     }
 
     @Override
