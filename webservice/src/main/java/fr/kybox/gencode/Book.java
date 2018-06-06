@@ -25,7 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="Title" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Author" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Publisher" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="PublishDate" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="PublishDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
@@ -64,7 +64,8 @@ public class Book {
     @XmlElement(name = "Publisher", required = true)
     protected String publisher;
     @XmlElement(name = "PublishDate", required = true)
-    protected String publishDate;
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar publishDate;
     @XmlElement(name = "Summary", required = true)
     protected String summary;
     @XmlElement(name = "Genre", required = true)
@@ -178,10 +179,10 @@ public class Book {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getPublishDate() {
+    public XMLGregorianCalendar getPublishDate() {
         return publishDate;
     }
 
@@ -190,10 +191,10 @@ public class Book {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setPublishDate(String value) {
+    public void setPublishDate(XMLGregorianCalendar value) {
         this.publishDate = value;
     }
 
