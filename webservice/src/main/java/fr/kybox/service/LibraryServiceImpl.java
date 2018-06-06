@@ -1,6 +1,7 @@
 package fr.kybox.service;
 
-import fr.kybox.dao.LibraryDao;
+import fr.kybox.dao.BorrowedBooksRepository;
+import fr.kybox.dao.UserRepository;
 import fr.kybox.entities.User;
 import fr.kybox.gencode.LibraryService;
 import fr.kybox.gencode.LoginUser;
@@ -22,6 +23,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +40,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
 
     @Autowired
-    LibraryDao libraryDao;
+    UserRepository userRepository;
+
+    @Autowired
+    BorrowedBooksRepository borrowedBooksRepository;
+
+    private User user;
 
     @Override
     @WebMethod
@@ -54,7 +61,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                 logger.debug("Email and password defined : [OK]");
 
-                User user = libraryDao.getUserByEmail(parameters.getLogin());
+                user = userRepository.findByEmail(parameters.getLogin());
 
                 if (user != null) {
 
@@ -93,11 +100,16 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             if(parameter.getUser() != null){
 
-                User user = libraryDao.getUserByEmail(parameter.getUser().getEmail());
+                //User user = libraryDao.getUserByEmail(parameter.getUser().getEmail());
 
                 if(user != null){
 
-                    List<fr.kybox.entities.Book> bookEntityList = libraryDao.getUserBookList(user);
+                    List<fr.kybox.entities.BorrowedBooks> borrowedBooksList = borrowedBooksRepository.findAllByUser(user);
+                    List<fr.kybox.entities.Book> bookEntityList = new ArrayList<>();
+
+                    for(fr.kybox.entities.BorrowedBooks borrowedBooks : borrowedBooksList){
+                        bookEntityList.add(borrowedBooks.getBook());
+                    }
 
                     BookList bookListObj = response.getBookList();
                     List<Book> bookList = bookListObj.getBook();
