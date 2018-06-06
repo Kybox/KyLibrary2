@@ -1,17 +1,24 @@
 package fr.kybox.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kybox
  * @version 1.0
  */
+
 @Entity
 @Table(name = "book", schema = "public")
+@NamedQuery(name = Book.GET_USER_BOOKLIST, query = "SELECT b FROM BorrowedBooks b WHERE User.id = :userId")
 public class Book extends AbstractEntity {
+
+    public static final String GET_USER_BOOKLIST = "Book.getUserBookList";
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowedBooks> borrowedBooksList = new ArrayList<>();
 
     @Column
     private String isbn;
@@ -121,5 +128,13 @@ public class Book extends AbstractEntity {
 
     public void setReturndate(Date returndate) {
         this.returndate = returndate;
+    }
+
+    public List<BorrowedBooks> getBorrowedBooksList() {
+        return borrowedBooksList;
+    }
+
+    public void setBorrowedBooksList(List<BorrowedBooks> borrowedBooksList) {
+        this.borrowedBooksList = borrowedBooksList;
     }
 }

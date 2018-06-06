@@ -2,6 +2,8 @@ package fr.kybox.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kybox
@@ -15,6 +17,9 @@ import java.sql.Date;
 public class User extends AbstractEntity {
 
     public static final String GET_USER_BY_EMAIL = "User.GetUserByEmail";
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowedBooks> borrowedBooksList = new ArrayList<>();
 
     @Column
     private String email;
@@ -91,5 +96,13 @@ public class User extends AbstractEntity {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public List<BorrowedBooks> getBorrowedBooksList() {
+        return borrowedBooksList;
+    }
+
+    public void setBorrowedBooksList(List<BorrowedBooks> borrowedBooksList) {
+        this.borrowedBooksList = borrowedBooksList;
     }
 }
