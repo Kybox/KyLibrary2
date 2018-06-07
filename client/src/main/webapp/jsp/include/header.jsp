@@ -8,9 +8,16 @@
 </div>
 <div class="container-fluid text-right">
     <s:if test="#session.user">
-        <a href="login.action">
-            <button class="btn btn-danger">
+        <a href="user.action">
+            <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
+                Mon compte
+            </button>
+        </a>
+        <span class="glyphicon glyphicon-minus"></span>
+        <a href="logout.action">
+            <button class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove"></span>
                 Déconnexion
             </button>
         </a>
