@@ -74,6 +74,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BookBorrowed }
+     * 
+     */
+    public BookBorrowed createBookBorrowed() {
+        return new BookBorrowed();
+    }
+
+    /**
      * Create an instance of {@link UserBookList }
      * 
      */
