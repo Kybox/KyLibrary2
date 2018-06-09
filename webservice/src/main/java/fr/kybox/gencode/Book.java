@@ -29,6 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
+ *         &lt;element name="Cover" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -46,7 +47,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "publishDate",
     "summary",
     "genre",
-    "available"
+    "available",
+    "cover"
 })
 @XmlRootElement(name = "book")
 public class Book {
@@ -68,6 +70,8 @@ public class Book {
     protected String genre;
     @XmlElement(name = "Available", required = true)
     protected BigInteger available;
+    @XmlElement(name = "Cover", required = true)
+    protected String cover;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -259,6 +263,30 @@ public class Book {
      */
     public void setAvailable(BigInteger value) {
         this.available = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété cover.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCover() {
+        return cover;
+    }
+
+    /**
+     * Définit la valeur de la propriété cover.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCover(String value) {
+        this.cover = value;
     }
 
 }
