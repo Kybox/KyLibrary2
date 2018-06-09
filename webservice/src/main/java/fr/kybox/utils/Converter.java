@@ -16,14 +16,18 @@ public class Converter {
 
         XMLGregorianCalendar xmlDate = null;
 
-        try {
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        if(SQLDate != null) {
 
-            gregorianCalendar.setTime(SQLDate);
-            xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+            try {
+                GregorianCalendar gregorianCalendar = new GregorianCalendar();
 
+                gregorianCalendar.setTime(SQLDate);
+                xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+
+            } catch (DatatypeConfigurationException e) {
+                e.printStackTrace();
+            }
         }
-        catch (DatatypeConfigurationException e) { e.printStackTrace(); }
 
         return xmlDate;
     }
