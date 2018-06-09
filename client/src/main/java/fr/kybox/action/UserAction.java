@@ -5,6 +5,8 @@ import fr.kybox.gencode.*;
 import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import java.util.Map;
 public class UserAction extends ActionSupport implements SessionAware {
 
     private String tab;
+    private Date dateToday;
     private Map<String, Object> session;
 
     private List<BookBorrowed> getUserBookList(){
@@ -34,6 +37,10 @@ public class UserAction extends ActionSupport implements SessionAware {
 
     public String getTab() { return tab; }
     public void setTab(String tab) { this.tab = tab; }
+
+    public Date getDateToday() {
+        return Date.from(Instant.now());
+    }
 
     public List<BookBorrowed> getBorrowedBooks() {
         return getUserBookList();
