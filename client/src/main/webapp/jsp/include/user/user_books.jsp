@@ -15,17 +15,26 @@
                 <th>Prolonger l'emprunt</th>
             </tr>
             <s:iterator value="borrowedBooks">
-            <tr>
-                <td><s:property value="book.title"/></td>
-                <td><s:property value="book.author"/></td>
-                <td><s:property value="book.publisher"/></td>
-                <td><s:date name="returndate" format="dd/MM/yyyy"/></td>
-                <td>
-                    <button class="btn btn-primary">
-                        Prolonger
-                    </button>
-                </td>
-            </tr>
+                <s:if test="returned!=true">
+                    <tr>
+                        <td><s:property value="book.title"/></td>
+                        <td><s:property value="book.author"/></td>
+                        <td><s:property value="book.publisher"/></td>
+                        <td><s:date name="returndate" format="dd/MM/yyyy"/></td>
+                        <td>
+                            <s:if test="extended!=true">
+                                <button class="btn btn-primary">
+                                    Prolonger
+                                </button>
+                            </s:if>
+                            <s:else>
+                                <button class="btn btn-default" disabled>
+                                    Prolonger
+                                </button>
+                            </s:else>
+                        </td>
+                    </tr>
+                </s:if>
             </s:iterator>
         </table>
     </div>
