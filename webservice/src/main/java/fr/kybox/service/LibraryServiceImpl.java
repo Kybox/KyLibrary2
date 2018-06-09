@@ -2,16 +2,10 @@ package fr.kybox.service;
 
 import fr.kybox.dao.BorrowedBooksRepository;
 import fr.kybox.dao.UserRepository;
+import fr.kybox.entities.BookEntity;
+import fr.kybox.entities.BorrowedBook;
 import fr.kybox.entities.User;
-import fr.kybox.gencode.LibraryService;
-import fr.kybox.gencode.LoginUser;
-import fr.kybox.gencode.LoginUserResponse;
-import fr.kybox.gencode.UserBookListResponse;
-import fr.kybox.gencode.UserBookList;
-import fr.kybox.gencode.SearchBook;
-import fr.kybox.gencode.SearchBookResponse;
-import fr.kybox.gencode.BookList;
-import fr.kybox.gencode.Book;
+import fr.kybox.gencode.*;
 
 import fr.kybox.security.Password;
 import fr.kybox.utils.Converter;
@@ -23,6 +17,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,37 +95,31 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             if(parameter.getUser() != null){
 
-                //User user = libraryDao.getUserByEmail(parameter.getUser().getEmail());
-
                 if(user != null){
 
-                    List<fr.kybox.entities.BorrowedBooks> borrowedBooksList = borrowedBooksRepository.findAllByUser(user);
-                    List<fr.kybox.entities.Book> bookEntityList = new ArrayList<>();
+                    List<BorrowedBook> borrowedBookList = borrowedBooksRepository.findAllByUser(user);
 
-                    for(fr.kybox.entities.BorrowedBooks borrowedBooks : borrowedBooksList){
-                        bookEntityList.add(borrowedBooks.getBook());
+                    for(BorrowedBook borrowedBook : borrowedBookList){
+
+                        Book book = new Book();
+                        book.setISBN(borrowedBook.getBook().getIsbn());
+                        book.setTitle(borrowedBook.getBook().getTitle());
+                        book.setAuthor(borrowedBook.getBook().getAuthor().getName());
+                        book.setPublisher(borrowedBook.getBook().getPublisher().getName());
+                        book.setPublishDate(Converter.SQLDateToXML(borrowedBook.getBook().getPublisherdate()));
+                        book.setSummary(borrowedBook.getBook().getSummary());
+                        book.setGenre(borrowedBook.getBook().getGenre().getName());
+                        book.setAvailable(BigInteger.valueOf(borrowedBook.getBook().getAvailable()));
+                        book.setCover(borrowedBook.getBook().getCover());
+
+                        BookBorrowed bookBorrowed = new BookBorrowed();
+                        bookBorrowed.setBook(book);
+                        bookBorrowed.setExtended(borrowedBook.getExtended());
+                        bookBorrowed.setReturndate(Converter.SQLDateToXML(borrowedBook.getReturnDate()));
+
+                        response.getBookBorrowed().add(bookBorrowed);
+
                     }
-
-                    BookList bookListObj = response.getBookList();
-                    List<Book> bookList = bookListObj.getBook();
-
-                    for(fr.kybox.entities.Book book : bookEntityList){
-
-                        Book borrowedBook = new Book();
-                        borrowedBook.setISBN(book.getIsbn());
-                        borrowedBook.setTitle(book.getTitle());
-                        borrowedBook.setAuthor(book.getAuthor());
-                        borrowedBook.setPublisher(book.getPublisher());
-                        borrowedBook.setPublishDate(Converter.SQLDateToXML(book.getPublisherdate()));
-                        borrowedBook.setSummary(book.getSummary());
-                        borrowedBook.setGenre(book.getGenre());
-                        borrowedBook.setAvailable(BigInteger.valueOf(book.getAvailable()));
-                        borrowedBook.setExtended(book.isExtended());
-                        borrowedBook.setReturnDate(Converter.SQLDateToXML(book.getReturndate()));
-
-                        bookList.add(borrowedBook);
-                    }
-
                 }
                 else logger.error("No user found from UserBookList parameter");
             }
