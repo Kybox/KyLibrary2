@@ -1,6 +1,8 @@
 
 package fr.kybox.gencode;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookList"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookBorrowed" maxOccurs="unbounded"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -29,36 +31,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "bookList"
+    "bookBorrowed"
 })
 @XmlRootElement(name = "userBookListResponse")
 public class UserBookListResponse {
 
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected BookList bookList;
+    protected List<BookBorrowed> bookBorrowed;
 
     /**
-     * Obtient la valeur de la propriété bookList.
+     * Gets the value of the bookBorrowed property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BookList }
-     *     
-     */
-    public BookList getBookList() {
-        return bookList;
-    }
-
-    /**
-     * Définit la valeur de la propriété bookList.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the bookBorrowed property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BookList }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getBookBorrowed().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link BookBorrowed }
+     * 
+     * 
      */
-    public void setBookList(BookList value) {
-        this.bookList = value;
+    public List<BookBorrowed> getBookBorrowed() {
+        if (bookBorrowed == null) {
+            bookBorrowed = new ArrayList<BookBorrowed>();
+        }
+        return this.bookBorrowed;
     }
 
 }

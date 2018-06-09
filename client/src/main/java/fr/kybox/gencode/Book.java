@@ -29,8 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
- *         &lt;element name="ReturnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
- *         &lt;element name="Extended" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="Cover" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -49,8 +48,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "summary",
     "genre",
     "available",
-    "returnDate",
-    "extended"
+    "cover"
 })
 @XmlRootElement(name = "book")
 public class Book {
@@ -72,11 +70,8 @@ public class Book {
     protected String genre;
     @XmlElement(name = "Available", required = true)
     protected BigInteger available;
-    @XmlElement(name = "ReturnDate", required = true, nillable = true)
-    @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar returnDate;
-    @XmlElement(name = "Extended", required = true, type = Boolean.class, nillable = true)
-    protected Boolean extended;
+    @XmlElement(name = "Cover", required = true)
+    protected String cover;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -271,51 +266,27 @@ public class Book {
     }
 
     /**
-     * Obtient la valeur de la propriété returnDate.
+     * Obtient la valeur de la propriété cover.
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getReturnDate() {
-        return returnDate;
+    public String getCover() {
+        return cover;
     }
 
     /**
-     * Définit la valeur de la propriété returnDate.
+     * Définit la valeur de la propriété cover.
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setReturnDate(XMLGregorianCalendar value) {
-        this.returnDate = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété extended.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isExtended() {
-        return extended;
-    }
-
-    /**
-     * Définit la valeur de la propriété extended.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setExtended(Boolean value) {
-        this.extended = value;
+    public void setCover(String value) {
+        this.cover = value;
     }
 
 }
