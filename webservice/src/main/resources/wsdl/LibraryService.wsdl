@@ -54,6 +54,7 @@
                         <xs:element name="Summary" type="xs:string"/>
                         <xs:element name="Genre" type="xs:string"/>
                         <xs:element name="Available" type="xs:integer"/>
+                        <xs:element name="Cover" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
