@@ -5,6 +5,23 @@
         <h3 class="panel-title">Information relatives à votre compte utilisateur</h3>
     </div>
     <div class="panel-body">
-        Panel content
+        <table class="table table-hover">
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>E-mail</th>
+                <th>Date de naissance</th>
+                <th>Adresse postale</th>
+                <th>Tel</th>
+            </tr>
+            <tr>
+                <td><s:property value="#session.user.lastName"/></td>
+                <td><s:property value="#session.user.firstName"/></td>
+                <td><s:property value="#session.user.email"/></td>
+                <td><s:property value="#session.user.birthday"/></td>
+                <td><s:property value="#session.user.postalAddress"/></td>
+                <td><s:property value="#session.user.tel"/></td>
+            </tr>
+        </table>
     </div>
 </div>
