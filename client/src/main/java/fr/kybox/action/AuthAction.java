@@ -2,6 +2,7 @@ package fr.kybox.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import fr.kybox.gencode.*;
+import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
@@ -24,8 +25,7 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
             if(!login.isEmpty() && !password.isEmpty()){
 
-                LibraryWebService webService = new LibraryWebService();
-                LibraryService service = webService.getLibraryServicePort();
+                LibraryService service = ServiceFactory.getLibraryService();
 
                 LoginUser loginUser = new LoginUser();
                 loginUser.setLogin(login);
@@ -35,12 +35,6 @@ public class AuthAction extends ActionSupport implements SessionAware {
                 User user = loginUserResponse.getUser();
 
                 if(user != null){
-
-                    System.out.println("USER :");
-                    System.out.println("FirstName = " + user.getFirstName());
-                    System.out.println("LastName = " + user.getLastName());
-                    System.out.println("Birthday = " + user.getBirthday());
-                    System.out.println("Address = " + user.getPostalAddress());
 
                     this.session.put("user", user);
 
