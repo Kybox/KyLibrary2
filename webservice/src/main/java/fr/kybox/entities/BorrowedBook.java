@@ -29,6 +29,9 @@ public class BorrowedBook {
     @Column
     private Boolean extended;
 
+    @Column
+    private Boolean returned;
+
     public BorrowedBook() {}
 
     public BorrowedBookPK getBorrowedBookPK() {
@@ -70,4 +73,8 @@ public class BorrowedBook {
     public void setExtended(Boolean extended) {
         this.extended = extended;
     }
+
+    public Boolean getReturned() { return returned; }
+
+    public void setReturned(Boolean returned) { this.returned = returned; }
 }
