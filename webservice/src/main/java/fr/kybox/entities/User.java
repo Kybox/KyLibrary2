@@ -15,7 +15,7 @@ import java.util.List;
 public class User extends AbstractEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowedBooks> books = new ArrayList<>();
+    private List<BorrowedBook> books = new ArrayList<>();
 
     @Column
     private String email;
@@ -96,11 +96,11 @@ public class User extends AbstractEntity {
         this.tel = tel;
     }
 
-    public List<BorrowedBooks> getBooks() {
+    public List<BorrowedBook> getBooks() {
         return books;
     }
 
-    public void setBooks(List<BorrowedBooks> books) {
+    public void setBooks(List<BorrowedBook> books) {
         this.books = books;
     }
 }

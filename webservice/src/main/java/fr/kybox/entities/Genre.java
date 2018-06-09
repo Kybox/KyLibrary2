@@ -16,6 +16,8 @@ public class Genre extends AbstractEntity {
     @Column
     private String name;
 
+    public Genre() {}
+
     public String getName() {
         return name;
     }

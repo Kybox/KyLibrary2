@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 
 @Embeddable
-public class BorrowedBooksPK implements Serializable {
+public class BorrowedBookPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class BorrowedBooksPK implements Serializable {
     @Column(name = "book_id")
     private int bookId;
 
-    public BorrowedBooksPK() {}
+    public BorrowedBookPK() {}
 
     public int getUserId() {
         return userId;

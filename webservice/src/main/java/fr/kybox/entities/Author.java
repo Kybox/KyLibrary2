@@ -16,6 +16,8 @@ public class Author extends AbstractEntity{
     @Column
     private String name;
 
+    public Author() {}
+
     public String getName() {
         return name;
     }

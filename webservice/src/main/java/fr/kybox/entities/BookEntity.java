@@ -19,10 +19,10 @@ import java.util.List;
 @Table(name = "book", schema = "public")
 @NaturalIdCache
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Book extends AbstractEntity {
+public class BookEntity extends AbstractEntity {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowedBooks> users = new ArrayList<>();
+    private List<BorrowedBook> users = new ArrayList<>();
 
     @Column
     @NaturalId
@@ -31,11 +31,13 @@ public class Book extends AbstractEntity {
     @Column
     private String title;
 
-    @Column
-    private String author;
+    @OneToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
-    @Column
-    private String publisher;
+    @OneToOne
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
 
     @Column
     private Date publisherdate;
@@ -43,19 +45,14 @@ public class Book extends AbstractEntity {
     @Column
     private String summary;
 
-    @Column
-    private String genre;
+    @OneToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
     @Column
     private int available;
 
-    @Column
-    private boolean extended;
-
-    @Column
-    private Date returndate;
-
-    public Book() {}
+    public BookEntity() {}
 
     public String getIsbn() {
         return isbn;
@@ -73,19 +70,19 @@ public class Book extends AbstractEntity {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
-    public String getPublisher() {
+    public Publisher getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
 
@@ -105,11 +102,11 @@ public class Book extends AbstractEntity {
         this.summary = summary;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 
@@ -121,27 +118,11 @@ public class Book extends AbstractEntity {
         this.available = available;
     }
 
-    public boolean isExtended() {
-        return extended;
-    }
-
-    public void setExtended(boolean extended) {
-        this.extended = extended;
-    }
-
-    public Date getReturndate() {
-        return returndate;
-    }
-
-    public void setReturndate(Date returndate) {
-        this.returndate = returndate;
-    }
-
-    public List<BorrowedBooks> getUsers() {
+    public List<BorrowedBook> getUsers() {
         return users;
     }
 
-    public void setUsers(List<BorrowedBooks> users) {
+    public void setUsers(List<BorrowedBook> users) {
         this.users = users;
     }
 }

@@ -1,7 +1,6 @@
 package fr.kybox.entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -10,19 +9,19 @@ import java.sql.Date;
  */
 
 @Entity
-@Table(name = "borrowed_books", schema = "public")
-public class BorrowedBooks {
+@Table(name = "borrowed_book", schema = "public")
+public class BorrowedBook {
 
     @EmbeddedId
-    private BorrowedBooksPK borrowedBooksPK = new BorrowedBooksPK();
+    private BorrowedBookPK borrowedBookPK = new BorrowedBookPK();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("userId")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("bookId")
-    private Book book;
+    private BookEntity book;
 
     @Column(name = "return_date")
     private Date returnDate;
@@ -30,14 +29,14 @@ public class BorrowedBooks {
     @Column
     private Boolean extended;
 
-    public BorrowedBooks() {}
+    public BorrowedBook() {}
 
-    public BorrowedBooksPK getBorrowedBooksPK() {
-        return borrowedBooksPK;
+    public BorrowedBookPK getBorrowedBookPK() {
+        return borrowedBookPK;
     }
 
-    public void setBorrowedBooksPK(BorrowedBooksPK borrowedBooksPK) {
-        this.borrowedBooksPK = borrowedBooksPK;
+    public void setBorrowedBookPK(BorrowedBookPK borrowedBookPK) {
+        this.borrowedBookPK = borrowedBookPK;
     }
 
     public User getUser() {
@@ -48,11 +47,11 @@ public class BorrowedBooks {
         this.user = user;
     }
 
-    public Book getBook() {
+    public BookEntity getBook() {
         return book;
     }
 
-    public void setBook(Book book) {
+    public void setBook(BookEntity book) {
         this.book = book;
     }
 
