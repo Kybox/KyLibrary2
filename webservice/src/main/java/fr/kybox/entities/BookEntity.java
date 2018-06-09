@@ -52,6 +52,9 @@ public class BookEntity extends AbstractEntity {
     @Column
     private int available;
 
+    @Column
+    private String cover;
+
     public BookEntity() {}
 
     public String getIsbn() {
@@ -117,6 +120,10 @@ public class BookEntity extends AbstractEntity {
     public void setAvailable(int available) {
         this.available = available;
     }
+
+    public String getCover() { return cover; }
+
+    public void setCover(String cover) { this.cover = cover; }
 
     public List<BorrowedBook> getUsers() {
         return users;
