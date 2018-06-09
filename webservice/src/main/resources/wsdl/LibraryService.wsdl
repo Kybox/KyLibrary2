@@ -54,10 +54,6 @@
                         <xs:element name="Summary" type="xs:string"/>
                         <xs:element name="Genre" type="xs:string"/>
                         <xs:element name="Available" type="xs:integer"/>
-                        
-                        <!-- Only for user bookList -->
-                        <xs:element name="ReturnDate" type="xs:date" nillable="true" wsdl:required="false"/>
-                        <xs:element name="Extended" type="xs:boolean" nillable="true" wsdl:required="false"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -67,6 +63,18 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:book" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [BOOK BORROWED] -->
+            <xs:element name="bookBorrowed">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:book"/>
+                        <xs:element name="returndate" type="xs:date"/>
+                        <xs:element name="extended" type="xs:boolean"/>
+                        <xs:element name="returned" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -82,7 +90,7 @@
             <xs:element name="userBookListResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:bookList"/>
+                        <xs:element ref="ws:bookBorrowed" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
