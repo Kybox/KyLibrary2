@@ -127,6 +127,12 @@
     <wsdl:message name="userBookListResponse">
         <wsdl:part name="response" element="ws:userBookListResponse"/>
     </wsdl:message>
+    <wsdl:message name="extendBorrowing">
+        <wsdl:part name="parameter" element="ws:book"/>
+    </wsdl:message>
+    <wsdl:message name="extendBorrowingResponse">
+        <wsdl:part name="response" element="ws:book"/>
+    </wsdl:message>
     <wsdl:message name="searchBook">
         <wsdl:part name="parameters" element="ws:searchBook"/>
     </wsdl:message>
@@ -143,6 +149,10 @@
         <wsdl:operation name="userBookList">
             <wsdl:input message="ws:userBookList"/>
             <wsdl:output message="ws:userBookListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="extendBorrowing">
+            <wsdl:input message="ws:extendBorrowing"/>
+            <wsdl:output message="ws:extendBorrowingResponse"/>
         </wsdl:operation>
         <wsdl:operation name="searchBook">
             <wsdl:input message="ws:searchBook"/>
@@ -166,6 +176,16 @@
         
         <!-- USER BOOK LIST -->
         <wsdl:operation name="userBookList">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <!-- EXTEND BORROWING -->
+        <wsdl:operation name="extendBorrowing">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
