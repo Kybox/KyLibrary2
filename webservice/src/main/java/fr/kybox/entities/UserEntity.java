@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_account", schema = "public")
-public class User extends AbstractEntity {
+public class UserEntity extends AbstractEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BorrowedBook> books = new ArrayList<>();
@@ -38,7 +38,7 @@ public class User extends AbstractEntity {
     @Column
     private String tel;
 
-    public User() {}
+    public UserEntity() {}
 
     public String getEmail() {
         return email;

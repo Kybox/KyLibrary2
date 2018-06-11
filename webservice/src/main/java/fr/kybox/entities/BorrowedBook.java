@@ -17,7 +17,7 @@ public class BorrowedBook {
 
     @ManyToOne
     @MapsId("userId")
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     @MapsId("bookId")
@@ -42,11 +42,11 @@ public class BorrowedBook {
         this.borrowedBookPK = borrowedBookPK;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
