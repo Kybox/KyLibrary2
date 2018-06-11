@@ -86,6 +86,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
+    public Book extendBorrowing(Book parameter) {
+        return null;
+    }
+
+    @Override
     @WebMethod
     public UserBookListResponse userBookList(UserBookList parameter) {
 
