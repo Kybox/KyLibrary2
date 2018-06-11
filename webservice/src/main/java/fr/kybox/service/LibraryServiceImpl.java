@@ -11,6 +11,8 @@ import fr.kybox.security.Password;
 import fr.kybox.utils.Converter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -93,8 +95,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getISBN());
         BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
         borrowedBook.setExtended(true);
+
+        LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
+        localDate.plusWeeks(4);
+        borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
+
         borrowedBooksRepository.save(borrowedBook);
 
+        parameter.setReturndate(Converter.LocalDateToXML(localDate));
         parameter.setExtended(true);
 
         return parameter;
