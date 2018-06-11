@@ -1,10 +1,10 @@
 package fr.kybox.service;
 
+import fr.kybox.dao.BookRepository;
 import fr.kybox.dao.BorrowedBooksRepository;
 import fr.kybox.dao.UserRepository;
-import fr.kybox.entities.BookEntity;
-import fr.kybox.entities.BorrowedBook;
-import fr.kybox.entities.User;
+import fr.kybox.entities.*;
+import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.*;
 
 import fr.kybox.security.Password;
@@ -17,8 +17,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +38,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @Autowired
     BorrowedBooksRepository borrowedBooksRepository;
 
-    private User user;
+    @Autowired
+    BookRepository bookRepository;
+
+    private UserEntity userEntity;
 
     @Override
     @WebMethod
@@ -56,27 +57,27 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                 logger.debug("Email and password defined : [OK]");
 
-                user = userRepository.findByEmail(parameters.getLogin());
+                userEntity = userRepository.findByEmail(parameters.getLogin());
 
-                if (user != null) {
+                if (userEntity != null) {
 
-                    logger.debug("User created : [OK]");
+                    logger.debug("UserEntity created : [OK]");
 
-                    if (Password.match(parameters.getPassword(), user.getPassword())) {
+                    if (Password.match(parameters.getPassword(), userEntity.getPassword())) {
 
                         logger.debug("Password comparison : [OK]");
 
-                        loginUserResponse.setUser(new fr.kybox.gencode.User());
-                        loginUserResponse.getUser().setFirstName(user.getFirst_name());
-                        loginUserResponse.getUser().setLastName(user.getLast_name());
-                        loginUserResponse.getUser().setEmail(user.getEmail());
-                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(user.getBirthday()));
-                        loginUserResponse.getUser().setPostalAddress(user.getPostal_address());
-                        loginUserResponse.getUser().setTel(user.getTel());
+                        loginUserResponse.setUser(new User());
+                        loginUserResponse.getUser().setFirstName(userEntity.getFirst_name());
+                        loginUserResponse.getUser().setLastName(userEntity.getLast_name());
+                        loginUserResponse.getUser().setEmail(userEntity.getEmail());
+                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(userEntity.getBirthday()));
+                        loginUserResponse.getUser().setPostalAddress(userEntity.getPostal_address());
+                        loginUserResponse.getUser().setTel(userEntity.getTel());
                     }
                     else logger.error("Password comparison : [NO]");
                 }
-                else logger.error("User created : [NO]");
+                else logger.error("UserEntity created : [NO]");
             }
             else logger.error("Email and password defined : [NO]");
         }
@@ -86,8 +87,17 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    public Book extendBorrowing(Book parameter) {
-        return null;
+    @WebMethod
+    public BookBorrowed extendBorrowing(BookBorrowed parameter) {
+
+        BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getISBN());
+        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
+        borrowedBook.setExtended(true);
+        borrowedBooksRepository.save(borrowedBook);
+
+        parameter.setExtended(true);
+
+        return parameter;
     }
 
     @Override
@@ -100,9 +110,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             if(parameter.getUser() != null){
 
-                if(user != null){
+                if(userEntity != null){
 
-                    List<BorrowedBook> borrowedBookList = borrowedBooksRepository.findAllByUser(user);
+                    List<BorrowedBook> borrowedBookList = borrowedBooksRepository.findAllByUser(userEntity);
 
                     for(BorrowedBook borrowedBook : borrowedBookList){
 
@@ -126,9 +136,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                     }
                 }
-                else logger.error("No user found from UserBookList parameter");
+                else logger.error("No userEntity found from UserBookList parameter");
             }
-            else logger.error("User object is null (from UserBookList parameter");
+            else logger.error("UserEntity object is null (from UserBookList parameter");
         }
         else logger.error("Parameter no defined");
 
