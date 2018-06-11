@@ -1,10 +1,16 @@
 package fr.kybox.utils;
 
+import org.joda.time.LocalDate;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.sql.Date;
+import java.sql.SQLData;
+import java.time.ZoneId;
 import java.util.GregorianCalendar;
+
+import static java.time.ZoneId.systemDefault;
 
 /**
  * @author Kybox
@@ -30,5 +36,19 @@ public class Converter {
         }
 
         return xmlDate;
+    }
+
+    public static Date DateToSQLDate(java.util.Date date){
+
+        return new Date(date.getTime());
+    }
+
+    public static XMLGregorianCalendar LocalDateToXML(LocalDate localDate){
+
+        java.util.Date date = localDate.toDate();
+
+        Date sqlDate = new Date(date.getTime());
+
+        return SQLDateToXML(sqlDate);
     }
 }
