@@ -128,10 +128,10 @@
         <wsdl:part name="response" element="ws:userBookListResponse"/>
     </wsdl:message>
     <wsdl:message name="extendBorrowing">
-        <wsdl:part name="parameter" element="ws:book"/>
+        <wsdl:part name="parameter" element="ws:bookBorrowed"/>
     </wsdl:message>
     <wsdl:message name="extendBorrowingResponse">
-        <wsdl:part name="response" element="ws:book"/>
+        <wsdl:part name="response" element="ws:bookBorrowed"/>
     </wsdl:message>
     <wsdl:message name="searchBook">
         <wsdl:part name="parameters" element="ws:searchBook"/>
