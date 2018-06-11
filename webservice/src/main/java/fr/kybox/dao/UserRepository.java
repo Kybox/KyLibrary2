@@ -1,13 +1,13 @@
 package fr.kybox.dao;
 
-import fr.kybox.entities.User;
+import fr.kybox.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Kybox
  * @version 1.0
  */
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-    User findByEmail(String email);
+    UserEntity findByEmail(String email);
 }
