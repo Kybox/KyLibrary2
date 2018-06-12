@@ -21,8 +21,10 @@
     <!-- Turn on Spring transaction manager -->
     <tx:annotation-driven transaction-manager="txManager"/>
     
-    <!-- JPA base package and entity manager factory reference -->
-    <jpa:repositories base-package="fr.kybox.dao" entity-manager-factory-ref="emf"/>
+    <!-- JPA base package, entityManagerFactory ref & transactionManager ref -->
+    <jpa:repositories base-package="fr.kybox.dao"
+                      entity-manager-factory-ref="emf"
+                      transaction-manager-ref="txManager"/>
     
     <!-- Transaction Manager -->
     <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
