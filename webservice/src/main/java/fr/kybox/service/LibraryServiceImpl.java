@@ -92,7 +92,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public BookBorrowed extendBorrowing(BookBorrowed parameter) {
 
-        BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getISBN());
+        BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getIsbn());
         BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBookOrderByReturnDateDesc(userEntity, bookEntity);
         borrowedBook.setExtended(true);
 
@@ -125,7 +125,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     for(BorrowedBook borrowedBook : bookList){
 
                         Book book = new Book();
-                        book.setISBN(borrowedBook.getBook().getIsbn());
+                        book.setIsbn(borrowedBook.getBook().getIsbn());
                         book.setTitle(borrowedBook.getBook().getTitle());
                         book.setAuthor(borrowedBook.getBook().getAuthor().getName());
                         book.setPublisher(borrowedBook.getBook().getPublisher().getName());
@@ -165,7 +165,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         for(BookEntity bookEntity : entityList){
 
             Book book = new Book();
-            book.setISBN(bookEntity.getIsbn());
+            book.setIsbn(bookEntity.getIsbn());
             book.setTitle(bookEntity.getTitle());
             book.setAuthor(bookEntity.getAuthor().getName());
             book.setPublisher(bookEntity.getPublisher().getName());
@@ -177,8 +177,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             bookList.getBook().add(book);
         }
-
-        System.out.println("    =====> BookList SIZE = " + bookList.getBook().size());
 
         SearchBookResponse searchBookResponse = new SearchBookResponse();
         searchBookResponse.setBookList(bookList);
