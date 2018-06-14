@@ -53,7 +53,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "book")
 public class Book {
 
-    @XmlElement(name = "ISBN", required = true)
+    @XmlElement(name = "Isbn", required = true)
     protected String isbn;
     @XmlElement(name = "Title", required = true)
     protected String title;
@@ -81,7 +81,7 @@ public class Book {
      *     {@link String }
      *     
      */
-    public String getISBN() {
+    public String getIsbn() {
         return isbn;
     }
 
@@ -93,7 +93,7 @@ public class Book {
      *     {@link String }
      *     
      */
-    public void setISBN(String value) {
+    public void setIsbn(String value) {
         this.isbn = value;
     }
 
