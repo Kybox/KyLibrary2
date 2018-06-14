@@ -51,12 +51,17 @@
         
     </package>
     
-    <package name="private" extends="default">
+    <package name="private" extends="default, json-default">
     
         <!-- [USER] Action -->
         <action name="user" class="fr.kybox.action.UserAction">
             <interceptor-ref name="authenticatedStack"/>
             <result name="success">jsp/user.jsp</result>
+        </action>
+        
+        <action name="extendBorrowing" class="fr.kybox.action.UserAction" method="extendBorrowing">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
         </action>
     </package>
 </struts>
