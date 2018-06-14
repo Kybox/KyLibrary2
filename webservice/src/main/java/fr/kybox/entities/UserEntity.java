@@ -38,6 +38,10 @@ public class UserEntity extends AbstractEntity {
     @Column
     private String tel;
 
+    @OneToOne
+    @JoinColumn(name = "level")
+    private Level level;
+
     public UserEntity() {}
 
     public String getEmail() {
@@ -95,6 +99,10 @@ public class UserEntity extends AbstractEntity {
     public void setTel(String tel) {
         this.tel = tel;
     }
+
+    public Level getLevel() { return level; }
+
+    public void setLevel(Level level) { this.level = level; }
 
     public List<BorrowedBook> getBooks() {
         return books;
