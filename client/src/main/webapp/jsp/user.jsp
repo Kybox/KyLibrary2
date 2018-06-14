@@ -9,7 +9,6 @@
 </head>
 <body>
 <%@ include file="include/header.jsp" %>
-t
 <div class="container">
     <div class="row profile">
         <div class="col-md-2 col-xs-3">

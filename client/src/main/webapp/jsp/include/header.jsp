@@ -7,7 +7,14 @@
     </h2>
 </div>
 <div class="container-fluid text-right">
+    <a href="search.action">
+        <button class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span>
+            Rechercher un livre
+        </button>
+    </a>
     <s:if test="#session.user">
+        <span class="glyphicon glyphicon-minus"></span>
         <a href="user.action">
             <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
@@ -23,6 +30,7 @@
         </a>
     </s:if>
     <s:else>
+        <span class="glyphicon glyphicon-minus"></span>
         <a href="login.action">
             <button class="btn btn-success">
                 <span class="glyphicon glyphicon-user"></span>
