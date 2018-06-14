@@ -5,7 +5,7 @@
 <head>
     <title>KyLibrary - Compte utilisateur</title>
     <%@ include file="include/head.jsp" %>
-    <script src="<s:property value="rootPath"/>js/user.js"></script>
+    <script src="<s:property value="rootPath"/>js/user.js" charset="UTF-8"></script>
 </head>
 <body>
 <%@ include file="include/header.jsp" %>
@@ -32,7 +32,7 @@ t
                         </a>
                         <a href="user.action?tab=books" id="books" class="list-group-item">
                             <span class="glyphicon glyphicon-transfer"></span>
-                            Livres empruntés
+                            Livres à rendre
                         </a>
                         <a href="user.action?tab=history" id="history" class="list-group-item">
                             <span class="glyphicon glyphicon-book"></span>
