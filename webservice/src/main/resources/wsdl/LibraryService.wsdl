@@ -13,14 +13,14 @@
             <xs:element name="user" nillable="true">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="ID" type="xs:integer"/>
+                        <xs:element name="id" type="xs:integer"/>
                         <xs:element name="firstName" type="xs:string"/>
                         <xs:element name="lastName" type="xs:string"/>
                         <xs:element name="birthday" type="xs:date"/>
                         <xs:element name="postalAddress" type="xs:string"/>
                         <xs:element name="tel" type="xs:string"/>
                         <xs:element name="email" type="xs:string"/>
-                        <xs:element ref="ws:bookList"/>
+                        <xs:element name="level" type="xs:integer"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
