@@ -1,5 +1,6 @@
 package fr.kybox.service;
 
+import fr.kybox.dao.AuthorRepository;
 import fr.kybox.dao.BookRepository;
 import fr.kybox.dao.BorrowedBooksRepository;
 import fr.kybox.dao.UserRepository;
@@ -18,8 +19,10 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Kybox
@@ -42,6 +45,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    AuthorRepository authorRepository;
 
     private UserEntity userEntity;
 
@@ -158,11 +164,20 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
-        List<BookEntity> entityList = bookRepository.findAllByTitleIgnoreCaseContaining(parameters.getKeywords());
+        Set<BookEntity> resultSet = new HashSet<>();
 
-        BookList bookList = new BookList();
+        Iterable<BookEntity> bookList = bookRepository.findAllByTitleIgnoreCaseContaining(parameters.getKeywords());
+        for(BookEntity book : bookList) resultSet.add(book);
 
-        for(BookEntity bookEntity : entityList){
+        Iterable<Author> authorList = authorRepository.findAllByNameIgnoreCaseContaining(parameters.getKeywords());
+        for(Author author : authorList){
+            bookList = bookRepository.findAllByAuthor(author);
+            for(BookEntity book : bookList) resultSet.add(book);
+        }
+
+        BookList resultList = new BookList();
+
+        for(BookEntity bookEntity : resultSet){
 
             Book book = new Book();
             book.setIsbn(bookEntity.getIsbn());
@@ -175,11 +190,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             book.setAvailable(BigInteger.valueOf(bookEntity.getAvailable()));
             book.setCover(bookEntity.getCover());
 
-            bookList.getBook().add(book);
+            resultList.getBook().add(book);
         }
 
         SearchBookResponse searchBookResponse = new SearchBookResponse();
-        searchBookResponse.setBookList(bookList);
+        searchBookResponse.setBookList(resultList);
 
         return searchBookResponse;
     }
