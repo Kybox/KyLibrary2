@@ -49,6 +49,10 @@
             <result name="success" type="redirectAction">index</result>
         </action>
         
+        <action name="search" class="fr.kybox.action.SearchAction">
+            <result>jsp/search.jsp</result>
+        </action>
+        
     </package>
     
     <package name="private" extends="default, json-default">
