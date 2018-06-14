@@ -92,7 +92,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     public BookBorrowed extendBorrowing(BookBorrowed parameter) {
 
         BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getISBN());
-        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
+        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBookOrderByReturnDateDesc(userEntity, bookEntity);
         borrowedBook.setExtended(true);
 
         LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
@@ -119,9 +119,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                 if(userEntity != null){
 
-                    List<BorrowedBook> borrowedBookList = borrowedBooksRepository.findAllByUser(userEntity);
+                    List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedDesc(userEntity);
 
-                    for(BorrowedBook borrowedBook : borrowedBookList){
+                    for(BorrowedBook borrowedBook : bookList){
 
                         Book book = new Book();
                         book.setISBN(borrowedBook.getBook().getIsbn());
@@ -138,6 +138,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                         bookBorrowed.setBook(book);
                         bookBorrowed.setExtended(borrowedBook.getExtended());
                         bookBorrowed.setReturndate(Converter.SQLDateToXML(borrowedBook.getReturnDate()));
+                        bookBorrowed.setReturned(borrowedBook.getReturned());
 
                         response.getBookBorrowed().add(bookBorrowed);
 
