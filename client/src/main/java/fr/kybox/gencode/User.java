@@ -20,14 +20,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="ID" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
  *         &lt;element name="firstName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="lastName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="birthday" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookList"/&gt;
+ *         &lt;element name="level" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -45,11 +45,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "postalAddress",
     "tel",
     "email",
-    "bookList"
+    "level"
 })
 public class User {
 
-    @XmlElement(name = "ID", required = true)
+    @XmlElement(required = true)
     protected BigInteger id;
     @XmlElement(required = true)
     protected String firstName;
@@ -64,8 +64,8 @@ public class User {
     protected String tel;
     @XmlElement(required = true)
     protected String email;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected BookList bookList;
+    @XmlElement(required = true)
+    protected BigInteger level;
 
     /**
      * Obtient la valeur de la propriété id.
@@ -75,7 +75,7 @@ public class User {
      *     {@link BigInteger }
      *     
      */
-    public BigInteger getID() {
+    public BigInteger getId() {
         return id;
     }
 
@@ -87,7 +87,7 @@ public class User {
      *     {@link BigInteger }
      *     
      */
-    public void setID(BigInteger value) {
+    public void setId(BigInteger value) {
         this.id = value;
     }
 
@@ -236,27 +236,27 @@ public class User {
     }
 
     /**
-     * Obtient la valeur de la propriété bookList.
+     * Obtient la valeur de la propriété level.
      * 
      * @return
      *     possible object is
-     *     {@link BookList }
+     *     {@link BigInteger }
      *     
      */
-    public BookList getBookList() {
-        return bookList;
+    public BigInteger getLevel() {
+        return level;
     }
 
     /**
-     * Définit la valeur de la propriété bookList.
+     * Définit la valeur de la propriété level.
      * 
      * @param value
      *     allowed object is
-     *     {@link BookList }
+     *     {@link BigInteger }
      *     
      */
-    public void setBookList(BookList value) {
-        this.bookList = value;
+    public void setLevel(BigInteger value) {
+        this.level = value;
     }
 
 }
