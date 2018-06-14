@@ -46,7 +46,7 @@
             <xs:element name="book">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="ISBN" type="xs:string"/>
+                        <xs:element name="Isbn" type="xs:string"/>
                         <xs:element name="Title" type="xs:string"/>
                         <xs:element name="Author" type="xs:string"/>
                         <xs:element name="Publisher" type="xs:string"/>
