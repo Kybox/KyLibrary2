@@ -27,7 +27,7 @@ public class UserAction extends ActionSupport implements SessionAware {
         List<BookBorrowed> bookList = getBorrowedBooks();
 
         for(BookBorrowed bookBorrowed : bookList){
-            if(bookBorrowed.getBook().getISBN().equals(getIsbn())){
+            if(bookBorrowed.getBook().getIsbn().equals(getIsbn())){
                 LibraryService service = ServiceFactory.getLibraryService();
                 service.extendBorrowing(bookBorrowed);
                 bookUpdated = true;
