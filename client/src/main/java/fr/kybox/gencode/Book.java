@@ -21,7 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="ISBN" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="Isbn" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Title" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Author" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Publisher" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
