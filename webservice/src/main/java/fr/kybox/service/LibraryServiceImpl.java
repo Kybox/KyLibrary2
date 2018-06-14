@@ -18,6 +18,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -157,18 +158,29 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
+        List<BookEntity> entityList = bookRepository.findAllByTitleIgnoreCaseContaining(parameters.getKeywords());
 
-        SearchBookResponse searchBookResponse = new SearchBookResponse();
         BookList bookList = new BookList();
-        List<Book> list = bookList.getBook();
 
-        for(int i = 0; i < 4; i++){
+        for(BookEntity bookEntity : entityList){
 
             Book book = new Book();
-            book.setTitle("Titre " + i);
-            list.add(book);
+            book.setISBN(bookEntity.getIsbn());
+            book.setTitle(bookEntity.getTitle());
+            book.setAuthor(bookEntity.getAuthor().getName());
+            book.setPublisher(bookEntity.getPublisher().getName());
+            book.setPublishDate(Converter.SQLDateToXML(bookEntity.getPublisherdate()));
+            book.setSummary(bookEntity.getSummary());
+            book.setGenre(bookEntity.getGenre().getName());
+            book.setAvailable(BigInteger.valueOf(bookEntity.getAvailable()));
+            book.setCover(bookEntity.getCover());
+
+            bookList.getBook().add(book);
         }
 
+        System.out.println("    =====> BookList SIZE = " + bookList.getBook().size());
+
+        SearchBookResponse searchBookResponse = new SearchBookResponse();
         searchBookResponse.setBookList(bookList);
 
         return searchBookResponse;
