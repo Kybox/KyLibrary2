@@ -21,12 +21,16 @@
         </div>
     </div>
 </div>
-<s:if test="bookList!=null">
-    bookList != null / size = <s:property value="bookList.size"/>
-    <s:iterator value="bookList">
-        Titre : <s:property value="title"/>
-    </s:iterator>
+<hr>
+<s:if test="bookList != null">
+    <s:if test="bookList.size > 0">
+        <%@ include file="include/search/search_result.jsp" %>
+    </s:if>
+    <s:else>
+        <div class="text-center">
+            <h3>Aucun résultat pour votre recherche...</h3>
+        </div>
+    </s:else>
 </s:if>
-<s:else>bookList == null</s:else>
 </body>
 </html>
