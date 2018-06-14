@@ -5,8 +5,6 @@ import fr.kybox.gencode.*;
 import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,17 +15,27 @@ import java.util.Map;
 public class UserAction extends ActionSupport implements SessionAware {
 
     private String tab;
+    private String isbn;
     private Map<String, Object> session;
 
-    private List<BookBorrowed> getUserBookList(){
+    public String extendBorrowing(){
 
-        LibraryService service = ServiceFactory.getLibraryService();
+        System.out.println("ISBN = " + getIsbn());
 
-        UserBookList userBookList = new UserBookList();
-        userBookList.setUser(getUser());
+        boolean bookUpdated = false;
 
-        UserBookListResponse userBookListResponse = service.userBookList(userBookList);
-        return userBookListResponse.getBookBorrowed();
+        List<BookBorrowed> bookList = getBorrowedBooks();
+
+        for(BookBorrowed bookBorrowed : bookList){
+            if(bookBorrowed.getBook().getISBN().equals(getIsbn())){
+                LibraryService service = ServiceFactory.getLibraryService();
+                service.extendBorrowing(bookBorrowed);
+                bookUpdated = true;
+            }
+        }
+
+        if(bookUpdated) return ActionSupport.SUCCESS;
+        else return ActionSupport.ERROR;
     }
 
     public User getUser() {
@@ -37,8 +45,18 @@ public class UserAction extends ActionSupport implements SessionAware {
     public String getTab() { return tab; }
     public void setTab(String tab) { this.tab = tab; }
 
+    public String getIsbn() { return isbn; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
+
     public List<BookBorrowed> getBorrowedBooks() {
-        return getUserBookList();
+
+        LibraryService service = ServiceFactory.getLibraryService();
+
+        UserBookList userBookList = new UserBookList();
+        userBookList.setUser(getUser());
+
+        UserBookListResponse userBookListResponse = service.userBookList(userBookList);
+        return userBookListResponse.getBookBorrowed();
     }
 
     @Override
