@@ -5,6 +5,7 @@ import fr.kybox.gencode.*;
 import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 /**
@@ -36,7 +37,9 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
                 if(user != null){
 
-                    this.session.put("user", user);
+                    if(user.getLevel().equals(BigInteger.valueOf(1))) this.session.put("user", user);
+                    else if(user.getLevel().equals(BigInteger.valueOf(2))) this.session.put("manager", user);
+                    else if(user.getLevel().equals(BigInteger.valueOf(3))) this.session.put("admin", user);
 
                     result = ActionSupport.SUCCESS;
 
