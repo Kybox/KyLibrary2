@@ -14,6 +14,5 @@ import java.util.Set;
 public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
     BookEntity findByIsbn(String isbn);
-    Iterable<BookEntity> findAllByTitleIgnoreCaseContaining(String keyword);
-    Iterable<BookEntity> findAllByAuthor(Author author);
+    Iterable<BookEntity> findAllByTitleContainingOrAuthor_NameContainingAllIgnoreCase(String keyword, String keyword2);
 }

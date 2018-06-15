@@ -19,10 +19,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @author Kybox
@@ -167,14 +164,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         Set<BookEntity> resultSet = new HashSet<>();
 
-        Iterable<BookEntity> bookList = bookRepository.findAllByTitleIgnoreCaseContaining(parameters.getKeywords());
-        for(BookEntity book : bookList) resultSet.add(book);
+        Iterable<BookEntity> bookList =
+                bookRepository.
+                        findAllByTitleContainingOrAuthor_NameContainingAllIgnoreCase
+                                (parameters.getKeywords(), parameters.getKeywords());
 
-        Iterable<Author> authorList = authorRepository.findAllByNameIgnoreCaseContaining(parameters.getKeywords());
-        for(Author author : authorList){
-            bookList = bookRepository.findAllByAuthor(author);
-            for(BookEntity book : bookList) resultSet.add(book);
-        }
+        for(BookEntity book : bookList) resultSet.add(book);
 
         BookList resultList = new BookList();
 
