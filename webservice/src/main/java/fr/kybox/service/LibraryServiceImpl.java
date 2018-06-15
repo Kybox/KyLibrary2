@@ -82,6 +82,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                         loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(userEntity.getBirthday()));
                         loginUserResponse.getUser().setPostalAddress(userEntity.getPostal_address());
                         loginUserResponse.getUser().setTel(userEntity.getTel());
+                        loginUserResponse.getUser().setLevel(BigInteger.valueOf(userEntity.getLevel().getId()));
                     }
                     else logger.error("Password comparison : [NO]");
                 }
