@@ -45,6 +45,11 @@
                 <artifactId>cxf-rt-transports-http</artifactId>
                 <version>${cxf.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.cxf.xjc-utils</groupId>
+                <artifactId>cxf-xjc-runtime</artifactId>
+                <version>3.2.1</version>
+            </dependency>
             
             <!-- [HIBERNATE] -->
             <dependency>
