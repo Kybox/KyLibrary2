@@ -21,9 +21,6 @@ import java.util.List;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BookEntity extends AbstractEntity {
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowedBook> users = new ArrayList<>();
-
     @Column
     @NaturalId
     private String isbn;
@@ -40,7 +37,7 @@ public class BookEntity extends AbstractEntity {
     private Publisher publisher;
 
     @Column
-    private Date publisherdate;
+    private Date publishdate;
 
     @Column
     private String summary;
@@ -90,11 +87,11 @@ public class BookEntity extends AbstractEntity {
     }
 
     public Date getPublisherdate() {
-        return publisherdate;
+        return publishdate;
     }
 
-    public void setPublisherdate(Date publisherdate) {
-        this.publisherdate = publisherdate;
+    public void setPublisherdate(Date publishdate) {
+        this.publishdate = publishdate;
     }
 
     public String getSummary() {
@@ -124,12 +121,4 @@ public class BookEntity extends AbstractEntity {
     public String getCover() { return cover; }
 
     public void setCover(String cover) { this.cover = cover; }
-
-    public List<BorrowedBook> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<BorrowedBook> users) {
-        this.users = users;
-    }
 }
