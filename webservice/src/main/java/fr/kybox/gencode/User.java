@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -61,7 +61,7 @@ public class User
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected Calendar birthday;
+    protected Date birthday;
     @XmlElement(required = true)
     protected String postalAddress;
     @XmlElement(required = true)
@@ -142,7 +142,7 @@ public class User
      *     {@link String }
      *     
      */
-    public Calendar getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
@@ -154,7 +154,7 @@ public class User
      *     {@link String }
      *     
      */
-    public void setBirthday(Calendar value) {
+    public void setBirthday(Date value) {
         this.birthday = value;
     }
 

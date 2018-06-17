@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -68,7 +68,7 @@ public class Book
     @XmlElement(name = "PublishDate", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected Calendar publishDate;
+    protected Date publishDate;
     @XmlElement(name = "Summary", required = true)
     protected String summary;
     @XmlElement(name = "Genre", required = true)
@@ -182,7 +182,7 @@ public class Book
      *     {@link String }
      *     
      */
-    public Calendar getPublishDate() {
+    public Date getPublishDate() {
         return publishDate;
     }
 
@@ -194,7 +194,7 @@ public class Book
      *     {@link String }
      *     
      */
-    public void setPublishDate(Calendar value) {
+    public void setPublishDate(Date value) {
         this.publishDate = value;
     }
 
