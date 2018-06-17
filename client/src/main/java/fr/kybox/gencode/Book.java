@@ -1,14 +1,15 @@
 
 package fr.kybox.gencode;
 
-import java.math.BigInteger;
+import java.io.Serializable;
+import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -28,7 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="PublishDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
+ *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *         &lt;element name="Cover" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -51,8 +52,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "cover"
 })
 @XmlRootElement(name = "book")
-public class Book {
+public class Book
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1L;
     @XmlElement(name = "Isbn", required = true)
     protected String isbn;
     @XmlElement(name = "Title", required = true)
@@ -61,15 +65,16 @@ public class Book {
     protected String author;
     @XmlElement(name = "Publisher", required = true)
     protected String publisher;
-    @XmlElement(name = "PublishDate", required = true)
+    @XmlElement(name = "PublishDate", required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar publishDate;
+    protected Calendar publishDate;
     @XmlElement(name = "Summary", required = true)
     protected String summary;
     @XmlElement(name = "Genre", required = true)
     protected String genre;
-    @XmlElement(name = "Available", required = true)
-    protected BigInteger available;
+    @XmlElement(name = "Available")
+    protected int available;
     @XmlElement(name = "Cover", required = true)
     protected String cover;
 
@@ -174,10 +179,10 @@ public class Book {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getPublishDate() {
+    public Calendar getPublishDate() {
         return publishDate;
     }
 
@@ -186,10 +191,10 @@ public class Book {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setPublishDate(XMLGregorianCalendar value) {
+    public void setPublishDate(Calendar value) {
         this.publishDate = value;
     }
 
@@ -244,24 +249,16 @@ public class Book {
     /**
      * Obtient la valeur de la propriété available.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
      */
-    public BigInteger getAvailable() {
+    public int getAvailable() {
         return available;
     }
 
     /**
      * Définit la valeur de la propriété available.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
      */
-    public void setAvailable(BigInteger value) {
+    public void setAvailable(int value) {
         this.available = value;
     }
 

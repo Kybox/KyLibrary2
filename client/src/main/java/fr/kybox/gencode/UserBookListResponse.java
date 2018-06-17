@@ -1,6 +1,7 @@
 
 package fr.kybox.gencode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,8 +35,11 @@ import javax.xml.bind.annotation.XmlType;
     "bookBorrowed"
 })
 @XmlRootElement(name = "userBookListResponse")
-public class UserBookListResponse {
+public class UserBookListResponse
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1L;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected List<BookBorrowed> bookBorrowed;
 
