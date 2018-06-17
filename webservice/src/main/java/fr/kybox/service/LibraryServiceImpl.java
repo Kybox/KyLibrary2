@@ -19,7 +19,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -77,8 +76,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                         loginUserResponse.getUser().setFirstName(userEntity.getFirst_name());
                         loginUserResponse.getUser().setLastName(userEntity.getLast_name());
                         loginUserResponse.getUser().setEmail(userEntity.getEmail());
-                        //loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(userEntity.getBirthday()));
-                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToCalendar(userEntity.getBirthday()));
+                        loginUserResponse.getUser().setBirthday(userEntity.getBirthday());
                         loginUserResponse.getUser().setPostalAddress(userEntity.getPostal_address());
                         loginUserResponse.getUser().setTel(userEntity.getTel());
                         loginUserResponse.getUser().setLevel(userEntity.getLevel().getId());
@@ -108,8 +106,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         borrowedBooksRepository.save(borrowedBook);
 
-        //parameter.setReturndate(Converter.LocalDateToXML(localDate));
-        parameter.setReturndate(Converter.SQLDateToCalendar(borrowedBook.getReturnDate()));
+        parameter.setReturndate(borrowedBook.getReturnDate());
         parameter.setExtended(true);
 
         return parameter;
@@ -131,26 +128,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                     for(BorrowedBook borrowedBook : bookList){
 
-                        Book book = Reflection.Book(borrowedBook.getBook());
-                        book.setPublishDate(Converter.SQLDateToCalendar(borrowedBook.getBook().getPublisherdate()));
-
-                        /*
-                        book.setIsbn(borrowedBook.getBook().getIsbn());
-                        book.setTitle(borrowedBook.getBook().getTitle());
-                        book.setAuthor(borrowedBook.getBook().getAuthor().getName());
-                        book.setPublisher(borrowedBook.getBook().getPublisher().getName());
-                        book.setPublishDate(Converter.SQLDateToXML(borrowedBook.getBook().getPublisherdate()));
-                        book.setSummary(borrowedBook.getBook().getSummary());
-                        book.setGenre(borrowedBook.getBook().getGenre().getName());
-                        book.setAvailable(BigInteger.valueOf(borrowedBook.getBook().getAvailable()));
-                        book.setCover(borrowedBook.getBook().getCover());
-                        */
+                        //Book book = Reflection.Book(borrowedBook.getBook());
 
                         BookBorrowed bookBorrowed = new BookBorrowed();
-                        bookBorrowed.setBook(book);
+                        bookBorrowed.setBook(Reflection.Book(borrowedBook.getBook()));
                         bookBorrowed.setExtended(borrowedBook.getExtended());
-                        bookBorrowed.setReturndate(Converter.SQLDateToCalendar(borrowedBook.getReturnDate()));
-                        //bookBorrowed.setReturndate(Converter.SQLDateToXML(borrowedBook.getReturnDate()));
+                        bookBorrowed.setReturndate(borrowedBook.getReturnDate());
                         bookBorrowed.setReturned(borrowedBook.getReturned());
 
                         response.getBookBorrowed().add(bookBorrowed);
@@ -177,15 +160,8 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         BookList resultList = new BookList();
 
-        for(BookEntity bookEntity : bookList){
-
-            Book book = Reflection.Book(bookEntity);
-            //book.setAvailable(BigInteger.valueOf(bookEntity.getAvailable()));
-            //book.setPublishDate(Converter.SQLDateToXML(bookEntity.getPublisherdate()));
-            book.setPublishDate(Converter.SQLDateToCalendar(bookEntity.getPublisherdate()));
-
-            resultList.getBook().add(book);
-        }
+        for(BookEntity bookEntity : bookList)
+            resultList.getBook().add(Reflection.Book(bookEntity));
 
         SearchBookResponse searchBookResponse = new SearchBookResponse();
         searchBookResponse.setBookList(resultList);
