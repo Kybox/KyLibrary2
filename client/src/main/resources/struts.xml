@@ -41,7 +41,7 @@
         <action name="login" class="fr.kybox.action.AuthAction" method="login">
             <result name="input">jsp/login.jsp</result>
             <result name="error">jsp/login.jsp</result>
-            <result name="success" type="redirectAction">index</result>
+            <result name="success" type="redirectAction">user</result>
         </action>
         
         <!-- [LOGOUT] Action -->
@@ -63,9 +63,16 @@
             <result name="success">jsp/user.jsp</result>
         </action>
         
+        <!-- [EXTEND BORROWING] Action -->
         <action name="extendBorrowing" class="fr.kybox.action.UserAction" method="extendBorrowing">
             <interceptor-ref name="authenticatedStack"/>
             <result type="json"/>
+        </action>
+        
+        <!-- [MANAGER] Action -->
+        <action name="manager" class="fr.kybox.action.ManagerAction">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/manager.jsp</result>
         </action>
     </package>
 </struts>
