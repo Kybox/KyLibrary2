@@ -18,6 +18,8 @@
                 Date de parution : <s:date name="publishDate.toGregorianCalendar()" format="dd/MM/yyyy"/>
                 <br>
                 Genre littéraire : <s:property value="genre"/>
+                <br>
+                Exemplaire(s) disponible(s) : <s:property value="available"/>
                 <hr>
                 Résumé : <br>
                 <s:property value="summary"/>

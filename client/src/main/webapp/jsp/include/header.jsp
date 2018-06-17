@@ -29,12 +29,28 @@
             </button>
         </a>
     </s:if>
+    <s:elseif test="#session.manager">
+        <span class="glyphicon glyphicon-minus"></span>
+        <a href="manager.action">
+            <button class="btn btn-info">
+                <span class="glyphicon glyphicon-user"></span>
+                Administrer
+            </button>
+        </a>
+        <span class="glyphicon glyphicon-minus"></span>
+        <a href="logout.action">
+            <button class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove"></span>
+                Déconnexion
+            </button>
+        </a>
+    </s:elseif>
     <s:else>
         <span class="glyphicon glyphicon-minus"></span>
         <a href="login.action">
             <button class="btn btn-success">
                 <span class="glyphicon glyphicon-user"></span>
-                Connexion utilisateur
+                Connexion
             </button>
         </a>
     </s:else>
