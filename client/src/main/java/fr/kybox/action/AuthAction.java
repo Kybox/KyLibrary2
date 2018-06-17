@@ -37,9 +37,9 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
                 if(user != null){
 
-                    if(user.getLevel().equals(BigInteger.valueOf(1))) this.session.put("user", user);
-                    else if(user.getLevel().equals(BigInteger.valueOf(2))) this.session.put("manager", user);
-                    else if(user.getLevel().equals(BigInteger.valueOf(3))) this.session.put("admin", user);
+                    if(user.getLevel() == 1) this.session.put("user", user);
+                    else if(user.getLevel() == 2) this.session.put("manager", user);
+                    else if(user.getLevel() == 3) this.session.put("admin", user);
 
                     result = ActionSupport.SUCCESS;
 
@@ -61,7 +61,7 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
     public String logout(){
 
-        this.session.remove("user");
+        this.session.clear();
 
         return ActionSupport.SUCCESS;
     }
