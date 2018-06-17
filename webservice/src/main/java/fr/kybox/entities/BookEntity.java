@@ -37,7 +37,7 @@ public class BookEntity extends AbstractEntity {
     private Publisher publisher;
 
     @Column
-    private Date publishdate;
+    private Date publishDate;
 
     @Column
     private String summary;
@@ -86,12 +86,12 @@ public class BookEntity extends AbstractEntity {
         this.publisher = publisher;
     }
 
-    public Date getPublisherdate() {
-        return publishdate;
+    public Date getPublishDate() {
+        return publishDate;
     }
 
-    public void setPublisherdate(Date publishdate) {
-        this.publishdate = publishdate;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public String getSummary() {
