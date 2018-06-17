@@ -67,6 +67,8 @@
     <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-ws-policy:3.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.neethi:neethi:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-transports-http:3.2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.cxf.xjc-utils:cxf-xjc-runtime:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.2.12" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-core:5.2.17.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.3.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
