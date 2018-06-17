@@ -39,7 +39,7 @@ public class Reflection {
                         setterName = "set" + methodName.substring(3);
                     else setterName = "set" + methodName.substring(2);
 
-                    if(!tempName.equals("Publisherdate") && !tempName.equals("Available")) {
+                    if(!tempName.equals("Publisherdate")) {
                         currentMethod = book.getClass().getMethod(setterName, object.getClass());
                         currentMethod.invoke(book, object);
                     }
