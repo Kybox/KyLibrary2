@@ -10,6 +10,7 @@ import fr.kybox.gencode.*;
 
 import fr.kybox.security.Password;
 import fr.kybox.utils.Converter;
+import fr.kybox.utils.Reflection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
@@ -76,10 +77,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                         loginUserResponse.getUser().setFirstName(userEntity.getFirst_name());
                         loginUserResponse.getUser().setLastName(userEntity.getLast_name());
                         loginUserResponse.getUser().setEmail(userEntity.getEmail());
-                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(userEntity.getBirthday()));
+                        //loginUserResponse.getUser().setBirthday(Converter.SQLDateToXML(userEntity.getBirthday()));
+                        loginUserResponse.getUser().setBirthday(Converter.SQLDateToCalendar(userEntity.getBirthday()));
                         loginUserResponse.getUser().setPostalAddress(userEntity.getPostal_address());
                         loginUserResponse.getUser().setTel(userEntity.getTel());
-                        loginUserResponse.getUser().setLevel(BigInteger.valueOf(userEntity.getLevel().getId()));
+                        loginUserResponse.getUser().setLevel(userEntity.getLevel().getId());
                     }
                     else logger.error("Password comparison : [NO]");
                 }
@@ -106,7 +108,8 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         borrowedBooksRepository.save(borrowedBook);
 
-        parameter.setReturndate(Converter.LocalDateToXML(localDate));
+        //parameter.setReturndate(Converter.LocalDateToXML(localDate));
+        parameter.setReturndate(Converter.SQLDateToCalendar(borrowedBook.getReturnDate()));
         parameter.setExtended(true);
 
         return parameter;
@@ -128,7 +131,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                     for(BorrowedBook borrowedBook : bookList){
 
-                        Book book = new Book();
+                        Book book = Reflection.Book(borrowedBook.getBook());
+                        book.setPublishDate(Converter.SQLDateToCalendar(borrowedBook.getBook().getPublisherdate()));
+
+                        /*
                         book.setIsbn(borrowedBook.getBook().getIsbn());
                         book.setTitle(borrowedBook.getBook().getTitle());
                         book.setAuthor(borrowedBook.getBook().getAuthor().getName());
@@ -138,11 +144,13 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                         book.setGenre(borrowedBook.getBook().getGenre().getName());
                         book.setAvailable(BigInteger.valueOf(borrowedBook.getBook().getAvailable()));
                         book.setCover(borrowedBook.getBook().getCover());
+                        */
 
                         BookBorrowed bookBorrowed = new BookBorrowed();
                         bookBorrowed.setBook(book);
                         bookBorrowed.setExtended(borrowedBook.getExtended());
-                        bookBorrowed.setReturndate(Converter.SQLDateToXML(borrowedBook.getReturnDate()));
+                        bookBorrowed.setReturndate(Converter.SQLDateToCalendar(borrowedBook.getReturnDate()));
+                        //bookBorrowed.setReturndate(Converter.SQLDateToXML(borrowedBook.getReturnDate()));
                         bookBorrowed.setReturned(borrowedBook.getReturned());
 
                         response.getBookBorrowed().add(bookBorrowed);
@@ -162,29 +170,19 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
-        Set<BookEntity> resultSet = new HashSet<>();
-
         Iterable<BookEntity> bookList =
                 bookRepository.
-                        findAllByTitleContainingOrAuthor_NameContainingAllIgnoreCase
-                                (parameters.getKeywords(), parameters.getKeywords());
-
-        for(BookEntity book : bookList) resultSet.add(book);
+                        findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
+                                (parameters.getKeywords(), parameters.getKeywords(), parameters.getKeywords());
 
         BookList resultList = new BookList();
 
-        for(BookEntity bookEntity : resultSet){
+        for(BookEntity bookEntity : bookList){
 
-            Book book = new Book();
-            book.setIsbn(bookEntity.getIsbn());
-            book.setTitle(bookEntity.getTitle());
-            book.setAuthor(bookEntity.getAuthor().getName());
-            book.setPublisher(bookEntity.getPublisher().getName());
-            book.setPublishDate(Converter.SQLDateToXML(bookEntity.getPublisherdate()));
-            book.setSummary(bookEntity.getSummary());
-            book.setGenre(bookEntity.getGenre().getName());
-            book.setAvailable(BigInteger.valueOf(bookEntity.getAvailable()));
-            book.setCover(bookEntity.getCover());
+            Book book = Reflection.Book(bookEntity);
+            //book.setAvailable(BigInteger.valueOf(bookEntity.getAvailable()));
+            //book.setPublishDate(Converter.SQLDateToXML(bookEntity.getPublisherdate()));
+            book.setPublishDate(Converter.SQLDateToCalendar(bookEntity.getPublisherdate()));
 
             resultList.getBook().add(book);
         }
