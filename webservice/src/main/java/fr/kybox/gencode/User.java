@@ -1,13 +1,15 @@
 
 package fr.kybox.gencode;
 
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -47,17 +49,21 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "email",
     "level"
 })
-public class User {
+public class User
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
     protected BigInteger id;
     @XmlElement(required = true)
     protected String firstName;
     @XmlElement(required = true)
     protected String lastName;
-    @XmlElement(required = true)
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar birthday;
+    protected Calendar birthday;
     @XmlElement(required = true)
     protected String postalAddress;
     @XmlElement(required = true)
@@ -144,10 +150,10 @@ public class User {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getBirthday() {
+    public Calendar getBirthday() {
         return birthday;
     }
 
@@ -156,10 +162,10 @@ public class User {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setBirthday(XMLGregorianCalendar value) {
+    public void setBirthday(Calendar value) {
         this.birthday = value;
     }
 

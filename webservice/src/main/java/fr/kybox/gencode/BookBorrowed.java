@@ -1,13 +1,15 @@
 
 package fr.kybox.gencode;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -40,13 +42,17 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "returned"
 })
 @XmlRootElement(name = "bookBorrowed")
-public class BookBorrowed {
+public class BookBorrowed
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1L;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected Book book;
-    @XmlElement(required = true)
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar returndate;
+    protected Calendar returndate;
     protected boolean extended;
     protected boolean returned;
 
@@ -79,10 +85,10 @@ public class BookBorrowed {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getReturndate() {
+    public Calendar getReturndate() {
         return returndate;
     }
 
@@ -91,10 +97,10 @@ public class BookBorrowed {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setReturndate(XMLGregorianCalendar value) {
+    public void setReturndate(Calendar value) {
         this.returndate = value;
     }
 

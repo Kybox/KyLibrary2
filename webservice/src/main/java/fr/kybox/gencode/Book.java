@@ -1,14 +1,16 @@
 
 package fr.kybox.gencode;
 
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -51,8 +53,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "cover"
 })
 @XmlRootElement(name = "book")
-public class Book {
+public class Book
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1L;
     @XmlElement(name = "Isbn", required = true)
     protected String isbn;
     @XmlElement(name = "Title", required = true)
@@ -61,9 +66,10 @@ public class Book {
     protected String author;
     @XmlElement(name = "Publisher", required = true)
     protected String publisher;
-    @XmlElement(name = "PublishDate", required = true)
+    @XmlElement(name = "PublishDate", required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar publishDate;
+    protected Calendar publishDate;
     @XmlElement(name = "Summary", required = true)
     protected String summary;
     @XmlElement(name = "Genre", required = true)
@@ -174,10 +180,10 @@ public class Book {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getPublishDate() {
+    public Calendar getPublishDate() {
         return publishDate;
     }
 
@@ -186,10 +192,10 @@ public class Book {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setPublishDate(XMLGregorianCalendar value) {
+    public void setPublishDate(Calendar value) {
         this.publishDate = value;
     }
 
