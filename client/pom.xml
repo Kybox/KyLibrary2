@@ -43,7 +43,11 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
         
-        
+        <!-- [SPRING] -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
         
     </dependencies>
     
@@ -68,6 +72,11 @@
                                         <extraarg>-p</extraarg>
                                         <extraarg>fr.kybox.gencode</extraarg>
                                     </extraargs>
+                                    <bindingFiles>
+                                        <bindingFile>
+                                            https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/binding/LibraryServiceBinding.xml
+                                        </bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
