@@ -50,7 +50,7 @@
                         <xs:element name="Title" type="xs:string"/>
                         <xs:element name="Author" type="xs:string"/>
                         <xs:element name="Publisher" type="xs:string"/>
-                        <xs:element name="PublishDate" type="xs:date"/>
+                        <xs:element name="PublishDate" type="xs:dateTime"/>
                         <xs:element name="Summary" type="xs:string"/>
                         <xs:element name="Genre" type="xs:string"/>
                         <xs:element name="Available" type="xs:integer"/>
