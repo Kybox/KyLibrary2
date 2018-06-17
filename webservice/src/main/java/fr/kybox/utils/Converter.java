@@ -1,7 +1,9 @@
 package fr.kybox.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Date;
-import java.util.Calendar;
 
 /**
  * @author Kybox
@@ -9,15 +11,9 @@ import java.util.Calendar;
  */
 public class Converter {
 
-    public static Calendar SQLDateToCalendar(Date date){
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
-    }
+    private final static Logger logger = LogManager.getLogger(Converter.class);
 
     public static Date DateToSQLDate(java.util.Date date){
-
         return new Date(date.getTime());
     }
 }
