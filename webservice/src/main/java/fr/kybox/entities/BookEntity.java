@@ -121,4 +121,19 @@ public class BookEntity extends AbstractEntity {
     public String getCover() { return cover; }
 
     public void setCover(String cover) { this.cover = cover; }
+
+    @Override
+    public String toString() {
+        return "BookEntity{" +
+                "isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", author=" + author.getName() +
+                ", publisher=" + publisher.getName() +
+                ", publishDate=" + publishDate +
+                ", summary='" + summary + '\'' +
+                ", genre=" + genre +
+                ", available=" + available +
+                ", cover='" + cover + '\'' +
+                '}';
+    }
 }
