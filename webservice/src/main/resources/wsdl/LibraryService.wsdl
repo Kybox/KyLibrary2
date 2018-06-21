@@ -111,6 +111,41 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            
+            <!-- [CREATE USER] -->
+            <xs:element name="createUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:user"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:boolean"/>
+                        <xs:element name="info" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [LOAN RETURN] -->
+            <xs:element name="loanReturn">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:bookBorrowed"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loanReturnResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:boolean"/>
+                        <xs:element name="info" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
         </xs:schema>
     </wsdl:types>
     
@@ -139,6 +174,18 @@
     <wsdl:message name="searchBookResponse">
         <wsdl:part name="response" element="ws:searchBookResponse"/>
     </wsdl:message>
+    <wsdl:message name="createUser">
+        <wsdl:part name="parameters" element="ws:createUser"/>
+    </wsdl:message>
+    <wsdl:message name="createUserResponse">
+        <wsdl:part name="response" element="ws:createUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="loanReturn">
+        <wsdl:part name="parameters" element="ws:loanReturn"/>
+    </wsdl:message>
+    <wsdl:message name="loanReturnResponse">
+        <wsdl:part name="response" element="ws:loanReturnResponse"/>
+    </wsdl:message>
     
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -157,6 +204,14 @@
         <wsdl:operation name="searchBook">
             <wsdl:input message="ws:searchBook"/>
             <wsdl:output message="ws:searchBookResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <wsdl:input message="ws:createUser"/>
+            <wsdl:output message="ws:createUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="loanReturn">
+            <wsdl:input message="ws:loanReturn"/>
+            <wsdl:output message="ws:loanReturnResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     
@@ -203,6 +258,27 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        
+        <!-- [PRIVATE] CREATE USER -->
+        <wsdl:operation name="createUser">
+            <wsdl:input>
+                <soap:header message="loginUser" part="parameters" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="loanReturn">
+            <wsdl:input>
+                <soap:header message="loginUser" part="parameters" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
     </wsdl:binding>
     
     <!-- [SERVICE] -->
