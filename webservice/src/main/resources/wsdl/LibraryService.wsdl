@@ -116,6 +116,7 @@
             <xs:element name="createUser">
                 <xs:complexType>
                     <xs:sequence>
+                        <xs:element ref="ws:loginUser"/>
                         <xs:element ref="ws:user"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -133,6 +134,7 @@
             <xs:element name="loanReturn">
                 <xs:complexType>
                     <xs:sequence>
+                        <xs:element ref="ws:loginUser"/>
                         <xs:element ref="ws:bookBorrowed"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -262,16 +264,16 @@
         <!-- [PRIVATE] CREATE USER -->
         <wsdl:operation name="createUser">
             <wsdl:input>
-                <soap:header message="ws:loginUser" part="parameters" use="literal"/>
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        
+        <!-- [PRIVATE] LOAN RETURN -->
         <wsdl:operation name="loanReturn">
             <wsdl:input>
-                <soap:header message="ws:loginUser" part="parameters" use="literal"/>
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
