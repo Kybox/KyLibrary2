@@ -262,7 +262,7 @@
         <!-- [PRIVATE] CREATE USER -->
         <wsdl:operation name="createUser">
             <wsdl:input>
-                <soap:header message="loginUser" part="parameters" use="literal"/>
+                <soap:header message="ws:loginUser" part="parameters" use="literal"/>
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
@@ -271,7 +271,7 @@
         </wsdl:operation>
         <wsdl:operation name="loanReturn">
             <wsdl:input>
-                <soap:header message="loginUser" part="parameters" use="literal"/>
+                <soap:header message="ws:loginUser" part="parameters" use="literal"/>
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
