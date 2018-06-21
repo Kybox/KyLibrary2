@@ -114,6 +114,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreateUser }
+     * 
+     */
+    public CreateUser createCreateUser() {
+        return new CreateUser();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserResponse }
+     * 
+     */
+    public CreateUserResponse createCreateUserResponse() {
+        return new CreateUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoanReturn }
+     * 
+     */
+    public LoanReturn createLoanReturn() {
+        return new LoanReturn();
+    }
+
+    /**
+     * Create an instance of {@link LoanReturnResponse }
+     * 
+     */
+    public LoanReturnResponse createLoanReturnResponse() {
+        return new LoanReturnResponse();
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
      * 
      */
