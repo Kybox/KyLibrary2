@@ -3,7 +3,7 @@
     
     <display-name>KyLibrary - WebService</display-name>
     
-    <!-- [SPRING FRAMEWORK] -->
+    <!-- [SPRING CONTEXT] -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:apache-cxf-services.xml, classpath:spring-hibernate-jax-ws.xml</param-value>
@@ -22,5 +22,21 @@
         <servlet-name>CXFServlet</servlet-name>
         <url-pattern>/SOAP/*</url-pattern>
     </servlet-mapping>
+    
+    <!-- [SPRING BATCH] -->
+    <!--
+    <servlet>
+        <servlet-name>SpringBatchServlet</servlet-name>
+        <servlet-class>org.springframework.web.SpringServletContainerInitializer</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-batch.xml</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SpringBatchServlet</servlet-name>
+        <url-pattern>/Batch/*</url-pattern>
+    </servlet-mapping>
+    -->
     
 </web-app>
