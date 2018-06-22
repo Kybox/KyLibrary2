@@ -1,7 +1,10 @@
 package fr.kybox.utils;
 
 import fr.kybox.entities.BookEntity;
+import fr.kybox.entities.Level;
+import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.Book;
+import fr.kybox.gencode.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +20,7 @@ public class Reflection {
 
     private final static Logger logger = LogManager.getLogger(Reflection.class);
 
-    public static Book Book(BookEntity bookEntity){
+    public static Book BookEntityToWS(BookEntity bookEntity){
 
         Book book = new Book();
 
@@ -65,5 +68,47 @@ public class Reflection {
         }
 
         return book;
+    }
+
+    public static UserEntity WSToUserEntity(User user){
+
+        UserEntity userEntity = new UserEntity();
+
+        for(Method method : user.getClass().getDeclaredMethods()){
+
+            Object object;
+            Method currentMethod;
+
+            try {
+
+                String methodName = method.getName();
+
+                if(methodName.startsWith("get")){
+
+                    currentMethod = method;
+                    object = currentMethod.invoke(user);
+
+                    if(object.getClass().getName().equals("java.util.Date"))
+                        object = Converter.DateToSQLDate((java.util.Date) object);
+
+                    if(currentMethod.getName().equals("getLevel")) {
+                        object = new Level();
+                        ((Level) object).setId(1);
+                    }
+
+                    if(!currentMethod.getName().equals("getId")) {
+                        String setterName = "set" + methodName.substring(3);
+                        currentMethod = userEntity.getClass().getMethod(setterName, object.getClass());
+
+                        currentMethod.invoke(userEntity, object);
+                    }
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return userEntity;
     }
 }
