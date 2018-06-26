@@ -63,8 +63,6 @@
         <property name="password" value=""/>
     </bean>
     
-    <!--
     <context:property-placeholder location="classpath:properties/webservice.properties"/>
-    -->
 
 </beans>
