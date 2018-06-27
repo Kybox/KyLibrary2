@@ -151,10 +151,10 @@
     </wsdl:types>
     
     <!-- [MESSAGES] -->
-    <wsdl:message name="loginUser">
+    <wsdl:message name="login">
         <wsdl:part name="parameters" element="ws:login"/>
     </wsdl:message>
-    <wsdl:message name="loginUserResponse">
+    <wsdl:message name="loginResponse">
         <wsdl:part name="response" element="ws:loginResponse"/>
     </wsdl:message>
     <wsdl:message name="userBookList">
@@ -190,9 +190,9 @@
     
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
-        <wsdl:operation name="loginUser">
-            <wsdl:input message="ws:loginUser"/>
-            <wsdl:output message="ws:loginUserResponse"/>
+        <wsdl:operation name="login">
+            <wsdl:input message="ws:login"/>
+            <wsdl:output message="ws:loginResponse"/>
         </wsdl:operation>
         <wsdl:operation name="userBookList">
             <wsdl:input message="ws:userBookList"/>
@@ -221,7 +221,7 @@
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         
         <!-- LOGIN USER -->
-        <wsdl:operation name="loginUser">
+        <wsdl:operation name="login">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
