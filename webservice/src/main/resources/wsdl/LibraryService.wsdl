@@ -34,7 +34,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="loginUserResponse">
+            <xs:element name="loginResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:user"/>
@@ -155,7 +155,7 @@
         <wsdl:part name="parameters" element="ws:login"/>
     </wsdl:message>
     <wsdl:message name="loginUserResponse">
-        <wsdl:part name="response" element="ws:loginUserResponse"/>
+        <wsdl:part name="response" element="ws:loginResponse"/>
     </wsdl:message>
     <wsdl:message name="userBookList">
         <wsdl:part name="parameter" element="ws:userBookList"/>
