@@ -20,13 +20,63 @@ public class Reflection {
 
     private final static Logger logger = LogManager.getLogger(Reflection.class);
 
-    public static Book BookEntityToWS(BookEntity bookEntity){
+    public static Object WStoEntity(Object wsObject){
 
-        Book book = new Book();
+        Object objEntity = null;
 
-        for(Method method : bookEntity.getClass().getDeclaredMethods()){
+        if(wsObject instanceof Book) objEntity = new BookEntity();
+        else if(wsObject instanceof User) objEntity = new UserEntity();
+
+        for(Method method : wsObject.getClass().getDeclaredMethods()){
 
             Object object;
+            Method currentMethod;
+
+            try {
+
+                String methodName = method.getName();
+
+                if(methodName.startsWith("get")){
+
+                    currentMethod = method;
+                    object = currentMethod.invoke(wsObject);
+
+                    if(object.getClass().getName().equals("java.util.Date"))
+                        object = Converter.DateToSQLDate((java.util.Date) object);
+
+                    if(currentMethod.getName().equals("getLevel")) {
+                        object = new Level();
+                        ((Level) object).setId(1);
+                    }
+
+                    if(!currentMethod.getName().equals("getId")) {
+                        String setterName = "set" + methodName.substring(3);
+                        if (objEntity != null) {
+                            currentMethod = objEntity.getClass().getMethod(setterName, object.getClass());
+                            currentMethod.invoke(objEntity, object);
+                        }
+                        else logger.error("objEntity is null !");
+                    }
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return objEntity;
+    }
+
+    public static Object EntityToWS(Object entity){
+
+        Object wsObject = null;
+
+        if(entity instanceof BookEntity) wsObject = new Book();
+        else if(entity instanceof UserEntity) wsObject = new User();
+
+        for(Method method : entity.getClass().getDeclaredMethods()){
+
+            Object object = null;
             Method currentMethod;
 
             try{
@@ -36,15 +86,16 @@ public class Reflection {
                 if(methodName.startsWith("get")){
 
                     currentMethod = method;
-                    object = currentMethod.invoke(bookEntity);
+                    object = currentMethod.invoke(entity);
 
                     boolean javaName = object.getClass().getName().startsWith("java");
                     boolean hibernateName = object.getClass().getName().startsWith("org.hibernate");
 
                     if(!javaName && !hibernateName){
 
-                        if(object.getClass().getName().equals("Level"))
+                        if(object.getClass().getSimpleName().equals("Level")) {
                             currentMethod = object.getClass().getMethod("getId");
+                        }
                         else
                             currentMethod = object.getClass().getMethod("getName");
 
@@ -57,58 +108,24 @@ public class Reflection {
                         }
                     }
 
-                    String setterName = "set" + methodName.substring(3);
-                    currentMethod = book.getClass().getMethod(setterName, object.getClass());
-                    currentMethod.invoke(book, object);
+                    if(!methodName.substring(3).equals("Password")) {
+                        String setterName = "set" + methodName.substring(3);
+                        if (wsObject != null) {
+                            currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
+                            currentMethod.invoke(wsObject, object);
+                        }
+                        else logger.error("wsObject is null !");
+                    }
                 }
             }
             catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error(e.getMessage());
+                if (object != null)
+                    logger.error("Object -> " + object.getClass().getName());
+                else logger.error("Object -> null");
             }
         }
 
-        return book;
-    }
-
-    public static UserEntity WSToUserEntity(User user){
-
-        UserEntity userEntity = new UserEntity();
-
-        for(Method method : user.getClass().getDeclaredMethods()){
-
-            Object object;
-            Method currentMethod;
-
-            try {
-
-                String methodName = method.getName();
-
-                if(methodName.startsWith("get")){
-
-                    currentMethod = method;
-                    object = currentMethod.invoke(user);
-
-                    if(object.getClass().getName().equals("java.util.Date"))
-                        object = Converter.DateToSQLDate((java.util.Date) object);
-
-                    if(currentMethod.getName().equals("getLevel")) {
-                        object = new Level();
-                        ((Level) object).setId(1);
-                    }
-
-                    if(!currentMethod.getName().equals("getId")) {
-                        String setterName = "set" + methodName.substring(3);
-                        currentMethod = userEntity.getClass().getMethod(setterName, object.getClass());
-
-                        currentMethod.invoke(userEntity, object);
-                    }
-                }
-            }
-            catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return userEntity;
+        return wsObject;
     }
 }
