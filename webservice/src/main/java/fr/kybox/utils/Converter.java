@@ -14,6 +14,18 @@ public class Converter {
     private final static Logger logger = LogManager.getLogger(Converter.class);
 
     public static Date DateToSQLDate(java.util.Date date){
+
+        logger.debug("DateToSQLDate method");
+        logger.debug("Date param : " + date.getTime());
+
         return new Date(date.getTime());
+    }
+
+    public static java.util.Date SQLDateToDate(Date date){
+
+        logger.debug("SQLDateToDate method");
+        logger.debug("Date param : " + date.getTime());
+
+        return new java.util.Date(date.getTime());
     }
 }
