@@ -10,11 +10,13 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "user_level")
+@Table(name = "user_level", schema = "public")
 public class Level extends AbstractEntity {
 
     @Column
     String label;
+
+    public Level() {}
 
     public String getLabel() {
         return label;
