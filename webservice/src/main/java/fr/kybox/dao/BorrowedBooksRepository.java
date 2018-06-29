@@ -10,5 +10,5 @@ import java.util.List;
 public interface BorrowedBooksRepository extends JpaRepository<BorrowedBook, Integer> {
 
     List<BorrowedBook> findAllByUserOrderByReturnedDesc(UserEntity user);
-    BorrowedBook findByUserAndBookOrderByReturnDateDesc(UserEntity user, BookEntity bookEntity);
+    BorrowedBook findByUserAndBook(UserEntity user, BookEntity bookEntity);
 }
