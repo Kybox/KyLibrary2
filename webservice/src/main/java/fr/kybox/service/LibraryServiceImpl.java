@@ -10,12 +10,15 @@ import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.*;
 
 import fr.kybox.security.Password;
+import fr.kybox.service.utils.CheckParams;
 import fr.kybox.utils.Converter;
 import fr.kybox.utils.Reflection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
@@ -35,125 +38,140 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
 
-    @Autowired
-    UserRepository userRepository;
+    // ERROR CODE
+    private final int INTERNAL_SERVER_ERROR = 500;
+    private final int UNAUTHORIZED = 401;
+    private final int BAD_REQUEST = 400;
+    private final int CONFLICT = 409;
+    private final int CREATED = 201;
+    private final int OK = 200;
+
+    // USER LEVEL
+    private final int MANAGER = 2;
 
     @Autowired
     BorrowedBooksRepository borrowedBooksRepository;
-
+    @Autowired
+    AuthorRepository authorRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     BookRepository bookRepository;
 
-    @Autowired
-    AuthorRepository authorRepository;
+    @Value("${settings.nbWeeksToExtend}")
+    private int nbWeeksToExtend;
 
     private UserEntity userEntity;
 
     @Override
     @WebMethod
-    public LoginUserResponse loginUser(LoginUser parameters) {
+    public LoginResponse login(Login parameters) {
 
-        LoginUserResponse loginUserResponse = new LoginUserResponse();
+        LoginResponse loginResponse = new LoginResponse();
 
-        if(parameters != null){
+        if(CheckParams.login(parameters)){
 
-            logger.debug("Parameters defined : [OK]");
+            userEntity = userRepository.findByEmail(parameters.getLogin());
 
-            if(parameters.getLogin()!= null && parameters.getPassword() != null) {
+            if (userEntity != null) {
 
-                logger.debug("EmailEntity and password defined : [OK]");
+                if (Password.match(parameters.getPassword(), userEntity.getPassword()))
+                    loginResponse.setUser((User) Reflection.EntityToWS(userEntity));
 
-                userEntity = userRepository.findByEmail(parameters.getLogin());
-
-                if (userEntity != null) {
-
-                    logger.debug("UserEntity created : [OK]");
-
-                    if (Password.match(parameters.getPassword(), userEntity.getPassword())) {
-
-                        logger.debug("Password comparison : [OK]");
-
-                        loginUserResponse.setUser(new User());
-                        loginUserResponse.getUser().setFirstName(userEntity.getFirst_name());
-                        loginUserResponse.getUser().setLastName(userEntity.getLast_name());
-                        loginUserResponse.getUser().setEmail(userEntity.getEmail());
-                        loginUserResponse.getUser().setBirthday(userEntity.getBirthday());
-                        loginUserResponse.getUser().setPostalAddress(userEntity.getPostal_address());
-                        loginUserResponse.getUser().setTel(userEntity.getTel());
-                        loginUserResponse.getUser().setLevel(userEntity.getLevel().getId());
-                    }
-                    else logger.warn("Password comparison : [NO]");
-                }
-                else logger.warn("UserEntity created : [NO]");
+                else logger.warn("Password comparison : [NO]");
             }
-            else logger.warn("EmailEntity and password defined : [NO]");
+            else logger.warn("UserEntity created : [NO]");
         }
-        else logger.warn("Parameters defined : [NO]");
 
-        return loginUserResponse;
+        return loginResponse;
     }
 
     @Override
+    @WebMethod
     public CreateUserResponse createUser(CreateUser parameters) {
 
         CreateUserResponse response = new CreateUserResponse();
-        response.setResult(false);
 
-        if(parameters != null){
+        response.setResult(BAD_REQUEST);
 
-            if(parameters.getLoginUser() != null){
+        if(CheckParams.createUser(parameters)){
 
-                LoginUser loginUser = parameters.getLoginUser();
+            Login login = parameters.getLogin();
 
-                if(loginUser.getLogin() != null && loginUser.getPassword() != null ){
+            userEntity = userRepository.findByEmail(login.getLogin());
 
-                    userEntity = userRepository.findByEmail(loginUser.getLogin());
+            if(userEntity != null){
 
-                    if(userEntity != null){
+                if(Password.match(login.getPassword(), userEntity.getPassword())){
 
-                        if(Password.match(loginUser.getPassword(), userEntity.getPassword())){
+                    if(userEntity.getLevel().getId() == MANAGER) {
 
-                            if(userEntity.getLevel().getId() >= 2 ) {
+                        userEntity = (UserEntity) Reflection.WStoEntity(parameters.getUser());
 
-                                userEntity = Reflection.WSToUserEntity(parameters.getUser());
-                                userRepository.save(userEntity);
-                                response.setResult(true);
-                            }
-                            else {
-                                logger.warn("Unauthorized action with this login");
-                                response.setInfo("Unauthorized action with this login");
-                            }
+                        try {
+                            userRepository.save(userEntity);
+                            response.setResult(CREATED);
                         }
-                        else {
-                            logger.warn("Wrong password");
-                            response.setInfo("Wrong password");
+                        catch (HibernateException e){
+                            logger.warn(e.getMessage());
+                            response.setResult(INTERNAL_SERVER_ERROR);
                         }
                     }
                     else {
-                        logger.warn("Login not found");
-                        response.setInfo("Login not found");
+                        logger.warn("Unauthorized action with this login");
+                        response.setResult(UNAUTHORIZED);
                     }
                 }
-                else {
-                    logger.warn("Null login or/and password");
-                    response.setInfo("Null login or/and password");
-                }
-            }
-            else{
-                logger.warn("Null loginUser");
-                response.setInfo("Null loginUser");
             }
         }
-        else {
-            response.setInfo("Null parameters");
-            logger.warn("Null parameters");
-        }
+
         return response;
     }
 
     @Override
+    @WebMethod
     public LoanReturnResponse loanReturn(LoanReturn parameters) {
-        return null;
+
+        LoanReturnResponse response = new LoanReturnResponse();
+
+        response.setResult(BAD_REQUEST);
+
+        if(CheckParams.login(parameters.getLogin())){
+            Login login = parameters.getLogin();
+            userEntity = userRepository.findByEmail(login.getLogin());
+
+            if(userEntity != null){
+                if(Password.match(login.getPassword(), userEntity.getPassword())){
+                    if(userEntity.getLevel().getId() == MANAGER) {
+                        if(CheckParams.loanReturn(parameters)){
+                            try {
+
+                                UserEntity user =
+                                        userRepository.findByEmail(parameters.getUser().getEmail());
+                                BookEntity book =
+                                        bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+
+                                BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(user, book);
+
+                                if(!borrowedBook.getReturned()) {
+                                    borrowedBook.setReturned(true);
+                                    borrowedBooksRepository.save(borrowedBook);
+                                    response.setResult(OK);
+                                }
+                                else response.setResult(CONFLICT);
+                            }
+                            catch (HibernateException e){
+                                logger.warn(e.getMessage());
+                                response.setResult(INTERNAL_SERVER_ERROR);
+                            }
+                        }
+                    }
+                    else response.setResult(UNAUTHORIZED);
+                }
+            }
+        }
+
+        return response;
     }
 
     @Override
@@ -161,11 +179,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     public BookBorrowed extendBorrowing(BookBorrowed parameter) {
 
         BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getIsbn());
-        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBookOrderByReturnDateDesc(userEntity, bookEntity);
+        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
         borrowedBook.setExtended(true);
 
         LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
-        localDate = localDate.plusWeeks(4);
+        localDate = localDate.plusWeeks(nbWeeksToExtend);
         borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
 
         borrowedBooksRepository.save(borrowedBook);
@@ -193,7 +211,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     for(BorrowedBook borrowedBook : bookList){
 
                         BookBorrowed bookBorrowed = new BookBorrowed();
-                        bookBorrowed.setBook(Reflection.BookEntityToWS(borrowedBook.getBook()));
+                        bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
                         bookBorrowed.setExtended(borrowedBook.getExtended());
                         bookBorrowed.setReturndate(borrowedBook.getReturnDate());
                         bookBorrowed.setReturned(borrowedBook.getReturned());
@@ -215,9 +233,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
-        Email email = new Email();
-        email.send();
-
         Iterable<BookEntity> bookList =
                 bookRepository.
                         findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
@@ -226,7 +241,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         BookList resultList = new BookList();
 
         for(BookEntity bookEntity : bookList)
-            resultList.getBook().add(Reflection.BookEntityToWS(bookEntity));
+            resultList.getBook().add((Book) Reflection.EntityToWS(bookEntity));
 
         SearchBookResponse searchBookResponse = new SearchBookResponse();
         searchBookResponse.setBookList(resultList);
