@@ -70,6 +70,11 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
+    
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-mail</artifactId>
+        </dependency>
         
         <!-- [APACHE TOMCAT] -->
         <dependency>
@@ -120,6 +125,10 @@
                                         </bindingFile>
                                     </bindingFiles>
                                     <extraargs>
+                                        <extraarg>-validate</extraarg>
+                                        <extraarg>-verbose</extraarg>
+                                        <extraarg>-exsh</extraarg>
+                                        <extraarg>true</extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>fr.kybox.gencode</extraarg>
                                     </extraargs>
