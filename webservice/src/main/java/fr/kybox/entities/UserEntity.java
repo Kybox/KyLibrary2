@@ -2,8 +2,6 @@ package fr.kybox.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Kybox
@@ -20,23 +18,23 @@ public class UserEntity extends AbstractEntity {
     @Column
     private String password;
 
-    @Column
-    private String first_name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column
-    private String last_name;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column
     private Date birthday;
 
-    @Column
-    private String postal_address;
+    @Column(name = "postal_address")
+    private String postalAddress;
 
     @Column
     private String tel;
 
-    @OneToOne
-    @JoinColumn(name = "level")
+    @ManyToOne
+    @JoinColumn(name = "level_id")
     private Level level;
 
     public UserEntity() {}
@@ -49,28 +47,26 @@ public class UserEntity extends AbstractEntity {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public Date getBirthday() {
@@ -81,17 +77,15 @@ public class UserEntity extends AbstractEntity {
         this.birthday = birthday;
     }
 
-    public String getPostal_address() {
-        return postal_address;
+    public String getPostalAddress() {
+        return postalAddress;
     }
 
-    public void setPostal_address(String postal_address) {
-        this.postal_address = postal_address;
+    public void setPostalAddress(String postalAddress) {
+        this.postalAddress = postalAddress;
     }
 
-    public String getTel() {
-        return tel;
-    }
+    public String getTel() { return tel; }
 
     public void setTel(String tel) {
         this.tel = tel;
@@ -100,4 +94,18 @@ public class UserEntity extends AbstractEntity {
     public Level getLevel() { return level; }
 
     public void setLevel(Level level) { this.level = level; }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", first_name='" + firstName + '\'' +
+                ", last_name='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", postalAddress='" + postalAddress + '\'' +
+                ", tel='" + tel + '\'' +
+                ", level=" + level +
+                '}';
+    }
 }
