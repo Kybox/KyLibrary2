@@ -71,6 +71,12 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
     
+        <!-- [SPRING BATCH] -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-core</artifactId>
+        </dependency>
+        
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-mail</artifactId>
@@ -92,13 +98,6 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-        </dependency>
-    
-        <!-- [BATCH MODULE] -->
-        <dependency>
-            <groupId>fr.kybox</groupId>
-            <artifactId>batch</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
