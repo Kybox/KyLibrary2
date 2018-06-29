@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
     "login",
     "password"
 })
-@XmlRootElement(name = "loginUser")
-public class LoginUser
+@XmlRootElement(name = "login")
+public class Login
     implements Serializable
 {
 

@@ -38,7 +38,7 @@ public class UserBookList
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true, nillable = true)
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected User user;
 
     /**

@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "user"
 })
-@XmlRootElement(name = "loginUserResponse")
-public class LoginUserResponse
+@XmlRootElement(name = "loginResponse")
+public class LoginResponse
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true, nillable = true)
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected User user;
 
     /**
