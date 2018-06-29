@@ -1,7 +1,6 @@
 package fr.kybox.service.utils;
 
-import fr.kybox.gencode.CreateUser;
-import fr.kybox.gencode.Login;
+import fr.kybox.gencode.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,23 +14,43 @@ public class CheckParams {
 
     public static boolean login(Login params){
 
-        if(params != null && params.getLogin() != null && params.getPassword() != null)
-            return true;
-
-        else return false;
+        return checkSignInParams(params.getLogin(), params.getPassword());
     }
 
     public static boolean createUser(CreateUser params){
 
         if(params != null && params.getLogin() != null) {
-
             Login login = params.getLogin();
+            return checkSignInParams(login.getLogin(), login.getPassword());
+        }
+        else return false;
+    }
 
-            if (login.getLogin() != null && login.getPassword() != null)
-                return true;
+    public static boolean loanReturn(LoanReturn params){
+
+        if(params != null && params.getLogin() != null){
+            Login login = params.getLogin();
+            if(checkSignInParams(login.getLogin(), login.getPassword()))
+                return checkUserData(params.getUser()) && checkBookBorrowedData(params.getBookBorrowed());
 
             else return false;
         }
         else return false;
+    }
+
+    private static boolean checkSignInParams(String login, String pass){
+        return login != null && !login.isEmpty() && pass != null && !pass.isEmpty();
+    }
+
+    private static boolean checkUserData(User user){
+        return user.getEmail() != null && !user.getEmail().isEmpty();
+    }
+
+    private static boolean checkBookBorrowedData(BookBorrowed bookBorrowed){
+        return bookBorrowed.getReturndate() != null && checkBookData(bookBorrowed.getBook());
+    }
+
+    private static boolean checkBookData(Book book){
+        return book.getIsbn() != null && !book.getIsbn().isEmpty();
     }
 }
