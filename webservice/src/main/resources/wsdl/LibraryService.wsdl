@@ -80,6 +80,34 @@
                 </xs:complexType>
             </xs:element>
             
+            <!-- [UNRETURNED BOOK] -->
+            <xs:element name="unreturnedBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:user"/>
+                        <xs:element ref="ws:bookBorrowed"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- [UNRETURNED BOOKLIST] -->
+            <xs:element name="unreturnedBookList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:login"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="unreturnedBookListResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:unreturnedBook" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            
             <!-- [USER BOOK LIST -->
             <xs:element name="userBookList">
                 <xs:complexType>
@@ -147,6 +175,8 @@
                 </xs:complexType>
             </xs:element>
             
+            
+            
         </xs:schema>
     </wsdl:types>
     
@@ -187,6 +217,12 @@
     <wsdl:message name="loanReturnResponse">
         <wsdl:part name="response" element="ws:loanReturnResponse"/>
     </wsdl:message>
+    <wsdl:message name="unreturnedBookList">
+        <wsdl:part name="parameters" element="ws:unreturnedBookList"/>
+    </wsdl:message>
+    <wsdl:message name="unreturnedBookListResponse">
+        <wsdl:part name="response" element="ws:unreturnedBookListResponse"/>
+    </wsdl:message>
     
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -213,6 +249,10 @@
         <wsdl:operation name="loanReturn">
             <wsdl:input message="ws:loanReturn"/>
             <wsdl:output message="ws:loanReturnResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="unreturnedBookList">
+            <wsdl:input message="ws:unreturnedBookList"/>
+            <wsdl:output message="ws:unreturnedBookListResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     
@@ -272,6 +312,16 @@
         
         <!-- [PRIVATE] LOAN RETURN -->
         <wsdl:operation name="loanReturn">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <!-- [PRIVATE] UNRETURNED BOOKLIST -->
+        <wsdl:operation name="unreturnedBookList">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
