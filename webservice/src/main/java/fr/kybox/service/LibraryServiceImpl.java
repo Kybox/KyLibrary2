@@ -1,6 +1,5 @@
 package fr.kybox.service;
 
-import fr.kybox.batch.email.Email;
 import fr.kybox.dao.AuthorRepository;
 import fr.kybox.dao.BookRepository;
 import fr.kybox.dao.BorrowedBooksRepository;
@@ -23,6 +22,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -47,6 +47,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final int OK = 200;
 
     // USER LEVEL
+    private final int ADMIN = 1;
     private final int MANAGER = 2;
 
     @Autowired
@@ -63,11 +64,13 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     private UserEntity userEntity;
 
+    private ObjectFactory objectFactory;
+
     @Override
     @WebMethod
     public LoginResponse login(Login parameters) {
 
-        LoginResponse loginResponse = new LoginResponse();
+        LoginResponse loginResponse = objectFactory.createLoginResponse();
 
         if(CheckParams.login(parameters)){
 
@@ -90,7 +93,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public CreateUserResponse createUser(CreateUser parameters) {
 
-        CreateUserResponse response = new CreateUserResponse();
+        CreateUserResponse response = objectFactory.createCreateUserResponse();
 
         response.setResult(BAD_REQUEST);
 
@@ -132,7 +135,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public LoanReturnResponse loanReturn(LoanReturn parameters) {
 
-        LoanReturnResponse response = new LoanReturnResponse();
+        LoanReturnResponse response = objectFactory.createLoanReturnResponse();
 
         response.setResult(BAD_REQUEST);
 
@@ -140,34 +143,32 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             Login login = parameters.getLogin();
             userEntity = userRepository.findByEmail(login.getLogin());
 
-            if(userEntity != null){
-                if(Password.match(login.getPassword(), userEntity.getPassword())){
-                    if(userEntity.getLevel().getId() == MANAGER) {
-                        if(CheckParams.loanReturn(parameters)){
-                            try {
+            if(userEntity != null && Password.match(login.getPassword(), userEntity.getPassword())){
+                if(userEntity.getLevel().getId() == MANAGER) {
+                    if(CheckParams.loanReturn(parameters)){
+                        try {
 
-                                UserEntity user =
-                                        userRepository.findByEmail(parameters.getUser().getEmail());
-                                BookEntity book =
-                                        bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+                            UserEntity user =
+                                    userRepository.findByEmail(parameters.getUser().getEmail());
+                            BookEntity book =
+                                    bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
 
-                                BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(user, book);
+                            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(user, book);
 
-                                if(!borrowedBook.getReturned()) {
-                                    borrowedBook.setReturned(true);
-                                    borrowedBooksRepository.save(borrowedBook);
-                                    response.setResult(OK);
-                                }
-                                else response.setResult(CONFLICT);
+                            if(!borrowedBook.getReturned()) {
+                                borrowedBook.setReturned(true);
+                                borrowedBooksRepository.save(borrowedBook);
+                                response.setResult(OK);
                             }
-                            catch (HibernateException e){
-                                logger.warn(e.getMessage());
-                                response.setResult(INTERNAL_SERVER_ERROR);
-                            }
+                            else response.setResult(CONFLICT);
+                        }
+                        catch (HibernateException e){
+                            logger.warn(e.getMessage());
+                            response.setResult(INTERNAL_SERVER_ERROR);
                         }
                     }
-                    else response.setResult(UNAUTHORIZED);
                 }
+                else response.setResult(UNAUTHORIZED);
             }
         }
 
@@ -198,7 +199,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public UserBookListResponse userBookList(UserBookList parameter) {
 
-        UserBookListResponse response = new UserBookListResponse();
+        UserBookListResponse response = objectFactory.createUserBookListResponse();
 
         if(parameter != null){
 
@@ -225,6 +226,51 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             else logger.error("UserEntity object is null (from UserBookList parameter");
         }
         else logger.error("Parameter no defined");
+
+        return response;
+    }
+
+    @Override
+    public UnreturnedBookListResponse unreturnedBookList(UnreturnedBookList parameters) {
+
+        UnreturnedBookListResponse response = objectFactory.createUnreturnedBookListResponse();
+
+        response.setResult(BAD_REQUEST);
+
+        if(CheckParams.unreturnedBookList(parameters)){
+
+            Login login = parameters.getLogin();
+            userEntity = userRepository.findByEmail(login.getLogin());
+
+            if(userEntity != null && Password.match(login.getPassword(), userEntity.getPassword())){
+                if(userEntity.getLevel().getId() == ADMIN) {
+
+                    Iterable<BorrowedBook> itemList =
+                            borrowedBooksRepository
+                                    .findAllByReturnDateAfterAndReturnedFalse(new Date(System.currentTimeMillis()));
+
+                    for(BorrowedBook borrowedBook : itemList){
+
+                        UnreturnedBook unreturnedBook = new UnreturnedBook();
+                        unreturnedBook.setUser((User) Reflection.EntityToWS(borrowedBook.getUser()));
+
+                        BookBorrowed bookBorrowed = unreturnedBook.getBookBorrowed();
+                        bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
+                        bookBorrowed.setExtended(borrowedBook.getExtended());
+                        bookBorrowed.setReturndate(borrowedBook.getReturnDate());
+                        bookBorrowed.setReturned(borrowedBook.getReturned());
+
+                        unreturnedBook.setBookBorrowed(bookBorrowed);
+
+                        response.getUnreturnedBook().add(unreturnedBook);
+                    }
+
+                    response.setResult(OK);
+
+                }
+                else response.setResult(UNAUTHORIZED);
+            }
+        }
 
         return response;
     }
