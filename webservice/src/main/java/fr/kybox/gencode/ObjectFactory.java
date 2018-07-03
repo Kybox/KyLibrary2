@@ -78,6 +78,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UnreturnedBook }
+     * 
+     */
+    public UnreturnedBook createUnreturnedBook() {
+        return new UnreturnedBook();
+    }
+
+    /**
+     * Create an instance of {@link UnreturnedBookList }
+     * 
+     */
+    public UnreturnedBookList createUnreturnedBookList() {
+        return new UnreturnedBookList();
+    }
+
+    /**
+     * Create an instance of {@link UnreturnedBookListResponse }
+     * 
+     */
+    public UnreturnedBookListResponse createUnreturnedBookListResponse() {
+        return new UnreturnedBookListResponse();
+    }
+
+    /**
      * Create an instance of {@link UserBookList }
      * 
      */
