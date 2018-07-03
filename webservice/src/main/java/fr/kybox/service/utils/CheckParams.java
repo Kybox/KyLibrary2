@@ -38,6 +38,15 @@ public class CheckParams {
         else return false;
     }
 
+    public static boolean unreturnedBookList(UnreturnedBookList params){
+
+        if(params != null && params.getLogin() != null){
+            Login login = params.getLogin();
+            return checkSignInParams(login.getLogin(), login.getPassword());
+        }
+        else return false;
+    }
+
     private static boolean checkSignInParams(String login, String pass){
         return login != null && !login.isEmpty() && pass != null && !pass.isEmpty();
     }
