@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>KyLibrary Batch</title>
@@ -34,5 +36,31 @@
     <div class="col-md-3"></div>
 </div>
 <hr>
+<c:if test="${result!=null}">
+    <div class="col-md-12 text-center">
+        [Code 400 = BAD REQUEST] - [Code 401 = UNAUTHORIZED]<br>
+        [Code 500 = INTERNAL SERVER ERROR]<br>
+        [Code 200 = OK]
+    </div>
+    <br>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <table class="table table-hover" style="width:100%">
+            <tr>
+                <th>Message</th>
+                <th>Résultat</th>
+            </tr>
+            <c:forEach var="entry" items="${result}">
+                <tr>
+                    <td><c:out value="${entry.key}"/></td>
+                    <td><c:out value="${entry.value}"/></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+</c:if>
 </body>
 </html>
