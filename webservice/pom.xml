@@ -16,6 +16,12 @@
 
     <!-- [DEPENDENCIES] -->
     <dependencies>
+    
+        <dependency>
+            <groupId>fr.kybox</groupId>
+            <artifactId>batch</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         
         <!-- [APACHE CXF] -->
         <dependency>
