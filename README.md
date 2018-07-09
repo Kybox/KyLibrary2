@@ -86,3 +86,9 @@ Afin de connecter le web service à la base de données, il est nécessaire de c
                         type="javax.sql.DataSource"/>
 </Context>
 ```
+
+### Contact : Yan
+
+ - E-mail : [nslr@riseup.net](nslr@riseup.net)
+ - Twitter : [https://twitter.com/KyboxYan](https://twitter.com/KyboxYan)
+ - Linkedin : [https://www.linkedin.com/in/kybox](https://www.linkedin.com/in/kybox)
