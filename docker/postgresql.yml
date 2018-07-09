@@ -1,0 +1,15 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    network_mode: bridge
+    container_name: KyLibraryDB
+    environment:
+      POSTGRES_DB: kylibrary
+      POSTGRES_USER: kybox
+      POSTGRES_PASSWORD: kybox-db:kylibrary
+    volumes:
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pgdata:/var/lib/postgresql/data

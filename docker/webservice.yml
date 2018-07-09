@@ -1,0 +1,20 @@
+version: '3'
+services:
+  tomcat:
+    image: 'bitnami/tomcat:latest'
+    container_name: KyLibraryWS
+    network_mode: bridge
+    external_links:
+      - KyLibraryDB
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes :
+      - ./tomcat_data:/bitnami
+    environment:
+      TOMCAT_USERNAME: kybox
+      TOMCAT_PASSWORD: kybox-tomcat:webservice
+      TOMCAT_ALLOW_REMOTE_MANAGEMENT: 1
+volumes:
+  tomcat_data:
+    driver: local
