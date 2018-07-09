@@ -50,3 +50,39 @@ Info : Seul le web service peut se connecter à la base de données.
 
 ##### Le batch :
 Le batch effectue un envoi d’e-mail récurrent en se connectant, en mode administrateur, au web service afin de récupérer la liste des ouvrage non rendus à temps.
+
+### Déploiement
+
+Le déploiement se réalise sous Docker à l'aide des fichiers yaml (docker-compose) situés dans le dossier "docker" du projet.
+
+Afin de connecter le web service à la base de données, il est nécessaire de configurer le serveur d'application comme suit :
+
+##### tomcat_data/tomcat/conf/server.xml
+```
+<GlobalNamingResources>
+    <!-- JNDI Resources -->
+    <Resource name="jdbc/kylibrary" 
+                    global="jdbc/kylibrary"
+                    auth="Container" 
+                    type="javax.sql.DataSource" 
+                    driverClassName="org.postgresql.Driver"
+                    url="jdbc:postgresql://KyLibraryDB:5432/kylibrary"
+                    username="kybox" 
+                    password="kybox-db-kylibrary" 
+                    maxActive="100"
+                    maxIdle="20"
+                    minIdle="5"
+                    maxWait="10000"/>
+</GlobalNamingResources>
+```
+
+##### tomcat_data/tomcat/conf/context.xml
+```
+<Context>
+    <!-- JNDI Datasource -->
+    <ResourceLink name="jdbc/kylibrary"
+                        global="jdbc/kylibrary"
+                        auth="Container"
+                        type="javax.sql.DataSource"/>
+</Context>
+```
