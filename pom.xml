@@ -25,7 +25,6 @@
         <hibernate.version>5.2.17.Final</hibernate.version>
         <postgresql.version>42.2.2</postgresql.version>
         <spring.version>5.0.6.RELEASE</spring.version>
-        <sendgrid.version>4.2.1</sendgrid.version>
         <struts.version>2.5.16</struts.version>
         <tomcat.version>9.0.6</tomcat.version>
         <log4j.version>2.11.0</log4j.version>
