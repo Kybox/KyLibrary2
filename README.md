@@ -32,7 +32,7 @@ La modification des informations de connexion à la base de données doit être 
 
 ### Description
 
-Le web service propose :
+#####Le web service propose :
 - l’authentification d’un utilisateur
 - la récupération des ouvrages emprunté par un utilisateur ainsi qu’un historique*
 - la possibilité de prolonger la durée de l’emprunt d’un ouvrage*
@@ -43,12 +43,10 @@ Le web service propose :
 
 Info : Seul le web service peut se connecter à la base de données.
 
-### L’application web propose :
-
+#####L’application web propose :
 - la possibilité d’effectuer une recherche d’ouvrage aussi bien par titre que par auteurs ou genre
 - une interface d’authentification
 - une interface utilisateur avec le rappel des informations du compte ainsi que la possibilité d’étendre le délai d’un emprunt
 
-### Le batch
-
+#####Le batch :
 Le batch effectue un envoi d’e-mail récurrent en se connectant, en mode administrateur, au web service afin de récupérer la liste des ouvrage non rendus à temps.
