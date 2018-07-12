@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-batch-job.xml</file>
+        </fileset>
+      </configuration>
     </facet>
     <facet type="web" name="Web">
       <configuration>
@@ -64,6 +68,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:5.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:4.0.0" level="project" />
@@ -73,6 +78,6 @@
     <orderEntry type="library" name="Maven: org.apache.taglibs:taglibs-standard-impl:1.2.5" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.0.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: javax.mail:mail:1.4" level="project" />
   </component>
 </module>
