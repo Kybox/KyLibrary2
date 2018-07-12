@@ -5,6 +5,10 @@ import fr.kybox.gencode.*;
 import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +51,11 @@ public class UserAction extends ActionSupport implements SessionAware {
 
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
+
+    public Date getCurrentDate() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTime();
+    }
 
     public List<BookBorrowed> getBorrowedBooks() {
 
