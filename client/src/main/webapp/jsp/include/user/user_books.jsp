@@ -5,6 +5,11 @@
         <h3 class="panel-title">Liste des livres actuellement empruntés</h3>
     </div>
     <div class="panel-body">
+        <div class="text-right">
+            Nous sommes aujourd'hui le
+            <s:date name="currentDate" format="dd/MM/yyyy"/>
+        </div>
+        <br>
         <table class="table table-hover">
             <tr>
                 <th>Titre</th>
@@ -20,7 +25,16 @@
                         <td><s:property value="book.author"/></td>
                         <td class="text-center"><s:property value="book.publisher"/></td>
                         <td class="text-center">
-                            <s:date name="returndate.toGregorianCalendar()" format="dd/MM/yyyy"/>
+                            <s:if test="returndate.after(currentDate)">
+                                <s:date name="returndate" format="dd/MM/yyyy"/>
+                            </s:if>
+                            <s:if test="returndate.before(currentDate)">
+                                <p class="text-danger">
+                                    <span class="glyphicon glyphicon-exclamation-sign">
+                                    </span>
+                                    <s:date name="returndate" format="dd/MM/yyyy"/>
+                                </p>
+                            </s:if>
                         </td>
                         <td class="text-center">
                             <s:if test="extended!=true">

@@ -18,7 +18,7 @@
                 <td><s:property value="#session.user.lastName"/></td>
                 <td><s:property value="#session.user.firstName"/></td>
                 <td><s:property value="#session.user.email"/></td>
-                <td><s:property value="#session.user.birthday"/></td>
+                <td><s:date name="#session.user.birthday" format="dd/MM/yyyy"/></td>
                 <td><s:property value="#session.user.postalAddress"/></td>
                 <td><s:property value="#session.user.tel"/></td>
             </tr>

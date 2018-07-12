@@ -19,7 +19,7 @@
                         <td><s:property value="book.author"/></td>
                         <td class="text-center"><s:property value="book.publisher"/></td>
                         <td class="text-center">
-                            <s:date name="returndate.toGregorianCalendar()" format="dd/MM/yyyy"/>
+                            <s:date name="returndate" format="dd/MM/yyyy"/>
                         </td>
                     </tr>
                 </s:if>
