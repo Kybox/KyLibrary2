@@ -68,8 +68,8 @@ public class EmailSender implements Tasklet, StepExecutionListener {
         for (UnreturnedBook item : itemList){
 
             index++;
-            BatchResult.put("User[" + index + "/" + itemList.size() + "]", item.getUser().getEmail());
-            BatchResult.put("Book[" + index + "/" + itemList.size() + "]", item.getBookBorrowed().getBook().getTitle());
+            BatchResult.put("User [" + index + "/" + itemList.size() + "]", item.getUser().getEmail());
+            BatchResult.put("Book [" + index + "/" + itemList.size() + "]", item.getBookBorrowed().getBook().getTitle());
 
             try{
                 MimeMessage email = new MimeMessage(session);
@@ -94,7 +94,7 @@ public class EmailSender implements Tasklet, StepExecutionListener {
 
 
                 finalMessage += "Date limite de retour : "
-                        + new SimpleDateFormat("MM-dd-yyyy")
+                        + new SimpleDateFormat("dd-MM-yyyy")
                         .format(returnDate) + "\n";
 
                 finalMessage += "\n";
@@ -104,7 +104,7 @@ public class EmailSender implements Tasklet, StepExecutionListener {
 
                 Transport.send(email);
 
-                BatchResult.put("Mail[" + index + "/" + itemList.size() + "]", "Sent");
+                BatchResult.put("Mail [" + index + "/" + itemList.size() + "]", "Sent");
 
             }
             catch (MessagingException e){
