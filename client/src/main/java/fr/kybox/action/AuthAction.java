@@ -28,18 +28,18 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
                 LibraryService service = ServiceFactory.getLibraryService();
 
-                LoginUser loginUser = new LoginUser();
-                loginUser.setLogin(login);
-                loginUser.setPassword(password);
+                Login login = new Login();
+                login.setLogin(this.login);
+                login.setPassword(password);
 
-                LoginUserResponse loginUserResponse = service.loginUser(loginUser);
-                User user = loginUserResponse.getUser();
+                LoginResponse loginResponse = service.login(login);
+                User user = loginResponse.getUser();
 
                 if(user != null){
 
-                    if(user.getLevel() == 1) this.session.put("user", user);
+                    if(user.getLevel() == 3) this.session.put("user", user);
                     else if(user.getLevel() == 2) this.session.put("manager", user);
-                    else if(user.getLevel() == 3) this.session.put("admin", user);
+                    else if(user.getLevel() == 1) this.session.put("admin", user);
 
                     result = ActionSupport.SUCCESS;
 
