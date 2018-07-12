@@ -2,6 +2,7 @@ package fr.kybox.batch.servlets;
 
 import fr.kybox.batch.Reminder;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @version 1.0
  */
 
+@Component
 public class WebBatch extends HttpServlet {
 
     public WebBatch(){ super(); }
