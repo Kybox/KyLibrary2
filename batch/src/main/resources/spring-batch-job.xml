@@ -35,7 +35,7 @@
     </batch:job>
     
     <task:scheduled-tasks>
-        <task:scheduled ref="reminder" method="scheduleder" fixed-delay="10000" initial-delay="30000"/>
+        <task:scheduled ref="reminder" method="scheduleder" cron="0 0 15 * * *"/>
     </task:scheduled-tasks>
     
     <util:properties id="mailProperties" location="classpath:properties/spring-mail.properties"/>
