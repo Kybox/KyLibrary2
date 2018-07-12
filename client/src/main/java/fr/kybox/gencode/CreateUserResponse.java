@@ -4,7 +4,6 @@ package fr.kybox.gencode;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -19,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
+ *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -30,39 +29,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "user"
+    "result"
 })
-@XmlRootElement(name = "userBookList")
-public class UserBookList
+@XmlRootElement(name = "createUserResponse")
+public class CreateUserResponse
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected User user;
+    protected int result;
 
     /**
-     * Obtient la valeur de la propriété user.
+     * Obtient la valeur de la propriété result.
      * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
      */
-    public User getUser() {
-        return user;
+    public int getResult() {
+        return result;
     }
 
     /**
-     * Définit la valeur de la propriété user.
+     * Définit la valeur de la propriété result.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
      */
-    public void setUser(User value) {
-        this.user = value;
+    public void setResult(int value) {
+        this.result = value;
     }
 
 }

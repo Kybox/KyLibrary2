@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -52,7 +52,7 @@ public class BookBorrowed
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected Calendar returndate;
+    protected Date returndate;
     protected boolean extended;
     protected boolean returned;
 
@@ -88,7 +88,7 @@ public class BookBorrowed
      *     {@link String }
      *     
      */
-    public Calendar getReturndate() {
+    public Date getReturndate() {
         return returndate;
     }
 
@@ -100,7 +100,7 @@ public class BookBorrowed
      *     {@link String }
      *     
      */
-    public void setReturndate(Calendar value) {
+    public void setReturndate(Date value) {
         this.returndate = value;
     }
 

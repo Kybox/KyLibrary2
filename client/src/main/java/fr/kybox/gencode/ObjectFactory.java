@@ -1,10 +1,7 @@
 
 package fr.kybox.gencode;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
-import javax.xml.namespace.QName;
 
 
 /**
@@ -24,7 +21,6 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _User_QNAME = new QName("dd7b026a-d6a2-4089-adb2-596ab0598c73", "user");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: fr.kybox.gencode
@@ -42,19 +38,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoginUser }
+     * Create an instance of {@link Login }
      * 
      */
-    public LoginUser createLoginUser() {
-        return new LoginUser();
+    public Login createLogin() {
+        return new Login();
     }
 
     /**
-     * Create an instance of {@link LoginUserResponse }
+     * Create an instance of {@link LoginResponse }
      * 
      */
-    public LoginUserResponse createLoginUserResponse() {
-        return new LoginUserResponse();
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
     }
 
     /**
@@ -79,6 +75,30 @@ public class ObjectFactory {
      */
     public BookBorrowed createBookBorrowed() {
         return new BookBorrowed();
+    }
+
+    /**
+     * Create an instance of {@link UnreturnedBook }
+     * 
+     */
+    public UnreturnedBook createUnreturnedBook() {
+        return new UnreturnedBook();
+    }
+
+    /**
+     * Create an instance of {@link UnreturnedBookList }
+     * 
+     */
+    public UnreturnedBookList createUnreturnedBookList() {
+        return new UnreturnedBookList();
+    }
+
+    /**
+     * Create an instance of {@link UnreturnedBookListResponse }
+     * 
+     */
+    public UnreturnedBookListResponse createUnreturnedBookListResponse() {
+        return new UnreturnedBookListResponse();
     }
 
     /**
@@ -114,12 +134,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
+     * Create an instance of {@link CreateUser }
      * 
      */
-    @XmlElementDecl(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", name = "user")
-    public JAXBElement<User> createUser(User value) {
-        return new JAXBElement<User>(_User_QNAME, User.class, null, value);
+    public CreateUser createCreateUser() {
+        return new CreateUser();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserResponse }
+     * 
+     */
+    public CreateUserResponse createCreateUserResponse() {
+        return new CreateUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoanReturn }
+     * 
+     */
+    public LoanReturn createLoanReturn() {
+        return new LoanReturn();
+    }
+
+    /**
+     * Create an instance of {@link LoanReturnResponse }
+     * 
+     */
+    public LoanReturnResponse createLoanReturnResponse() {
+        return new LoanReturnResponse();
     }
 
 }

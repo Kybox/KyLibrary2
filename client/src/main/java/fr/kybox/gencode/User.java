@@ -2,10 +2,11 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -21,14 +22,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="firstName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="firstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="lastName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="birthday" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
- *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="birthday" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
+ *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="level" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="level" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -48,41 +49,47 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "email",
     "level"
 })
+@XmlRootElement(name = "user")
 public class User
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
-    protected int id;
-    @XmlElement(required = true)
+    protected Integer id;
     protected String firstName;
     @XmlElement(required = true)
     protected String lastName;
-    @XmlElement(required = true, type = String.class)
+    @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected Calendar birthday;
-    @XmlElement(required = true)
+    protected Date birthday;
     protected String postalAddress;
-    @XmlElement(required = true)
     protected String tel;
     @XmlElement(required = true)
     protected String email;
-    protected int level;
+    protected Integer level;
 
     /**
      * Obtient la valeur de la propriété id.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Définit la valeur de la propriété id.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setId(int value) {
+    public void setId(Integer value) {
         this.id = value;
     }
 
@@ -142,7 +149,7 @@ public class User
      *     {@link String }
      *     
      */
-    public Calendar getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
@@ -154,7 +161,7 @@ public class User
      *     {@link String }
      *     
      */
-    public void setBirthday(Calendar value) {
+    public void setBirthday(Date value) {
         this.birthday = value;
     }
 
@@ -233,16 +240,24 @@ public class User
     /**
      * Obtient la valeur de la propriété level.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
     /**
      * Définit la valeur de la propriété level.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setLevel(int value) {
+    public void setLevel(Integer value) {
         this.level = value;
     }
 

@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -22,15 +22,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="Isbn" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Title" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Author" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Publisher" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="PublishDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
- *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Available" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="Cover" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="author" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="publisher" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="publishDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
+ *         &lt;element name="summary" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="genre" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="cover" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -57,25 +57,18 @@ public class Book
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(name = "Isbn", required = true)
+    @XmlElement(required = true)
     protected String isbn;
-    @XmlElement(name = "Title", required = true)
     protected String title;
-    @XmlElement(name = "Author", required = true)
     protected String author;
-    @XmlElement(name = "Publisher", required = true)
     protected String publisher;
-    @XmlElement(name = "PublishDate", required = true, type = String.class)
+    @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "date")
-    protected Calendar publishDate;
-    @XmlElement(name = "Summary", required = true)
+    protected Date publishDate;
     protected String summary;
-    @XmlElement(name = "Genre", required = true)
     protected String genre;
-    @XmlElement(name = "Available")
-    protected int available;
-    @XmlElement(name = "Cover", required = true)
+    protected Integer available;
     protected String cover;
 
     /**
@@ -182,7 +175,7 @@ public class Book
      *     {@link String }
      *     
      */
-    public Calendar getPublishDate() {
+    public Date getPublishDate() {
         return publishDate;
     }
 
@@ -194,7 +187,7 @@ public class Book
      *     {@link String }
      *     
      */
-    public void setPublishDate(Calendar value) {
+    public void setPublishDate(Date value) {
         this.publishDate = value;
     }
 
@@ -249,16 +242,24 @@ public class Book
     /**
      * Obtient la valeur de la propriété available.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getAvailable() {
+    public Integer getAvailable() {
         return available;
     }
 
     /**
      * Définit la valeur de la propriété available.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setAvailable(int value) {
+    public void setAvailable(Integer value) {
         this.available = value;
     }
 

@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}login"/&gt;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookBorrowed"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -31,43 +31,19 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "login",
-    "user"
+    "user",
+    "bookBorrowed"
 })
-@XmlRootElement(name = "createUser")
-public class CreateUser
+@XmlRootElement(name = "unreturnedBook")
+public class UnreturnedBook
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected Login login;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected User user;
-
-    /**
-     * Obtient la valeur de la propriété login.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Login }
-     *     
-     */
-    public Login getLogin() {
-        return login;
-    }
-
-    /**
-     * Définit la valeur de la propriété login.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Login }
-     *     
-     */
-    public void setLogin(Login value) {
-        this.login = value;
-    }
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected BookBorrowed bookBorrowed;
 
     /**
      * Obtient la valeur de la propriété user.
@@ -91,6 +67,30 @@ public class CreateUser
      */
     public void setUser(User value) {
         this.user = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété bookBorrowed.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BookBorrowed }
+     *     
+     */
+    public BookBorrowed getBookBorrowed() {
+        return bookBorrowed;
+    }
+
+    /**
+     * Définit la valeur de la propriété bookBorrowed.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BookBorrowed }
+     *     
+     */
+    public void setBookBorrowed(BookBorrowed value) {
+        this.bookBorrowed = value;
     }
 
 }

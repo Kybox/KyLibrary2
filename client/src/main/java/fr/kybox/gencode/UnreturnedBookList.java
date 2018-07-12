@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}login"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -31,19 +30,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "login",
-    "user"
+    "login"
 })
-@XmlRootElement(name = "createUser")
-public class CreateUser
+@XmlRootElement(name = "unreturnedBookList")
+public class UnreturnedBookList
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected Login login;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected User user;
 
     /**
      * Obtient la valeur de la propriété login.
@@ -67,30 +63,6 @@ public class CreateUser
      */
     public void setLogin(Login value) {
         this.login = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété user.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Définit la valeur de la propriété user.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
-     */
-    public void setUser(User value) {
-        this.user = value;
     }
 
 }
