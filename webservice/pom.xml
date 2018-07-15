@@ -16,12 +16,6 @@
 
     <!-- [DEPENDENCIES] -->
     <dependencies>
-    
-        <dependency>
-            <groupId>fr.kybox</groupId>
-            <artifactId>batch</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         
         <!-- [APACHE CXF] -->
         <dependency>
@@ -95,11 +89,14 @@
             <artifactId>joda-time</artifactId>
         </dependency>
         
+        
         <!-- [JAVAX MAIL] -->
+        <!--
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
         </dependency>
+        -->
 
     </dependencies>
     
