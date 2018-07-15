@@ -64,6 +64,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     private UserEntity userEntity;
 
+    @Autowired
     private ObjectFactory objectFactory;
 
     @Override
@@ -247,14 +248,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                     Iterable<BorrowedBook> itemList =
                             borrowedBooksRepository
-                                    .findAllByReturnDateAfterAndReturnedFalse(new Date(System.currentTimeMillis()));
+                                    .findAllByReturnDateBeforeAndReturnedFalse(new Date(System.currentTimeMillis()));
 
                     for(BorrowedBook borrowedBook : itemList){
 
                         UnreturnedBook unreturnedBook = new UnreturnedBook();
                         unreturnedBook.setUser((User) Reflection.EntityToWS(borrowedBook.getUser()));
 
-                        BookBorrowed bookBorrowed = unreturnedBook.getBookBorrowed();
+                        BookBorrowed bookBorrowed = objectFactory.createBookBorrowed();
                         bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
                         bookBorrowed.setExtended(borrowedBook.getExtended());
                         bookBorrowed.setReturndate(borrowedBook.getReturnDate());
