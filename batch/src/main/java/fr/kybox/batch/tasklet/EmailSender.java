@@ -100,7 +100,7 @@ public class EmailSender implements Tasklet, StepExecutionListener {
                 finalMessage += "\n";
                 finalMessage += properties.getProperty("mail.template.outro");
 
-                email.setText(finalMessage);
+                email.setText(finalMessage, "utf-8");
 
                 Transport.send(email);
 
