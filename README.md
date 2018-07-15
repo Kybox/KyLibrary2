@@ -51,9 +51,22 @@ Info : Seul le web service peut se connecter à la base de données.
 ##### Le batch :
 Le batch effectue un envoi d’e-mail récurrent en se connectant, en mode administrateur, au web service afin de récupérer la liste des ouvrage non rendus à temps.
 
+Un fichier de propriétés regroupe un template des différentes phrases qui seront ajoutées à chaque e-mail, ainsi que la configuration du serveur d'envoi. Il est donc nécessaire de correctement configurer les données (en particulier les lignes concernant l'authentification : user & pass) comme indiqué ci-dessous :
+```
+# Config
+mail.smtp.host=smtp.gmail.com
+mail.smtp.port=587
+mail.smtp.starttls.enable=true
+mail.smtp.auth=true
+
+# Authentication
+mail.auth.user=email@gmail.com
+mail.auth.pass=***
+```
+
 ### Déploiement
 
-Le déploiement se réalise sous Docker à l'aide des fichiers yaml (docker-compose) situés dans le dossier "docker" du projet.
+Le déploiement se réalise sous Docker à l'aide du fichier yaml (docker-compose) situés dans le dossier "docker" du projet.
 
 Afin de connecter le web service à la base de données, il est nécessaire de configurer le serveur d'application comme suit :
 
@@ -86,6 +99,8 @@ Afin de connecter le web service à la base de données, il est nécessaire de c
                         type="javax.sql.DataSource"/>
 </Context>
 ```
+
+Après avoir lancé (cmd : docker-compose up) les 3 conteneurs (KyLibraryDB, KyLibraryPGA & KyLibrary), il sera nécessaire de packager les 3 modules Maven en 3 fichiers WAR et de les ajouter en tant qu'applications sur le serveur Tomcat (conteneur KyLibrary).
 
 ### Contact : Yan
 
