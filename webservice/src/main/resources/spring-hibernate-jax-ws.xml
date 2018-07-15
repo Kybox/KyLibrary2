@@ -4,7 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:jee="http://www.springframework.org/schema/jee"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -12,9 +12,7 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/data/jpa
-       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-       http://www.springframework.org/schema/batch
-       http://www.springframework.org/schema/batch/spring-batch.xsd">
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
     <!-- Active annotations in beans -->
     <context:annotation-config/>
@@ -56,12 +54,18 @@
     </bean>
     
     <!-- DataSource -->
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/kylibrary" expected-type="javax.sql.DataSource"/>
+    
+    <!--
     <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="url" value="jdbc:postgresql://localhost:5432/kylibrary"/>
         <property name="username" value="postgres"/>
         <property name="password" value=""/>
     </bean>
+    -->
+    
+    <bean id="objectFactory" class="fr.kybox.gencode.ObjectFactory"/>
     
     <context:property-placeholder location="classpath:properties/webservice.properties"/>
 
