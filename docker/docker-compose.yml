@@ -1,0 +1,51 @@
+version: "3"
+services:
+
+  # POSTGRESQL DATABASE
+  postgres:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    network_mode: bridge
+    container_name: KyLibraryDB
+    environment:
+      POSTGRES_DB: kylibrary
+      POSTGRES_USER: kybox
+      POSTGRES_PASSWORD: kybox-db:kylibrary
+    volumes:
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pgdata:/var/lib/postgresql/data
+
+  # PGADMIN FOR POSTGRESQL
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - '8081:80'
+    network_mode: bridge
+    container_name: KyLibraryPGA
+    external_links:
+      - KyLibraryDB
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kylibrary@kybox.fr
+      PGADMIN_DEFAULT_PASSWORD: kylibrary:admin-db
+
+  # KYLIBRARY
+  tomcat:
+    image: 'bitnami/tomcat:latest'
+    container_name: KyLibrary
+    network_mode: bridge
+    external_links:
+      - KyLibraryDB
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes :
+      - ./tomcat_data:/bitnami
+    environment:
+      TOMCAT_USERNAME: kybox
+      TOMCAT_PASSWORD: kybox-tomcat:kylibrary
+      TOMCAT_ALLOW_REMOTE_MANAGEMENT: 1
+
+volumes:
+  tomcat_data:
+    driver: local
