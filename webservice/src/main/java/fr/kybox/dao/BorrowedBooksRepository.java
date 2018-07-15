@@ -12,5 +12,5 @@ public interface BorrowedBooksRepository extends JpaRepository<BorrowedBook, Int
 
     List<BorrowedBook> findAllByUserOrderByReturnedDesc(UserEntity user);
     BorrowedBook findByUserAndBook(UserEntity user, BookEntity bookEntity);
-    Iterable<BorrowedBook> findAllByReturnDateAfterAndReturnedFalse(Date date);
+    Iterable<BorrowedBook> findAllByReturnDateBeforeAndReturnedFalse(Date date);
 }
