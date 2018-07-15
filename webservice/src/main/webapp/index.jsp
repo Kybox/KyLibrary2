@@ -20,12 +20,12 @@
 <hr>
 <div class="panel panel-default" style="margin-left: 10px">
     <div class="panel-body text-center">
-        <a href="http://localhost:8080/KyLibrary/WebService/SOAP">
+        <a id="services" href="#">
             <button type="button" class="btn btn-info">Available SOAP services</button>
         </a>
         <br>
         <br>
-        <a href="http://localhost:8080/KyLibrary/WebService/SOAP/LibraryWebService?wsdl">
+        <a id="wsdl" href="#">
             <button type="button" class="btn btn-info">Display the WSDL file</button>
         </a>
         <br>
@@ -36,5 +36,9 @@
     </div>
 </div>
 <hr>
+<script>
+    document.getElementById("services").href = window.location.href + "SOAP/";
+    document.getElementById("wsdl").href = window.location.href + "SOAP/LibraryWebService?wsdl";
+</script>
 </body>
 </html>
