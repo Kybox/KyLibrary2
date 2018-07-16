@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="77932870-6369-41e1-9bb2-08df5770803c" activeEnvironment="Default" name="KyLibrary" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="1629ff11-f5b2-42b6-bbf9-5f05b79b67a3" wsaVersion="NONE" name="LibraryServicePortBinding" type="wsdl" bindingName="{dd7b026a-d6a2-4089-adb2-596ab0598c73}LibraryServicePortBinding" soapVersion="1_1" anonymous="optional" definition="https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl"><con:part><con:url>https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73" name="WebService" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ws="dd7b026a-d6a2-4089-adb2-596ab0598c73">
+  <wsdl:types>
+    <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
+      <!--[USER]-->
+      <xs:element name="user">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="id" type="xs:int" minOccurs="0"/>
+            <xs:element name="firstName" type="xs:string" minOccurs="0"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="birthday" type="xs:date" minOccurs="0"/>
+            <xs:element name="postalAddress" type="xs:string" minOccurs="0"/>
+            <xs:element name="tel" type="xs:string" minOccurs="0"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="level" type="xs:int" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[LOGIN USER]-->
+      <xs:element name="login">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="loginResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:user"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[BOOK]-->
+      <xs:element name="book">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="isbn" type="xs:string"/>
+            <xs:element name="title" type="xs:string" minOccurs="0"/>
+            <xs:element name="author" type="xs:string" minOccurs="0"/>
+            <xs:element name="publisher" type="xs:string" minOccurs="0"/>
+            <xs:element name="publishDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="summary" type="xs:string" minOccurs="0"/>
+            <xs:element name="genre" type="xs:string" minOccurs="0"/>
+            <xs:element name="available" type="xs:int" minOccurs="0"/>
+            <xs:element name="cover" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[BOOK LIST]-->
+      <xs:element name="bookList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:book" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[BOOK BORROWED]-->
+      <xs:element name="bookBorrowed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:book"/>
+            <xs:element name="returndate" type="xs:date"/>
+            <xs:element name="extended" type="xs:boolean"/>
+            <xs:element name="returned" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[UNRETURNED BOOK]-->
+      <xs:element name="unreturnedBook">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:user"/>
+            <xs:element ref="ws:bookBorrowed"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[UNRETURNED BOOKLIST]-->
+      <xs:element name="unreturnedBookList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:login"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="unreturnedBookListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="result" type="xs:int"/>
+            <xs:element ref="ws:unreturnedBook" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[USER BOOK LIST-->
+      <xs:element name="userBookList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:user"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="userBookListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:bookBorrowed" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[SEARCH BOOK]-->
+      <xs:element name="searchBook">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="keywords" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="searchBookResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:bookList"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[CREATE USER]-->
+      <xs:element name="createUser">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:login"/>
+            <xs:element ref="ws:user"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createUserResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="result" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!--[LOAN RETURN]-->
+      <xs:element name="loanReturn">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ws:login"/>
+            <xs:element ref="ws:user"/>
+            <xs:element ref="ws:bookBorrowed"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="loanReturnResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="result" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <!--[MESSAGES]-->
+  <wsdl:message name="login">
+    <wsdl:part name="parameters" element="ws:login"/>
+  </wsdl:message>
+  <wsdl:message name="loginResponse">
+    <wsdl:part name="response" element="ws:loginResponse"/>
+  </wsdl:message>
+  <wsdl:message name="userBookList">
+    <wsdl:part name="parameter" element="ws:userBookList"/>
+  </wsdl:message>
+  <wsdl:message name="userBookListResponse">
+    <wsdl:part name="response" element="ws:userBookListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="extendBorrowing">
+    <wsdl:part name="parameter" element="ws:bookBorrowed"/>
+  </wsdl:message>
+  <wsdl:message name="extendBorrowingResponse">
+    <wsdl:part name="response" element="ws:bookBorrowed"/>
+  </wsdl:message>
+  <wsdl:message name="searchBook">
+    <wsdl:part name="parameters" element="ws:searchBook"/>
+  </wsdl:message>
+  <wsdl:message name="searchBookResponse">
+    <wsdl:part name="response" element="ws:searchBookResponse"/>
+  </wsdl:message>
+  <wsdl:message name="createUser">
+    <wsdl:part name="parameters" element="ws:createUser"/>
+  </wsdl:message>
+  <wsdl:message name="createUserResponse">
+    <wsdl:part name="response" element="ws:createUserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="loanReturn">
+    <wsdl:part name="parameters" element="ws:loanReturn"/>
+  </wsdl:message>
+  <wsdl:message name="loanReturnResponse">
+    <wsdl:part name="response" element="ws:loanReturnResponse"/>
+  </wsdl:message>
+  <wsdl:message name="unreturnedBookList">
+    <wsdl:part name="parameters" element="ws:unreturnedBookList"/>
+  </wsdl:message>
+  <wsdl:message name="unreturnedBookListResponse">
+    <wsdl:part name="response" element="ws:unreturnedBookListResponse"/>
+  </wsdl:message>
+  <!--[PORT TYPE]-->
+  <wsdl:portType name="LibraryService">
+    <wsdl:operation name="login">
+      <wsdl:input message="ws:login"/>
+      <wsdl:output message="ws:loginResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="userBookList">
+      <wsdl:input message="ws:userBookList"/>
+      <wsdl:output message="ws:userBookListResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="extendBorrowing">
+      <wsdl:input message="ws:extendBorrowing"/>
+      <wsdl:output message="ws:extendBorrowingResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="searchBook">
+      <wsdl:input message="ws:searchBook"/>
+      <wsdl:output message="ws:searchBookResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <wsdl:input message="ws:createUser"/>
+      <wsdl:output message="ws:createUserResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="loanReturn">
+      <wsdl:input message="ws:loanReturn"/>
+      <wsdl:output message="ws:loanReturnResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="unreturnedBookList">
+      <wsdl:input message="ws:unreturnedBookList"/>
+      <wsdl:output message="ws:unreturnedBookListResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <!--[BINDING]-->
+  <wsdl:binding name="LibraryServicePortBinding" type="ws:LibraryService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <!--LOGIN USER-->
+    <wsdl:operation name="login">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--USER BOOK LIST-->
+    <wsdl:operation name="userBookList">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--EXTEND BORROWING-->
+    <wsdl:operation name="extendBorrowing">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--SEARCH BOOK-->
+    <wsdl:operation name="searchBook">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--[PRIVATE] CREATE USER-->
+    <wsdl:operation name="createUser">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--[PRIVATE] LOAN RETURN-->
+    <wsdl:operation name="loanReturn">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <!--[PRIVATE] UNRETURNED BOOKLIST-->
+    <wsdl:operation name="unreturnedBookList">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <!--[SERVICE]-->
+  <wsdl:service name="LibraryWebService">
+    <wsdl:documentation>Provides services from KyLibrary</wsdl:documentation>
+    <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
+      <soap:address location="http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint></con:endpoints><con:operation id="dc25edd4-7ac1-4ce4-bfcf-1b0ad9f26255" isOneWay="false" action="" name="// createUser (not available)" bindingOperationName="createUser" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="5b46a52f-df45-45aa-8244-f9ce4b1caf28" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:createUser>\r
+         <dd7:login>\r
+            <login>manager@kylibrary.fr</login>\r
+            <password>manager</password>\r
+         </dd7:login>\r
+         <dd7:user>\r
+            <id></id>\r
+            <firstName>Alain</firstName>\r
+            <lastName>Deloin</lastName>\r
+            <birthday>2001-06-21Z</birthday>\r
+            <postalAddress>78 Avenue de Rome 75013 Paris</postalAddress>\r
+            <tel>0965982541</tel>\r
+            <email>alain@deloin.fr</email>\r
+            <level></level>\r
+         </dd7:user>\r
+      </dd7:createUser>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/createUserRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="06d9bb20-7e52-4f4a-8722-81f88b17fd2d" isOneWay="false" action="" name="extendBorrowing" bindingOperationName="extendBorrowing" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="926c635b-5ede-41c7-aabe-a5061eb1b0d4" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:bookBorrowed>\r
+         <dd7:book>\r
+            <isbn>978-2889116546</isbn>
+               <title>Les quatre accords toltèques</title>
+               <author>Miguel Ruiz</author>
+               <publisher>Jouvence</publisher>
+               <publishDate>2016-01-08Z</publishDate>
+               <summary>Découvrez ou redécouvrez Les quatre accords toltèques, et prenez comme des millions de lecteurs en France et à travers le monde, la voie de la liberté personnelle. 
+Dans ce livre, Don Miguel révèle la source des croyances limitatrices qui nous privent de joie et créent des souffrances inutiles. Il montre en des termes très simples comment on peut se libérer du conditionnement collectif - le "rêve de la planète", basé sur la peur - afin de retrouver la dimension d'amour inconditionnel qui est à notre origine et constitue le fondement des enseignements toltèques que Castenada fut le premier à faire découvrir au grand public. Don Miguel révèle ici 4 clés simples pour transformer sa vie et ses relations, tirées de la sagesse toltèque. Leur application au quotidien permet de transformer rapidement notre vie en une expérience de liberté, de vrai bonheur et d'amour.</summary>
+               <genre>Essai</genre>
+               <available>1</available>
+               <cover>https://images-na.ssl-images-amazon.com/images/I/81jfJUEh2AL.jpg</cover>
+         </dd7:book>\r
+         <returndate>2018-06-06Z</returndate>
+            <extended>false</extended>
+            <returned>false</returned>
+      </dd7:bookBorrowed>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/extendBorrowingRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d9b434da-2ea1-4b7e-a3d7-d2cb9ce17fab" isOneWay="false" action="" name="loanReturn" bindingOperationName="loanReturn" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="a4e8b88b-50d9-4d82-a938-f38c474f3230" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:loanReturn>\r
+         <dd7:login>\r
+            <login>manager@kylibrary.fr</login>\r
+            <password>manager</password>\r
+         </dd7:login>\r
+         <dd7:user>
+            <firstName>Yan</firstName>
+            <lastName>Ky</lastName>
+            <birthday>1980-06-20Z</birthday>
+            <postalAddress>6 rue Laborde</postalAddress>
+            <tel>0678542569</tel>
+            <email>nslr@riseup.net</email>
+            <level>3</level>
+         </dd7:user>
+         <dd7:bookBorrowed>
+            <dd7:book>
+               <isbn>978-2072730030</isbn>
+               <title>1984</title>
+               <author>George Orwell</author>
+               <publisher>Gallimard</publisher>
+               <publishDate>2018-05-24Z</publishDate>
+               <summary>Année 1984 en Océanie. 1984 ? C'est en tout cas ce qu'il semble à Winston, qui ne saurait toutefois en jurer. Le passé a été oblitéré et réinventé, et les événements les plus récents sont susceptibles d'être modifiés. Winston est lui-même chargé de récrire les archives qui contredisent le présent et les promesses de Big Brother. Grâce à une technologie de pointe, ce dernier sait tout, voit tout. Il n'est pas une âme dont il ne puisse connaître les pensées. On ne peut se fier à personne et les enfants sont encore les meilleurs espions qui soient. Liberté est Servitude. Ignorance est Puissance. Telles sont les devises du régime de Big Brother. La plupart des Océaniens n'y voient guère à redire, surtout les plus jeunes qui n'ont pas connu l'époque de leurs grands-parents et le sens initial du mot «libre». Winston refuse cependant de perdre espoir. Il entame une liaison secrète et hautement dangereuse avec l'insoumise Julia et tous deux vont tenter d'intégrer la Fraternité, une organisation ayant pour but de renverser Big Brother. Mais celui-ci veille... Le célèbre et glaçant roman de George Orwell se redécouvre dans une nouvelle traduction, plus directe et plus dépouillée, qui tente de restituer la terreur dans toute son immédiateté mais aussi les tonalités nostalgiques et les échappées lyriques d'une œuvre brutale et subtile, équivoque et génialement manipulatrice.</summary>
+               <genre>Fiction utopique et dystopique</genre>
+               <available>1</available>
+               <cover>https://images-na.ssl-images-amazon.com/images/I/51rr0JcuqjL.jpg</cover>
+            </dd7:book>
+            <returndate>2018-06-23Z</returndate>
+            <extended>false</extended>
+            <returned>false</returned>
+         </dd7:bookBorrowed>
+      </dd7:loanReturn>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/loanReturnRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="a3881be9-73cd-4f44-a855-f626a437b358" isOneWay="false" action="" name="login" bindingOperationName="login" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="ad5d58df-c6d9-41fa-a10d-f003b11d035b" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:login>\r
+         <login>lou@lou.fr</login>\r
+         <password>lou</password>\r
+      </dd7:login>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/loginRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="ada92e75-3229-4fb9-85c5-1a896b2de9f5" isOneWay="false" action="" name="searchBook" bindingOperationName="searchBook" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="e67459c8-35ae-4ca9-84ff-974b61e0784d" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:searchBook>\r
+         <keywords>prince</keywords>\r
+      </dd7:searchBook>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/searchBookRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="7fc68adf-826f-4bc0-8ff3-f8da5951dacd" isOneWay="false" action="" name="unreturnedBookList" bindingOperationName="unreturnedBookList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="ce79aef6-5d22-4916-873b-d772def35049" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:unreturnedBookList>\r
+         <dd7:login>\r
+            <login>admin@kylibrary.fr</login>\r
+            <password>admin</password>\r
+         </dd7:login>\r
+      </dd7:unreturnedBookList>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/unreturnedBookListRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="be558d33-47b6-48fd-aa55-ed14c4d61155" isOneWay="false" action="" name="userBookList" bindingOperationName="userBookList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d0c121bb-3790-4e1e-a952-a244d56e9b38" name="Request"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:userBookList>\r
+         <dd7:user>\r
+            <firstName>Lou</firstName>
+            <lastName>Lou</lastName>
+            <birthday>2008-05-15Z</birthday>
+            <postalAddress>10 rue de la paix 75011 Paris</postalAddress>
+            <tel>0600120012</tel>
+            <email>lou@lou.fr</email>
+            <level>3</level>
+         </dd7:user>\r
+      </dd7:userBookList>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/userBookListRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="6db72f1d-7db6-439e-90f5-ecbc0dacc8d5" name="Auth operations"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="e50e9b2e-bc1f-48cd-91dc-153da5bf8534" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="UserBookList" searchProperties="true"><con:settings/><con:testStep type="request" id="2ae753d7-be71-4017-b75b-c983df0dad9e" name="login - Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>LibraryServicePortBinding</con:interface><con:operation>login</con:operation><con:request name="login - Request" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="b4b2d75d-b4e6-4a58-877f-2b839f6460bc"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:login>\r
+         <login>lou@lou.fr</login>\r
+         <password>lou</password>\r
+      </dd7:login>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="49b4ea55-66fe-4184-9a7f-5c2201e0a5da" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/loginRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="71e96f92-0d82-44a3-a687-16ef0142a11a" name="userBookList - Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>LibraryServicePortBinding</con:interface><con:operation>userBookList</con:operation><con:request name="userBookList - Request" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="13f7565c-fb4a-48d2-b6f2-71312a67fc61"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://5.196.95.68:8080/KyLibrary/WebService/SOAP/LibraryWebService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dd7="dd7b026a-d6a2-4089-adb2-596ab0598c73">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <dd7:userBookList>\r
+         <dd7:user>\r
+            <firstName>Lou</firstName>
+            <lastName>Lou</lastName>
+            <birthday>2008-05-15Z</birthday>
+            <postalAddress>10 rue de la paix 75011 Paris</postalAddress>
+            <tel>0600120012</tel>
+            <email>lou@lou.fr</email>
+            <level>3</level>
+         </dd7:user>\r
+      </dd7:userBookList>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="3b059dcb-37fd-446b-90b6-04dea992afff" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="dd7b026a-d6a2-4089-adb2-596ab0598c73/LibraryService/userBookListRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
