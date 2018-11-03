@@ -33,7 +33,7 @@ import java.util.*;
         name = "LibraryWebService",
         targetNamespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73",
         portName = "LibraryService",
-        wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl")
+        wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl")
 public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements LibraryService {
 
     private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
