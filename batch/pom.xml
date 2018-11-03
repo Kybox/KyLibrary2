@@ -79,6 +79,7 @@
     
     <!-- [BUILD] -->
     <build>
+        <finalName>KyLibrary#WebService#Batch</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.cxf</groupId>
