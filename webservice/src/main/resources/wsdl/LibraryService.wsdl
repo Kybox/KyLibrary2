@@ -338,7 +338,7 @@
             Provides services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
-            <soap:address location="http://kylibrary.kybox.fr/KyLibrary/WebService/SOAP/LibraryWebService"/>
+            <soap:address location="http://5.196.95.68:18080/KyLibrary/WebService/SOAP/LibraryWebService"/>
         </wsdl:port>
     </wsdl:service>
     
