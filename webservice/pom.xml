@@ -107,10 +107,10 @@
                             <sourceRoot>${basedir}/src/main/java</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl</wsdl>
+                                    <wsdl>http://kybox.fr/kylibrary/wsdl/LibraryService.wsdl</wsdl>
                                     <bindingFiles>
                                         <bindingFile>
-                                            https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/binding/LibraryServiceBinding.xml
+                                            http://kybox.fr/kylibrary/wsdl/binding/LibraryServiceBinding.xml
                                         </bindingFile>
                                     </bindingFiles>
                                     <extraargs>
