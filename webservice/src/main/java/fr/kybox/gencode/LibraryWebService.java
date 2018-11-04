@@ -18,7 +18,7 @@ import javax.xml.ws.Service;
  *
  */
 @WebServiceClient(name = "LibraryWebService",
-                  wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl",
+                  wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl",
                   targetNamespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73")
 public class LibraryWebService extends Service {
 
@@ -29,11 +29,11 @@ public class LibraryWebService extends Service {
     static {
         URL url = null;
         try {
-            url = new URL("https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl");
+            url = new URL("https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl");
         } catch (MalformedURLException e) {
             java.util.logging.Logger.getLogger(LibraryWebService.class.getName())
                 .log(java.util.logging.Level.INFO,
-                     "Can not initialize the default wsdl from {0}", "https://raw.githubusercontent.com/Kybox/KyLibrary/master/webservice/src/main/resources/wsdl/LibraryService.wsdl");
+                     "Can not initialize the default wsdl from {0}", "https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl");
         }
         WSDL_LOCATION = url;
     }
