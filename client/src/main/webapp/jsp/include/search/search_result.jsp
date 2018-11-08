@@ -20,6 +20,18 @@
                 Genre littéraire : <s:property value="genre"/>
                 <br>
                 Exemplaire(s) disponible(s) : <s:property value="available"/>
+                <s:if test="available == 0">
+                    <br>
+                    <hr>
+                    <s:if test="#session.user">
+                        <button class="btn btn-primary" type="submit">Réserver un emprunt</button>
+                    </s:if>
+                    <s:else>
+                        <button class="btn btn-primary" type="submit" disabled>
+                            Connectez-vous pour réserver un emprunt
+                        </button>
+                    </s:else>
+                </s:if>
                 <hr>
                 Résumé : <br>
                 <s:property value="summary"/>
