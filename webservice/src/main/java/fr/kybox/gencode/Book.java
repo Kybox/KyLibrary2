@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="genre" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *         &lt;element name="cover" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="nbcopies" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -49,7 +50,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "summary",
     "genre",
     "available",
-    "cover"
+    "cover",
+    "nbcopies"
 })
 @XmlRootElement(name = "book")
 public class Book
@@ -70,6 +72,7 @@ public class Book
     protected String genre;
     protected Integer available;
     protected String cover;
+    protected Integer nbcopies;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -285,6 +288,30 @@ public class Book
      */
     public void setCover(String value) {
         this.cover = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété nbcopies.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getNbcopies() {
+        return nbcopies;
+    }
+
+    /**
+     * Définit la valeur de la propriété nbcopies.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setNbcopies(Integer value) {
+        this.nbcopies = value;
     }
 
 }
