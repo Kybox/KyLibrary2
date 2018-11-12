@@ -156,6 +156,33 @@
                     <groupId>org.apache.cxf</groupId>
                     <artifactId>cxf-codegen-plugin</artifactId>
                     <version>${cxf.version}</version>
+                    <executions>
+                        <execution>
+                            <id>generate-sources</id>
+                            <phase>generate-sources</phase>
+                            <configuration>
+                                <encoding>UTF-8</encoding>
+                                <sourceRoot>${basedir}/src/main/java</sourceRoot>
+                                <wsdlOptions>
+                                    <wsdlOption>
+                                        <wsdl>http://kybox.fr/kylibrary/test/wsdl/LibraryService.wsdl</wsdl>
+                                        <extraargs>
+                                            <extraarg>-p</extraarg>
+                                            <extraarg>fr.kybox.gencode</extraarg>
+                                        </extraargs>
+                                        <bindingFiles>
+                                            <bindingFile>
+                                                http://kybox.fr/kylibrary/test/wsdl/binding/LibraryServiceBinding.xml
+                                            </bindingFile>
+                                        </bindingFiles>
+                                    </wsdlOption>
+                                </wsdlOptions>
+                            </configuration>
+                            <goals>
+                                <goal>wsdl2java</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 
                 <!-- [MAVEN] -->
