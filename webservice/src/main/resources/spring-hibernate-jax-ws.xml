@@ -56,15 +56,6 @@
     <!-- DataSource -->
     <jee:jndi-lookup id="dataSource" jndi-name="jdbc/kylibrary" expected-type="javax.sql.DataSource"/>
     
-    <!--
-    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://localhost:5432/kylibrary"/>
-        <property name="username" value="postgres"/>
-        <property name="password" value=""/>
-    </bean>
-    -->
-    
     <bean id="objectFactory" class="fr.kybox.gencode.ObjectFactory"/>
     
     <context:property-placeholder location="classpath:properties/webservice.properties"/>
