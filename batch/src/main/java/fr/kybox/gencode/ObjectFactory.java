@@ -54,6 +54,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Logout }
+     * 
+     */
+    public Logout createLogout() {
+        return new Logout();
+    }
+
+    /**
      * Create an instance of {@link Book }
      * 
      */
@@ -75,6 +83,46 @@ public class ObjectFactory {
      */
     public BookBorrowed createBookBorrowed() {
         return new BookBorrowed();
+    }
+
+    /**
+     * Create an instance of {@link ExtendBorrowing }
+     * 
+     */
+    public ExtendBorrowing createExtendBorrowing() {
+        return new ExtendBorrowing();
+    }
+
+    /**
+     * Create an instance of {@link ExtendBorrowingResponse }
+     * 
+     */
+    public ExtendBorrowingResponse createExtendBorrowingResponse() {
+        return new ExtendBorrowingResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReservedBook }
+     * 
+     */
+    public ReservedBook createReservedBook() {
+        return new ReservedBook();
+    }
+
+    /**
+     * Create an instance of {@link ReservedBookList }
+     * 
+     */
+    public ReservedBookList createReservedBookList() {
+        return new ReservedBookList();
+    }
+
+    /**
+     * Create an instance of {@link ReservedBookListResponse }
+     * 
+     */
+    public ReservedBookListResponse createReservedBookListResponse() {
+        return new ReservedBookListResponse();
     }
 
     /**

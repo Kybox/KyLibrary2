@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookBorrowed" maxOccurs="unbounded"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}reservedBook" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -34,17 +34,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "result",
-    "bookBorrowed"
+    "reservedBook"
 })
-@XmlRootElement(name = "userBookListResponse")
-public class UserBookListResponse
+@XmlRootElement(name = "reservedBookListResponse")
+public class ReservedBookListResponse
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     protected int result;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected List<BookBorrowed> bookBorrowed;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73")
+    protected List<ReservedBook> reservedBook;
 
     /**
      * Obtient la valeur de la propriété result.
@@ -63,32 +63,32 @@ public class UserBookListResponse
     }
 
     /**
-     * Gets the value of the bookBorrowed property.
+     * Gets the value of the reservedBook property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the bookBorrowed property.
+     * This is why there is not a <CODE>set</CODE> method for the reservedBook property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getBookBorrowed().add(newItem);
+     *    getReservedBook().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BookBorrowed }
+     * {@link ReservedBook }
      * 
      * 
      */
-    public List<BookBorrowed> getBookBorrowed() {
-        if (bookBorrowed == null) {
-            bookBorrowed = new ArrayList<BookBorrowed>();
+    public List<ReservedBook> getReservedBook() {
+        if (reservedBook == null) {
+            reservedBook = new ArrayList<ReservedBook>();
         }
-        return this.bookBorrowed;
+        return this.reservedBook;
     }
 
 }
