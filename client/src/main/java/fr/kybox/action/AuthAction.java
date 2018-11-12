@@ -2,6 +2,7 @@ package fr.kybox.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import fr.kybox.gencode.*;
+import fr.kybox.security.Token;
 import fr.kybox.utils.ServiceFactory;
 import org.apache.struts2.interceptor.SessionAware;
 
@@ -41,6 +42,8 @@ public class AuthAction extends ActionSupport implements SessionAware {
                     else if(user.getLevel() == 2) this.session.put("manager", user);
                     else if(user.getLevel() == 1) this.session.put("admin", user);
 
+                    Token.setToken(loginResponse.getToken());
+
                     result = ActionSupport.SUCCESS;
 
                 }
@@ -60,6 +63,9 @@ public class AuthAction extends ActionSupport implements SessionAware {
     }
 
     public String logout(){
+
+        LibraryService service = ServiceFactory.getLibraryService();
+        service.logout(Token.getToken());
 
         this.session.clear();
 
