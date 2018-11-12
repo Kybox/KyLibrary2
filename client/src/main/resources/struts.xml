@@ -48,9 +48,15 @@
         <action name="logout" class="fr.kybox.action.AuthAction" method="logout">
             <result name="success" type="redirectAction">index</result>
         </action>
-        
+
+        <!-- [SEARCH] Action -->
         <action name="search" class="fr.kybox.action.SearchAction">
             <result>jsp/search.jsp</result>
+        </action>
+
+        <!-- [ERROR] Page -->
+        <action name="error">
+            <result>jsp/error.jsp</result>
         </action>
         
     </package>
@@ -61,6 +67,8 @@
         <action name="user" class="fr.kybox.action.UserAction">
             <interceptor-ref name="authenticatedStack"/>
             <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
         </action>
         
         <!-- [EXTEND BORROWING] Action -->
