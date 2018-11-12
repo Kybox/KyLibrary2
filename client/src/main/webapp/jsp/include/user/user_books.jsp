@@ -1,5 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<s:if test="hasActionErrors()">
+    <p><s:actionerror/></p>
+</s:if>
+<s:else>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Liste des livres actuellement empruntés</h3>
@@ -75,3 +79,4 @@
         </div>
     </div>
 </div>
+</s:else>
