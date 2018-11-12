@@ -1,9 +1,6 @@
 package fr.kybox.service;
 
-import fr.kybox.dao.AuthorRepository;
-import fr.kybox.dao.BookRepository;
-import fr.kybox.dao.BorrowedBooksRepository;
-import fr.kybox.dao.UserRepository;
+import fr.kybox.dao.*;
 import fr.kybox.entities.*;
 import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.*;
@@ -12,6 +9,7 @@ import fr.kybox.security.Password;
 import fr.kybox.service.utils.CheckParams;
 import fr.kybox.utils.Converter;
 import fr.kybox.utils.Reflection;
+import fr.kybox.utils.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -21,19 +19,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
-import javax.jws.WebService;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * @author Kybox
  * @version 1.0
  */
-@WebService(
-        name = "LibraryWebService",
-        targetNamespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73",
-        portName = "LibraryService",
-        wsdlLocation = "https://raw.githubusercontent.com/Kybox/KyLibrary2/master/webservice/src/main/resources/wsdl/LibraryService.wsdl")
+
+
 public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements LibraryService {
 
     private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
@@ -58,11 +53,16 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     UserRepository userRepository;
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    TokenRepository tokenRepository;
 
     @Value("${settings.nbWeeksToExtend}")
     private int nbWeeksToExtend;
 
     private UserEntity userEntity;
+
+    @Autowired
+    private Token token;
 
     @Autowired
     private ObjectFactory objectFactory;
@@ -79,8 +79,16 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             if (userEntity != null) {
 
-                if (Password.match(parameters.getPassword(), userEntity.getPassword()))
+                if (Password.match(parameters.getPassword(), userEntity.getPassword())) {
                     loginResponse.setUser((User) Reflection.EntityToWS(userEntity));
+
+                    TokenStorage tokenStorage = tokenRepository.findByUserEntity(userEntity);
+                    if(tokenStorage != null) tokenRepository.delete(tokenStorage);
+
+                    token.generateNew(userEntity);
+                    tokenRepository.save(token.getTokenStorage());
+                    loginResponse.setToken(token.getTokenStorage().getToken());
+                }
 
                 else logger.warn("Password comparison : [NO]");
             }
@@ -88,6 +96,15 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         }
 
         return loginResponse;
+    }
+
+    @Override
+    public void logout(String token) {
+
+        TokenStorage tokenStorage = tokenRepository.findByToken(token);
+
+        if(tokenStorage != null) tokenRepository.delete(tokenStorage);
+
     }
 
     @Override
@@ -177,23 +194,37 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    @WebMethod
-    public BookBorrowed extendBorrowing(BookBorrowed parameter) {
+    public ExtendBorrowingResponse extendBorrowing(ExtendBorrowing parameters) {
 
-        BookEntity bookEntity = bookRepository.findByIsbn(parameter.getBook().getIsbn());
-        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
-        borrowedBook.setExtended(true);
+        ExtendBorrowingResponse response = objectFactory.createExtendBorrowingResponse();
 
-        LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
-        localDate = localDate.plusWeeks(nbWeeksToExtend);
-        borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
+        if(isValidToken(parameters.getToken())){
 
-        borrowedBooksRepository.save(borrowedBook);
+            userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
+            BookEntity bookEntity = bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
 
-        parameter.setReturndate(borrowedBook.getReturnDate());
-        parameter.setExtended(true);
+            LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
+            localDate = localDate.plusWeeks(nbWeeksToExtend);
+            borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
 
-        return parameter;
+            borrowedBook.setExtended(true);
+
+            borrowedBooksRepository.save(borrowedBook);
+
+            response.setResult(OK);
+
+        }
+        else response.setResult(UNAUTHORIZED);
+
+        return response;
+    }
+
+    @Override
+    public ReservedBookListResponse reservedBookList(ReservedBookList parameters) {
+
+
+        return null;
     }
 
     @Override
@@ -202,31 +233,30 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         UserBookListResponse response = objectFactory.createUserBookListResponse();
 
-        if(parameter != null){
+        if(isValidToken(parameter.getToken())){
 
-            if(parameter.getUser() != null){
+            userEntity = tokenRepository.findByToken(parameter.getToken()).getUserEntity();
 
-                if(userEntity != null){
+            if (userEntity != null) {
 
-                    List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedDesc(userEntity);
+                List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedDesc(userEntity);
 
-                    for(BorrowedBook borrowedBook : bookList){
+                for (BorrowedBook borrowedBook : bookList) {
 
-                        BookBorrowed bookBorrowed = new BookBorrowed();
-                        bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
-                        bookBorrowed.setExtended(borrowedBook.getExtended());
-                        bookBorrowed.setReturndate(borrowedBook.getReturnDate());
-                        bookBorrowed.setReturned(borrowedBook.getReturned());
+                    BookBorrowed bookBorrowed = new BookBorrowed();
+                    bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
+                    bookBorrowed.setExtended(borrowedBook.getExtended());
+                    bookBorrowed.setReturndate(borrowedBook.getReturnDate());
+                    bookBorrowed.setReturned(borrowedBook.getReturned());
 
-                        response.getBookBorrowed().add(bookBorrowed);
-
-                    }
+                    response.getBookBorrowed().add(bookBorrowed);
                 }
-                else logger.error("No userEntity found from UserBookList parameter");
-            }
-            else logger.error("UserEntity object is null (from UserBookList parameter");
+
+                response.setResult(OK);
+
+            } else response.setResult(INTERNAL_SERVER_ERROR);
         }
-        else logger.error("Parameter no defined");
+        else response.setResult(UNAUTHORIZED);
 
         return response;
     }
@@ -294,5 +324,23 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         searchBookResponse.setBookList(resultList);
 
         return searchBookResponse;
+    }
+
+    private boolean isValidToken(String token){
+
+        boolean result = false;
+
+        if(token != null && !token.isEmpty()){
+
+            TokenStorage tokenStorage = tokenRepository.findByToken(token);
+
+            if(tokenStorage != null){
+
+                if(tokenStorage.getExpireDate().isAfter(LocalDateTime.now())) result = true;
+                else tokenRepository.delete(tokenStorage);
+            }
+        }
+
+        return result;
     }
 }
