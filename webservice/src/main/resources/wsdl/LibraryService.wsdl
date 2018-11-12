@@ -4,7 +4,7 @@
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
                   xmlns:ws="dd7b026a-d6a2-4089-adb2-596ab0598c73"
-                  name="WebService">
+                  name="WebService" xmlns:soad="http://schemas.xmlsoap.org/wsdl/soap/">
     
     <wsdl:types>
         <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
@@ -38,6 +38,16 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:user"/>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [LOGOUT USER] -->
+            <xs:element name="logout">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -55,6 +65,7 @@
                         <xs:element name="genre" type="xs:string" minOccurs="0"/>
                         <xs:element name="available" type="xs:int" minOccurs="0"/>
                         <xs:element name="cover" type="xs:string" minOccurs="0"/>
+                        <xs:element name="nbcopies" type="xs:int" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -76,6 +87,52 @@
                         <xs:element name="returndate" type="xs:date"/>
                         <xs:element name="extended" type="xs:boolean"/>
                         <xs:element name="returned" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [EXTEND BORROWING] -->
+            <xs:element name="extendBorrowing">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element ref="ws:bookBorrowed"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="extendBorrowingResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+
+            <!-- [RESERVED BOOK] -->
+            <xs:element name="reservedBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:book"/>
+                        <xs:element name="reservedate" type="xs:dateTime"/>
+                        <xs:element name="pending" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [RESERVED BOOKLIST] -->
+            <xs:element name="reservedBookList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reservedBookListResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:reservedBook" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -108,17 +165,18 @@
             </xs:element>
             
             
-            <!-- [USER BOOK LIST -->
+            <!-- [USER BOOK LIST] -->
             <xs:element name="userBookList">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:user"/>
+                        <xs:element name="token" type="xs:token"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="userBookListResponse">
                 <xs:complexType>
                     <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
                         <xs:element ref="ws:bookBorrowed" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -174,9 +232,6 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
-            
-            
         </xs:schema>
     </wsdl:types>
     
@@ -187,6 +242,9 @@
     <wsdl:message name="loginResponse">
         <wsdl:part name="response" element="ws:loginResponse"/>
     </wsdl:message>
+    <wsdl:message name="logout">
+        <wsdl:part name="parameter" element="ws:logout"/>
+    </wsdl:message>
     <wsdl:message name="userBookList">
         <wsdl:part name="parameter" element="ws:userBookList"/>
     </wsdl:message>
@@ -194,10 +252,10 @@
         <wsdl:part name="response" element="ws:userBookListResponse"/>
     </wsdl:message>
     <wsdl:message name="extendBorrowing">
-        <wsdl:part name="parameter" element="ws:bookBorrowed"/>
+        <wsdl:part name="parameters" element="ws:extendBorrowing"/>
     </wsdl:message>
     <wsdl:message name="extendBorrowingResponse">
-        <wsdl:part name="response" element="ws:bookBorrowed"/>
+        <wsdl:part name="response" element="ws:extendBorrowingResponse"/>
     </wsdl:message>
     <wsdl:message name="searchBook">
         <wsdl:part name="parameters" element="ws:searchBook"/>
@@ -223,12 +281,21 @@
     <wsdl:message name="unreturnedBookListResponse">
         <wsdl:part name="response" element="ws:unreturnedBookListResponse"/>
     </wsdl:message>
+    <wsdl:message name="reservedBookList">
+        <wsdl:part name="parameters" element="ws:reservedBookList"/>
+    </wsdl:message>
+    <wsdl:message name="reservedBookListResponse">
+        <wsdl:part name="response" element="ws:reservedBookListResponse"/>
+    </wsdl:message>
     
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
         <wsdl:operation name="login">
             <wsdl:input message="ws:login"/>
             <wsdl:output message="ws:loginResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="logout">
+            <wsdl:input message="ws:logout"/>
         </wsdl:operation>
         <wsdl:operation name="userBookList">
             <wsdl:input message="ws:userBookList"/>
@@ -254,6 +321,10 @@
             <wsdl:input message="ws:unreturnedBookList"/>
             <wsdl:output message="ws:unreturnedBookListResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="reservedBookList">
+            <wsdl:input message="ws:reservedBookList"/>
+            <wsdl:output message="ws:reservedBookListResponse"/>
+        </wsdl:operation>
     </wsdl:portType>
     
     <!-- [BINDING] -->
@@ -268,6 +339,13 @@
             <wsdl:output>
                 <soap:body use="literal"/>
             </wsdl:output>
+        </wsdl:operation>
+
+        <!-- LOGOUT USER -->
+        <wsdl:operation name="logout">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
         </wsdl:operation>
         
         <!-- USER BOOK LIST -->
@@ -329,6 +407,16 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+
+        <!-- [PRIVATE] RESERVED BOOKLIST -->
+        <wsdl:operation name="reservedBookList">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         
     </wsdl:binding>
     
@@ -338,7 +426,10 @@
             Provides services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
-            <soap:address location="http://5.196.95.68:18080/KyLibrary/WebService/SOAP/LibraryWebService"/>
+            <!-- DEV WSDL Address -->
+            <soap:address location="http://localhost:18080/KyLibrary/WebService/SOAP/LibraryWebService"/>
+            <!-- PROD WSDL Location -->
+            <!-- <soap:address location="http://5.196.95.68:18080/KyLibrary/WebService/SOAP/LibraryWebService"/> -->
         </wsdl:port>
     </wsdl:service>
     
