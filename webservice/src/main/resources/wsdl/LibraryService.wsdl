@@ -136,6 +136,23 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+            <!-- [RESERVE BOOK] -->
+            <xs:element name="reserveBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element ref="ws:book"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reserveBookResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             
             <!-- [UNRETURNED BOOK] -->
             <xs:element name="unreturnedBook">
@@ -151,7 +168,7 @@
             <xs:element name="unreturnedBookList">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:login"/>
+                        <xs:element name="token" type="xs:token"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -287,6 +304,12 @@
     <wsdl:message name="reservedBookListResponse">
         <wsdl:part name="response" element="ws:reservedBookListResponse"/>
     </wsdl:message>
+    <wsdl:message name="reserveBook">
+        <wsdl:part name="parameters" element="ws:reserveBook"/>
+    </wsdl:message>
+    <wsdl:message name="reserveBookResponse">
+        <wsdl:part name="response" element="ws:reserveBookResponse"/>
+    </wsdl:message>
     
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -324,6 +347,10 @@
         <wsdl:operation name="reservedBookList">
             <wsdl:input message="ws:reservedBookList"/>
             <wsdl:output message="ws:reservedBookListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="reserveBook">
+            <wsdl:input message="ws:reserveBook"/>
+            <wsdl:output message="ws:reserveBookResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     
@@ -410,6 +437,16 @@
 
         <!-- [PRIVATE] RESERVED BOOKLIST -->
         <wsdl:operation name="reservedBookList">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] RESERVE BOOK -->
+        <wsdl:operation name="reserveBook">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
