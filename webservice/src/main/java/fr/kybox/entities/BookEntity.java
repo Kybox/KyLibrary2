@@ -50,6 +50,12 @@ public class BookEntity extends AbstractEntity {
     @Column
     private String cover;
 
+    @Column(name = "nb_copies")
+    private int nbCopies;
+
+    @Column
+    private boolean bookable;
+
     public BookEntity() {}
 
     public String getIsbn() {
@@ -119,6 +125,22 @@ public class BookEntity extends AbstractEntity {
     public String getCover() { return cover; }
 
     public void setCover(String cover) { this.cover = cover; }
+
+    public int getNbCopies() {
+        return nbCopies;
+    }
+
+    public void setNbCopies(int nbCopies) {
+        this.nbCopies = nbCopies;
+    }
+
+    public boolean isBookable() {
+        return bookable;
+    }
+
+    public void setBookable(boolean bookable) {
+        this.bookable = bookable;
+    }
 
     @Override
     public String toString() {
