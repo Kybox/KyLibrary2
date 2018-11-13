@@ -126,6 +126,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ReserveBook }
+     * 
+     */
+    public ReserveBook createReserveBook() {
+        return new ReserveBook();
+    }
+
+    /**
+     * Create an instance of {@link ReserveBookResponse }
+     * 
+     */
+    public ReserveBookResponse createReserveBookResponse() {
+        return new ReserveBookResponse();
+    }
+
+    /**
      * Create an instance of {@link UnreturnedBook }
      * 
      */

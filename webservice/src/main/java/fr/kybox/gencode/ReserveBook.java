@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -33,10 +34,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "token"
+    "token",
+    "book"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "reserveBook")
+public class ReserveBook
     implements Serializable
 {
 
@@ -45,6 +47,8 @@ public class UnreturnedBookList
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected Book book;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -68,6 +72,30 @@ public class UnreturnedBookList
      */
     public void setToken(String value) {
         this.token = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété book.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Book }
+     *     
+     */
+    public Book getBook() {
+        return book;
+    }
+
+    /**
+     * Définit la valeur de la propriété book.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Book }
+     *     
+     */
+    public void setBook(Book value) {
+        this.book = value;
     }
 
 }
