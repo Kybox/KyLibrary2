@@ -13,14 +13,14 @@
                 <h4><s:property value="author"/></h4>
                 ISBN : <s:property value="isbn"/>
                 <hr>
-                Edition <s:property value="publisher"/>
+                Edition : <s:property value="publisher"/>
                 <br>
-                Date de parution : <s:date name="publishDate.toGregorianCalendar()" format="dd/MM/yyyy"/>
+                Date de parution : <s:date name="publishDate" format="dd/MM/yyyy"/>
                 <br>
                 Genre littéraire : <s:property value="genre"/>
                 <br>
-                Exemplaire(s) disponible(s) : <s:property value="available"/>
-                <s:if test="available == 0">
+                Exemplaire(s) disponible(s) : <s:property value="available"/> / <s:property value="nbCopies"/>
+                <s:if test="bookable">
                     <br>
                     <hr>
                     <s:if test="#session.user">
