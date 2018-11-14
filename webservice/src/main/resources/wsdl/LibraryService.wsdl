@@ -65,7 +65,7 @@
                         <xs:element name="genre" type="xs:string" minOccurs="0"/>
                         <xs:element name="available" type="xs:int" minOccurs="0"/>
                         <xs:element name="cover" type="xs:string" minOccurs="0"/>
-                        <xs:element name="nbcopies" type="xs:int" minOccurs="0"/>
+                        <xs:element name="nbCopies" type="xs:int" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
