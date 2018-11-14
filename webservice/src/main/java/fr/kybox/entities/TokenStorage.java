@@ -11,10 +11,10 @@ public class TokenStorage {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "creationDate")
+    @Column(name = "creation")
     private LocalDateTime creationDate;
 
-    @Column(name = "expireDate")
+    @Column(name = "expire")
     private LocalDateTime expireDate;
 
     @OneToOne
