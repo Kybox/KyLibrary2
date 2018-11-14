@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="genre" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *         &lt;element name="cover" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="nbcopies" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="nbCopies" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="bookable" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -51,7 +52,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "genre",
     "available",
     "cover",
-    "nbcopies"
+    "nbCopies",
+    "bookable"
 })
 @XmlRootElement(name = "book")
 public class Book
@@ -72,7 +74,8 @@ public class Book
     protected String genre;
     protected Integer available;
     protected String cover;
-    protected Integer nbcopies;
+    protected Integer nbCopies;
+    protected Boolean bookable;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -291,27 +294,51 @@ public class Book
     }
 
     /**
-     * Obtient la valeur de la propriété nbcopies.
+     * Obtient la valeur de la propriété nbCopies.
      * 
      * @return
      *     possible object is
      *     {@link Integer }
      *     
      */
-    public Integer getNbcopies() {
-        return nbcopies;
+    public Integer getNbCopies() {
+        return nbCopies;
     }
 
     /**
-     * Définit la valeur de la propriété nbcopies.
+     * Définit la valeur de la propriété nbCopies.
      * 
      * @param value
      *     allowed object is
      *     {@link Integer }
      *     
      */
-    public void setNbcopies(Integer value) {
-        this.nbcopies = value;
+    public void setNbCopies(Integer value) {
+        this.nbCopies = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété bookable.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isBookable() {
+        return bookable;
+    }
+
+    /**
+     * Définit la valeur de la propriété bookable.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setBookable(Boolean value) {
+        this.bookable = value;
     }
 
 }
