@@ -54,7 +54,7 @@ public class BookEntity extends AbstractEntity {
     private int nbCopies;
 
     @Column
-    private boolean bookable;
+    private Boolean bookable;
 
     public BookEntity() {}
 
@@ -134,11 +134,11 @@ public class BookEntity extends AbstractEntity {
         this.nbCopies = nbCopies;
     }
 
-    public boolean isBookable() {
+    public Boolean isBookable() {
         return bookable;
     }
 
-    public void setBookable(boolean bookable) {
+    public void setBookable(Boolean bookable) {
         this.bookable = bookable;
     }
 
