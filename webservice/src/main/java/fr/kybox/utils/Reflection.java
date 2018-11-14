@@ -82,15 +82,21 @@ public class Reflection {
 
                 String methodName = method.getName();
 
-                if(!methodName.startsWith("get")) continue;
+                if(!methodName.startsWith("get") && !methodName.startsWith("is")) continue;
 
                 currentMethod = method;
                 object = currentMethod.invoke(entity);
 
+                logger.info("");
+
                 boolean javaName = object.getClass().getName().startsWith("java");
                 boolean hibernateName = object.getClass().getName().startsWith("org.hibernate");
 
+                logger.debug("Object class = " + object.getClass().getSimpleName());
+
                 if(!javaName && !hibernateName){
+
+                    logger.debug("Object class !Java & !Hibernate");
 
                     if(object.getClass().getSimpleName().equals("Level")) {
                         currentMethod = object.getClass().getMethod("getId");
@@ -107,9 +113,21 @@ public class Reflection {
                 }
 
                 if(!methodName.substring(3).equals("Password")) {
-                    String setterName = "set" + methodName.substring(3);
+
+                    logger.debug("methodName = " + methodName);
+
+                    String setterName = "set";
+                    if(methodName.startsWith("get"))
+                        setterName += methodName.substring(3);
+                    else if(methodName.startsWith("is"))
+                        setterName += methodName.substring(2);
+
+                    logger.info("Setter called = " + setterName);
+
                     if (wsObject != null) {
+
                         currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
+
                         currentMethod.invoke(wsObject, object);
                     }
                     else logger.error("wsObject is null !");
