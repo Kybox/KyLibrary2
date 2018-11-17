@@ -118,11 +118,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReservedBook }
+     * Create an instance of {@link BookReserved }
      * 
      */
-    public ReservedBook createReservedBook() {
-        return new ReservedBook();
+    public BookReserved createBookReserved() {
+        return new BookReserved();
     }
 
     /**

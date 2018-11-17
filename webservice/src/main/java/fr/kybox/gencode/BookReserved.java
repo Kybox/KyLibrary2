@@ -2,13 +2,14 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -22,7 +23,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
- *         &lt;element name="reservedate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="reserveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *         &lt;element name="pending" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -35,20 +36,21 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "book",
-    "reservedate",
+    "reserveDate",
     "pending"
 })
-@XmlRootElement(name = "reservedBook")
-public class ReservedBook
+@XmlRootElement(name = "bookReserved")
+public class BookReserved
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected Book book;
-    @XmlElement(required = true)
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar reservedate;
+    protected Date reserveDate;
     protected boolean pending;
 
     /**
@@ -76,27 +78,27 @@ public class ReservedBook
     }
 
     /**
-     * Obtient la valeur de la propriété reservedate.
+     * Obtient la valeur de la propriété reserveDate.
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getReservedate() {
-        return reservedate;
+    public Date getReserveDate() {
+        return reserveDate;
     }
 
     /**
-     * Définit la valeur de la propriété reservedate.
+     * Définit la valeur de la propriété reserveDate.
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setReservedate(XMLGregorianCalendar value) {
-        this.reservedate = value;
+    public void setReserveDate(Date value) {
+        this.reserveDate = value;
     }
 
     /**

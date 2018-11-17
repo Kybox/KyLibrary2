@@ -41,7 +41,7 @@
         <action name="login" class="fr.kybox.action.AuthAction" method="login">
             <result name="input">jsp/login.jsp</result>
             <result name="error">jsp/login.jsp</result>
-            <result name="success" type="redirectAction">user</result>
+            <result name="success" type="redirectAction">userInfo</result>
         </action>
         
         <!-- [LOGOUT] Action -->
@@ -65,6 +65,22 @@
     
         <!-- [USER] Action -->
         <action name="user" class="fr.kybox.action.UserAction">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
+        <!-- [USER INFO] Action -->
+        <action name="userInfo" class="fr.kybox.action.UserAction" method="informations">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
+        <!-- [USER RESERVATION] Action -->
+        <action name="userReservations" class="fr.kybox.action.UserAction" method="reservations">
             <interceptor-ref name="authenticatedStack"/>
             <result name="success">jsp/user.jsp</result>
             <result name="login" type="redirectAction">login</result>

@@ -60,7 +60,7 @@ public class User
     @XmlElement(required = true)
     protected String lastName;
     @XmlElement(type = String.class)
-    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlJavaTypeAdapter(Adapter2 .class)
     @XmlSchemaType(name = "date")
     protected Date birthday;
     protected String postalAddress;

@@ -2,8 +2,6 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -22,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookReserved" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -34,17 +32,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "result",
-    "bookReserved"
+    "book"
 })
-@XmlRootElement(name = "reservedBookListResponse")
-public class ReservedBookListResponse
+@XmlRootElement(name = "getBookResponse")
+public class GetBookResponse
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     protected int result;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73")
-    protected List<BookReserved> bookReserved;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected Book book;
 
     /**
      * Obtient la valeur de la propriété result.
@@ -63,32 +61,27 @@ public class ReservedBookListResponse
     }
 
     /**
-     * Gets the value of the bookReserved property.
+     * Obtient la valeur de la propriété book.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the bookReserved property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getBookReserved().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link BookReserved }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link Book }
+     *     
      */
-    public List<BookReserved> getBookReserved() {
-        if (bookReserved == null) {
-            bookReserved = new ArrayList<BookReserved>();
-        }
-        return this.bookReserved;
+    public Book getBook() {
+        return book;
+    }
+
+    /**
+     * Définit la valeur de la propriété book.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Book }
+     *     
+     */
+    public void setBook(Book value) {
+        this.book = value;
     }
 
 }

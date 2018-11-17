@@ -21,7 +21,9 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -273,8 +275,28 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @Override
     public ReservedBookListResponse reservedBookList(ReservedBookList parameters) {
 
+        ReservedBookListResponse response = objectFactory.createReservedBookListResponse();
 
-        return null;
+        if(isValidToken(parameters.getToken())){
+            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
+            if(userEntity != null){
+                List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
+                for(ReservedBook reservedBook : bookList){
+                    BookReserved bookReserved = new BookReserved();
+                    Book book = (Book) Reflection.EntityToWS(reservedBook.getBook());
+                    bookReserved.setBook(book);
+                    Instant instant = reservedBook.getReserveDate().atZone(ZoneId.systemDefault()).toInstant();
+                    bookReserved.setReserveDate(Date.from(instant));
+                    bookReserved.setPending(reservedBook.isPending());
+                    response.getBookReserved().add(bookReserved);
+                }
+               response.setResult(OK);
+            }
+            else response.setResult(INTERNAL_SERVER_ERROR);
+        }
+        else response.setResult(UNAUTHORIZED);
+
+        return response;
     }
 
     @Override

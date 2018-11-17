@@ -67,7 +67,7 @@ public class Book
     protected String author;
     protected String publisher;
     @XmlElement(type = String.class)
-    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlJavaTypeAdapter(Adapter2 .class)
     @XmlSchemaType(name = "date")
     protected Date publishDate;
     protected String summary;
