@@ -76,6 +76,21 @@
             <interceptor-ref name="authenticatedStack"/>
             <result type="json"/>
         </action>
+
+        <!-- [RESERVE] Action (Summary) -->
+        <action name="reserveSummary" class="fr.kybox.action.ReserveAction" method="summary">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/reserve.jsp</result>
+            <result name="error">jsp/error.jsp</result>
+        </action>
+
+        <!-- [RESERVE] Action -->
+        <action name="reserve" class="fr.kybox.action.ReserveAction" method="bookReserved">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/reserve.jsp</result>
+            <result name="error">jsp/error.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+        </action>
         
         <!-- [MANAGER] Action -->
         <action name="manager" class="fr.kybox.action.ManagerAction">

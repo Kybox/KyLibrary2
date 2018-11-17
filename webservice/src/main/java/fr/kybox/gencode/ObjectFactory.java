@@ -78,6 +78,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetBook }
+     * 
+     */
+    public GetBook createGetBook() {
+        return new GetBook();
+    }
+
+    /**
+     * Create an instance of {@link GetBookResponse }
+     * 
+     */
+    public GetBookResponse createGetBookResponse() {
+        return new GetBookResponse();
+    }
+
+    /**
      * Create an instance of {@link BookBorrowed }
      * 
      */

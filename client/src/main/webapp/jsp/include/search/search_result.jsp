@@ -24,7 +24,12 @@
                     <br>
                     <hr>
                     <s:if test="#session.user">
-                        <button class="btn btn-primary" type="submit">Réserver un emprunt</button>
+                        <s:url action="reserveSummary" var="urlReserve">
+                            <s:param name="isbn"><s:property value="isbn"/></s:param>
+                        </s:url>
+                        <s:a href="%{urlReserve}">
+                            <button class="btn btn-primary" type="submit">Réserver un emprunt</button>
+                        </s:a>
                     </s:if>
                     <s:else>
                         <button class="btn btn-primary" type="submit" disabled>

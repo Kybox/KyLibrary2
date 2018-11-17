@@ -112,34 +112,49 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    public ReserveBookResponse reserveBook(ReserveBook parameters) {
+    public GetBookResponse getBook(GetBook parameter) {
 
-        ReserveBookResponse response = objectFactory.createReserveBookResponse();
+        GetBookResponse response = objectFactory.createGetBookResponse();
 
-        if(isValidToken(parameters.getToken())){
+        BookEntity bookEntity = bookRepository.findByIsbn(parameter.getIsbn());
+        if(bookEntity != null){
+            response.setBook((Book) Reflection.EntityToWS(bookEntity));
+            response.setResult(OK);
+        }
+        else response.setResult(BAD_REQUEST);
 
-            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
-            BookEntity bookEntity = bookRepository.findByIsbn(parameters.getBook().getIsbn());
+        return response ;
+    }
+
+    @Override
+    public int reserveBook(String token, String isbn) {
+
+        int result;
+
+        if(isValidToken(token)){
+
+            UserEntity userEntity = tokenRepository.findByToken(token).getUserEntity();
+            BookEntity bookEntity = bookRepository.findByIsbn(isbn);
 
             if(bookEntity != null && bookEntity.isBookable()){
 
                 ReservedBook reservedBook = new ReservedBook();
-                reservedBook.setUserEntity(userEntity);
-                reservedBook.setBookEntity((BookEntity) Reflection.WStoEntity(parameters.getBook()));
+                reservedBook.setUser(userEntity);
+                reservedBook.setBook(bookEntity);
                 reservedBook.setReserveDate(LocalDateTime.now());
                 reservedBook.setPending(true);
 
                 reservedBookRepository.save(reservedBook);
 
-                response.setResult(OK);
+                result = OK;
 
             }
-            else response.setResult(INTERNAL_SERVER_ERROR);
+            else result = BAD_REQUEST;
 
         }
-        else response.setResult(UNAUTHORIZED);
+        else result = UNAUTHORIZED;
 
-        return response;
+        return result;
     }
 
     @Override
@@ -378,12 +393,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     private void checkReservationStatus(ReservedBook reservedBook){
 
-        BookEntity bookEntity = reservedBook.getBookEntity();
+        BookEntity bookEntity = reservedBook.getBook();
 
         int nbCopies = bookEntity.getNbCopies();
         int maxReservedBook = nbCopies * multiplierReservation;
 
-        List<ReservedBook> reservedBookList = reservedBookRepository.findAllByBookEntity(bookEntity);
+        List<ReservedBook> reservedBookList = reservedBookRepository.findAllByBook(bookEntity);
 
         if(reservedBookList.size() >= maxReservedBook)
             bookEntity.setBookable(false);

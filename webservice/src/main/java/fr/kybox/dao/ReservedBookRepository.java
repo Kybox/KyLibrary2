@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReservedBookRepository extends JpaRepository<ReservedBook, Integer> {
 
-    List<ReservedBook> findAllByBookEntity(BookEntity bookEntity);
+    List<ReservedBook> findAllByBook(BookEntity bookEntity);
 }

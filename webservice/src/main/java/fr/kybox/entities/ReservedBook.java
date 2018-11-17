@@ -11,12 +11,12 @@ public class ReservedBook {
     private ReservedBookPK reservedBookPK = new ReservedBookPK();
 
     @ManyToOne
-    @MapsId("user_id")
-    private UserEntity userEntity;
+    @MapsId("userId")
+    private UserEntity user;
 
     @ManyToOne
-    @MapsId("book_id")
-    private BookEntity bookEntity;
+    @MapsId("bookId")
+    private BookEntity book;
 
     @Column(name = "reserve_date")
     private LocalDateTime reserveDate;
@@ -34,20 +34,20 @@ public class ReservedBook {
         this.reservedBookPK = reservedBookPK;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public BookEntity getBookEntity() {
-        return bookEntity;
+    public BookEntity getBook() {
+        return book;
     }
 
-    public void setBookEntity(BookEntity bookEntity) {
-        this.bookEntity = bookEntity;
+    public void setBook(BookEntity book) {
+        this.book = book;
     }
 
     public LocalDateTime getReserveDate() {

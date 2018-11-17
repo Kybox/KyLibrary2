@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
+ *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -33,41 +33,41 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "token"
+    "isbn"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "getBook")
+public class GetBook
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "token")
-    protected String token;
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String isbn;
 
     /**
-     * Obtient la valeur de la propriété token.
+     * Obtient la valeur de la propriété isbn.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getToken() {
-        return token;
+    public String getIsbn() {
+        return isbn;
     }
 
     /**
-     * Définit la valeur de la propriété token.
+     * Définit la valeur de la propriété isbn.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setToken(String value) {
-        this.token = value;
+    public void setIsbn(String value) {
+        this.isbn = value;
     }
 
 }

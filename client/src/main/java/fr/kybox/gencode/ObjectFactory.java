@@ -78,6 +78,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetBook }
+     * 
+     */
+    public GetBook createGetBook() {
+        return new GetBook();
+    }
+
+    /**
+     * Create an instance of {@link GetBookResponse }
+     * 
+     */
+    public GetBookResponse createGetBookResponse() {
+        return new GetBookResponse();
+    }
+
+    /**
      * Create an instance of {@link BookBorrowed }
      * 
      */
@@ -123,6 +139,22 @@ public class ObjectFactory {
      */
     public ReservedBookListResponse createReservedBookListResponse() {
         return new ReservedBookListResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReserveBook }
+     * 
+     */
+    public ReserveBook createReserveBook() {
+        return new ReserveBook();
+    }
+
+    /**
+     * Create an instance of {@link ReserveBookResponse }
+     * 
+     */
+    public ReserveBookResponse createReserveBookResponse() {
+        return new ReserveBookResponse();
     }
 
     /**
