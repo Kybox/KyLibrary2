@@ -47,7 +47,7 @@ public class CheckParams {
     }
 
     private static boolean checkBookBorrowedData(BookBorrowed bookBorrowed){
-        return bookBorrowed.getReturndate() != null && checkBookData(bookBorrowed.getBook());
+        return bookBorrowed.getReturnDate() != null && checkBookData(bookBorrowed.getBook());
     }
 
     private static boolean checkBookData(Book book){

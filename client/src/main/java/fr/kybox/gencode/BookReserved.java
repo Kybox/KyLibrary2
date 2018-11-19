@@ -25,6 +25,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
  *         &lt;element name="reserveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *         &lt;element name="pending" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="position" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="total" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,7 +39,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "", propOrder = {
     "book",
     "reserveDate",
-    "pending"
+    "pending",
+    "position",
+    "total"
 })
 @XmlRootElement(name = "bookReserved")
 public class BookReserved
@@ -52,6 +56,8 @@ public class BookReserved
     @XmlSchemaType(name = "dateTime")
     protected Date reserveDate;
     protected boolean pending;
+    protected int position;
+    protected int total;
 
     /**
      * Obtient la valeur de la propriété book.
@@ -115,6 +121,38 @@ public class BookReserved
      */
     public void setPending(boolean value) {
         this.pending = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété position.
+     * 
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    /**
+     * Définit la valeur de la propriété position.
+     * 
+     */
+    public void setPosition(int value) {
+        this.position = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété total.
+     * 
+     */
+    public int getTotal() {
+        return total;
+    }
+
+    /**
+     * Définit la valeur de la propriété total.
+     * 
+     */
+    public void setTotal(int value) {
+        this.total = value;
     }
 
 }

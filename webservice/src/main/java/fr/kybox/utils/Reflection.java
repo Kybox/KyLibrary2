@@ -36,6 +36,8 @@ public class Reflection {
 
                 String methodName = method.getName();
 
+                logger.debug("Method name : " + methodName);
+
                 if(!methodName.startsWith("get")) continue;
 
                 currentMethod = method;
@@ -82,55 +84,61 @@ public class Reflection {
 
                 String methodName = method.getName();
 
+                logger.info("------------------------------------");
+                logger.debug("Method name : " + methodName);
+
                 if(!methodName.startsWith("get") && !methodName.startsWith("is")) continue;
 
                 currentMethod = method;
+
+                logger.debug("Method call : " + currentMethod.getName() + "(" + entity.toString() + ")");
+
                 object = currentMethod.invoke(entity);
 
-                logger.info("");
+                if(object != null) {
 
-                boolean javaName = object.getClass().getName().startsWith("java");
-                boolean hibernateName = object.getClass().getName().startsWith("org.hibernate");
+                    logger.debug("Object package : " + object.getClass().getName());
 
-                logger.debug("Object class = " + object.getClass().getSimpleName());
+                    boolean javaName = object.getClass().getName().startsWith("java");
+                    boolean hibernateName = object.getClass().getName().startsWith("org.hibernate");
 
-                if(!javaName && !hibernateName){
+                    logger.debug("Object class = " + object.getClass().getSimpleName());
 
-                    logger.debug("Object class !Java & !Hibernate");
+                    if (!javaName && !hibernateName) {
 
-                    if(object.getClass().getSimpleName().equals("Level")) {
-                        currentMethod = object.getClass().getMethod("getId");
+                        logger.debug("Object class !Java & !Hibernate");
+
+                        if (object.getClass().getSimpleName().equals("Level")) {
+                            currentMethod = object.getClass().getMethod("getId");
+                        } else currentMethod = object.getClass().getMethod("getName");
+
+                        object = currentMethod.invoke(object);
+                    } else {
+                        if (object.getClass().getName().startsWith("java.sql")) {
+                            Date date = (Date) object;
+                            object = new java.util.Date(date.getTime());
+                        }
                     }
-                    else currentMethod = object.getClass().getMethod("getName");
 
-                    object = currentMethod.invoke(object);
-                }
-                else{
-                    if(object.getClass().getName().startsWith("java.sql")) {
-                        Date date = (Date) object;
-                        object = new java.util.Date(date.getTime());
+                    if (!methodName.substring(3).equals("Password")) {
+
+                        logger.debug("methodName = " + methodName);
+
+                        String setterName = "set";
+                        if (methodName.startsWith("get"))
+                            setterName += methodName.substring(3);
+                        else if (methodName.startsWith("is"))
+                            setterName += methodName.substring(2);
+
+                        logger.info("Setter called = " + setterName);
+
+                        if (wsObject != null) {
+
+                            currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
+
+                            currentMethod.invoke(wsObject, object);
+                        } else logger.error("wsObject is null !");
                     }
-                }
-
-                if(!methodName.substring(3).equals("Password")) {
-
-                    logger.debug("methodName = " + methodName);
-
-                    String setterName = "set";
-                    if(methodName.startsWith("get"))
-                        setterName += methodName.substring(3);
-                    else if(methodName.startsWith("is"))
-                        setterName += methodName.substring(2);
-
-                    logger.info("Setter called = " + setterName);
-
-                    if (wsObject != null) {
-
-                        currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
-
-                        currentMethod.invoke(wsObject, object);
-                    }
-                    else logger.error("wsObject is null !");
                 }
             }
             catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

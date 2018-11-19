@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BorrowedBooksRepository extends JpaRepository<BorrowedBook, Integer> {
 
-    List<BorrowedBook> findAllByUserOrderByReturnedDesc(UserEntity user);
+    List<BorrowedBook> findAllByUserOrderByReturnedAsc(UserEntity user);
     BorrowedBook findByUserAndBook(UserEntity user, BookEntity bookEntity);
     Iterable<BorrowedBook> findAllByReturnDateBeforeAndReturnedFalse(Date date);
     List<BorrowedBook> findAllByBookAndReturnedFalseOrderByReturnDateAsc(BookEntity bookEntity);

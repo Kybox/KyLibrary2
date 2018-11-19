@@ -312,7 +312,21 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     bookReserved.setReserveDate(Date.from(instant));
                     bookReserved.setPending(reservedBook.isPending());
                     response.getBookReserved().add(bookReserved);
+
+                    if(reservedBook.isPending()) {
+                        List<ReservedBook> reservedBookList = reservedBookRepository
+                                .findAllByBookAndPendingTrueOrderByReserveDateAsc(reservedBook.getBook());
+                        bookReserved.setTotal(reservedBookList.size());
+
+                        for(int i = 0; i < reservedBookList.size(); i++){
+                            if(reservedBookList.get(i).getUser().getId().equals(userEntity.getId())){
+                                bookReserved.setPosition(i + 1);
+                                break;
+                            }
+                        }
+                    }
                 }
+
                 response.setResult(OK);
             }
             else response.setResult(INTERNAL_SERVER_ERROR);
@@ -334,14 +348,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             if (userEntity != null) {
 
-                List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedDesc(userEntity);
+                List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedAsc(userEntity);
 
                 for (BorrowedBook borrowedBook : bookList) {
 
                     BookBorrowed bookBorrowed = new BookBorrowed();
                     bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
                     bookBorrowed.setExtended(borrowedBook.getExtended());
-                    bookBorrowed.setReturndate(borrowedBook.getReturnDate());
+                    bookBorrowed.setReturnDate(borrowedBook.getReturnDate());
                     bookBorrowed.setReturned(borrowedBook.getReturned());
 
                     response.getBookBorrowed().add(bookBorrowed);
@@ -381,7 +395,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     BookBorrowed bookBorrowed = objectFactory.createBookBorrowed();
                     bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
                     bookBorrowed.setExtended(borrowedBook.getExtended());
-                    bookBorrowed.setReturndate(borrowedBook.getReturnDate());
+                    bookBorrowed.setReturnDate(borrowedBook.getReturnDate());
                     bookBorrowed.setReturned(borrowedBook.getReturned());
 
                     unreturnedBook.setBookBorrowed(bookBorrowed);

@@ -17,18 +17,32 @@
                             <th>Auteur</th>
                             <th class="text-center">Edition</th>
                             <th class="text-center">Date de retour</th>
+                            <th class="text-center">Statut</th>
                         </tr>
                         <s:iterator value="borrowedBooks">
-                            <s:if test="returned!=false">
                                 <tr id="book<s:property value="book.isbn"/>">
                                     <td><s:property value="book.title"/></td>
                                     <td><s:property value="book.author"/></td>
                                     <td class="text-center"><s:property value="book.publisher"/></td>
                                     <td class="text-center">
-                                        <s:date name="returndate" format="dd/MM/yyyy"/>
+                                        <s:date name="returnDate" format="dd/MM/yyyy"/>
                                     </td>
+                                    <s:if test="returned"><td class="text-center">Rendu</td></s:if>
+                                    <s:else>
+                                        <s:if test="returnDate.before(currentDate)">
+                                            <td class="text-center text-danger">
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            Non rendu
+                                            </td>
+                                        </s:if>
+                                        <s:else>
+                                            <td class="text-center text-success">
+                                                <span class="glyphicon glyphicon glyphicon-hand-right"></span>
+                                                Non rendu
+                                            </td>
+                                        </s:else>
+                                    </s:else>
                                 </tr>
-                            </s:if>
                         </s:iterator>
                     </table>
                 </div>

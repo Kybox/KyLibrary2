@@ -11,15 +11,27 @@
                 <th>Auteur</th>
                 <th class="text-center">Edition</th>
                 <th class="text-center">Date de réservation</th>
+                <th class="text-center">Position</th>
                 <th class="text-center">Action</th>
             </tr>
             <s:iterator value="reservedBooks">
                 <s:if test="pending">
                     <tr>
-                        <td style="vertical-align: middle;"><s:property value="book.title"/></td>
-                        <td style="vertical-align: middle;"><s:property value="book.author"/></td>
-                        <td class="text-center" style="vertical-align: middle;"><s:property value="book.publisher"/></td>
-                        <td class="text-center" style="vertical-align: middle;"><s:date name="reserveDate" format="dd/MM/yyyy"/></td>
+                        <td style="vertical-align: middle;">
+                            <s:property value="book.title"/>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <s:property value="book.author"/>
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                            <s:property value="book.publisher"/>
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                            <s:date name="reserveDate" format="dd/MM/yyyy"/>
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                            <s:property value="position"/> / <s:property value="total"/>
+                        </td>
                         <td class="text-center" style="vertical-align: middle;">
                             <button class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove"></span>

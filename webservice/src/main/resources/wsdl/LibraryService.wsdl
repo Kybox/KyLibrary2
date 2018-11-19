@@ -103,9 +103,9 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:book"/>
-                        <xs:element name="returndate" type="xs:date"/>
-                        <xs:element name="extended" type="xs:boolean"/>
-                        <xs:element name="returned" type="xs:boolean"/>
+                        <xs:element name="returnDate" type="xs:date"/>
+                        <xs:element name="extended" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -135,6 +135,8 @@
                         <xs:element ref="ws:book"/>
                         <xs:element name="reserveDate" type="xs:dateTime"/>
                         <xs:element name="pending" type="xs:boolean"/>
+                        <xs:element name="position" type="xs:int"/>
+                        <xs:element name="total" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

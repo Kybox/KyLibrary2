@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
- *         &lt;element name="returndate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
- *         &lt;element name="extended" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
- *         &lt;element name="returned" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="extended" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="returned" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "book",
-    "returndate",
+    "returnDate",
     "extended",
     "returned"
 })
@@ -52,9 +52,9 @@ public class BookBorrowed
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter2 .class)
     @XmlSchemaType(name = "date")
-    protected Date returndate;
-    protected boolean extended;
-    protected boolean returned;
+    protected Date returnDate;
+    protected Boolean extended;
+    protected Boolean returned;
 
     /**
      * Obtient la valeur de la propriété book.
@@ -81,58 +81,74 @@ public class BookBorrowed
     }
 
     /**
-     * Obtient la valeur de la propriété returndate.
+     * Obtient la valeur de la propriété returnDate.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public Date getReturndate() {
-        return returndate;
+    public Date getReturnDate() {
+        return returnDate;
     }
 
     /**
-     * Définit la valeur de la propriété returndate.
+     * Définit la valeur de la propriété returnDate.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setReturndate(Date value) {
-        this.returndate = value;
+    public void setReturnDate(Date value) {
+        this.returnDate = value;
     }
 
     /**
      * Obtient la valeur de la propriété extended.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isExtended() {
+    public Boolean isExtended() {
         return extended;
     }
 
     /**
      * Définit la valeur de la propriété extended.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setExtended(boolean value) {
+    public void setExtended(Boolean value) {
         this.extended = value;
     }
 
     /**
      * Obtient la valeur de la propriété returned.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isReturned() {
+    public Boolean isReturned() {
         return returned;
     }
 
     /**
      * Définit la valeur de la propriété returned.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setReturned(boolean value) {
+    public void setReturned(Boolean value) {
         this.returned = value;
     }
 
