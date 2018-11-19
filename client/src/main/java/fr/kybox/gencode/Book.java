@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="cover" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="nbCopies" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *         &lt;element name="bookable" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -53,7 +54,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "available",
     "cover",
     "nbCopies",
-    "bookable"
+    "bookable",
+    "returnDate"
 })
 @XmlRootElement(name = "book")
 public class Book
@@ -76,6 +78,10 @@ public class Book
     protected String cover;
     protected Integer nbCopies;
     protected Boolean bookable;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter2 .class)
+    @XmlSchemaType(name = "date")
+    protected Date returnDate;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -339,6 +345,30 @@ public class Book
      */
     public void setBookable(Boolean value) {
         this.bookable = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété returnDate.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    /**
+     * Définit la valeur de la propriété returnDate.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setReturnDate(Date value) {
+        this.returnDate = value;
     }
 
 }

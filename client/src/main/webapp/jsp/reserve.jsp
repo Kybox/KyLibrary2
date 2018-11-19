@@ -41,6 +41,8 @@
             Genre littéraire : <s:property value="book.genre"/>
             <br>
             Exemplaire(s) disponibles(s) : <s:property value="book.available"/> / <s:property value="book.nbCopies"/>
+            <br>
+            Date de retour estimée : <s:date name="book.returnDate" format="dd/MM/yyyy"/>
             <hr>
             <b>Résumé :</b>
             <br>

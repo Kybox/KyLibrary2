@@ -36,6 +36,8 @@ public class SearchAction extends ActionSupport implements SessionAware {
             SearchBookResponse response = service.searchBook(searchBook);
 
             bookList = response.getBookList().getBook();
+
+
         }
 
         return ActionSupport.SUCCESS;

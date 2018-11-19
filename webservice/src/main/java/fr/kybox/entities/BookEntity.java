@@ -56,6 +56,9 @@ public class BookEntity extends AbstractEntity {
     @Column
     private Boolean bookable;
 
+    @Column(name = "return_date")
+    private Date returnDate;
+
     public BookEntity() {}
 
     public String getIsbn() {
@@ -134,12 +137,20 @@ public class BookEntity extends AbstractEntity {
         this.nbCopies = nbCopies;
     }
 
-    public Boolean isBookable() {
+    public Boolean getBookable() {
         return bookable;
     }
 
     public void setBookable(Boolean bookable) {
         this.bookable = bookable;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 
     @Override

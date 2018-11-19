@@ -9,6 +9,7 @@ import fr.kybox.gencode.*;
 import fr.kybox.security.Password;
 import fr.kybox.service.utils.CheckParams;
 import fr.kybox.utils.Converter;
+import fr.kybox.utils.DateUtils;
 import fr.kybox.utils.Reflection;
 import fr.kybox.utils.Token;
 import org.apache.logging.log4j.LogManager;
@@ -149,7 +150,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             }
 
             if(result != FORBIDDEN) {
-                if (bookEntity != null && bookEntity.isBookable() && result != FORBIDDEN) {
+                if (bookEntity != null && bookEntity.getBookable()) {
 
                     ReservedBook reservedBook = new ReservedBook();
                     reservedBook.setUser(userEntity);
@@ -275,6 +276,16 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             borrowedBook.setExtended(true);
 
             borrowedBooksRepository.save(borrowedBook);
+
+            if(bookEntity.getBookable()){
+
+                Boolean dateChecked = DateUtils.isDateBefore(borrowedBook.getReturnDate(), bookEntity.getReturnDate());
+
+                if(dateChecked != null && !dateChecked) {
+                    bookEntity.setReturnDate(borrowedBook.getReturnDate());
+                    bookRepository.save(bookEntity);
+                }
+            }
 
             response.setResult(OK);
 
@@ -434,11 +445,25 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         List<ReservedBook> reservedBookList = reservedBookRepository.findAllByBook(bookEntity);
 
-        if(reservedBookList.size() >= maxReservedBook)
+        if(reservedBookList.size() >= maxReservedBook) {
             bookEntity.setBookable(false);
+            bookEntity.setReturnDate(null);
+        }
 
-        else bookEntity.setBookable(true);
+        else {
+            bookEntity.setBookable(true);
+            bookEntity.setReturnDate(getNextReturnDate(bookEntity));
+        }
 
         bookRepository.save(bookEntity);
+    }
+
+    private Date getNextReturnDate(BookEntity bookEntity){
+
+        List<BorrowedBook> borrowedBookList = borrowedBooksRepository
+                .findAllByBookAndReturnedFalseOrderByReturnDateAsc(bookEntity);
+
+        // Nearest return date (order by asc)
+        return borrowedBookList.get(0).getReturnDate();
     }
 }
