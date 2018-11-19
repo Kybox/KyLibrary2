@@ -46,7 +46,17 @@
             <br>
             <s:property value="book.summary"/>
             <hr>
-            <s:if test="book.bookable && #session.user">
+            <s:if test="!authorizedReservation">
+                <button class="btn btn-primary" type="submit" disabled>
+                    Vous avez déjà une réservation en cours de cet ouvrage !
+                </button>
+            </s:if>
+            <s:elseif test="!book.bookable">
+                <button class="btn btn-primary" type="submit" disabled>
+                    Cet ouvrage n'est plus disponible à une réservation...
+                </button>
+            </s:elseif>
+            <s:else>
                 <s:url action="reserve" var="urlReserve">
                     <s:param name="isbn"><s:property value="book.isbn"/></s:param>
                     <s:param name="confirmed"><s:property value="true"/></s:param>
@@ -54,7 +64,7 @@
                 <s:a href="%{urlReserve}">
                     <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
                 </s:a>
-            </s:if>
+            </s:else>
         </div>
     </div>
 </s:if>

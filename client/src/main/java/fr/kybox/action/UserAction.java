@@ -23,6 +23,7 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
 
     private String tab;
     private String isbn;
+    private String actionReturned;
     private HttpServletRequest request;
     private Map<String, Object> session;
     private List<BookBorrowed> borrowedBooks;
@@ -38,42 +39,6 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         String result = ActionSupport.SUCCESS;
 
 
-        /*
-
-        logger.info("TAB = " + getTab());
-        logger.info("REQUEST PARAM VALUES = " + request.getParameterMap().toString());
-        Map<String, String[]> paramMap = request.getParameterMap();
-        for(Map.Entry<String, String[]> entry : paramMap.entrySet()){
-            logger.info("KEY = " + entry.getKey());
-            logger.info("VALUE = " + Arrays.toString(entry.getValue()));
-        }
-
-        switch (getTab()){
-            case "reservation":
-                logger.info("SWITCH TAB = RESERVATION");
-                ReservedBookList bookList = new ReservedBookList();
-                bookList.setToken(Token.getToken());
-                setReservedBooks(service.reservedBookList(bookList).getReservedBook());
-                break;
-
-                default:
-                    UserBookList userBookList = new UserBookList();
-                    userBookList.setToken(Token.getToken());
-
-                    UserBookListResponse userBookListResponse = service.userBookList(userBookList);
-
-                    if(userBookListResponse.getResult() == ResultCode.UNAUTHORIZED) {
-                        this.session.clear();
-                        result = ActionSupport.LOGIN;
-                    }
-
-                    else if(userBookListResponse.getResult() != ResultCode.OK)
-                        result = ActionSupport.ERROR;
-
-                    break;
-        }
-
-        */
 
         return result;
 
@@ -81,20 +46,13 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
 
     public String informations(){
 
-        logger.info("TAB = " + getTab());
-        logger.info("REQUEST PARAM VALUES = " + request.getParameterMap().toString());
-        Map<String, String[]> paramMap = request.getParameterMap();
-        for(Map.Entry<String, String[]> entry : paramMap.entrySet()){
-            logger.info("KEY = " + entry.getKey());
-            logger.info("VALUE = " + Arrays.toString(entry.getValue()));
-        }
+        // Add some notifications ?
 
         return ActionSupport.SUCCESS;
     }
 
     public String reservations(){
 
-        String actionReturned = null;
         LibraryService service = ServiceFactory.getLibraryService();
         ReservedBookList bookList = new ReservedBookList();
         bookList.setToken(Token.getToken());
@@ -114,6 +72,31 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
             setReservedBooks(response.getBookReserved());
             actionReturned = ActionSupport.SUCCESS;
         }
+        return actionReturned;
+    }
+
+    public String borrowing(){
+
+        LibraryService service = ServiceFactory.getLibraryService();
+        UserBookList userBookList = new UserBookList();
+        userBookList.setToken(Token.getToken());
+        UserBookListResponse response = service.userBookList(userBookList);
+
+        if(response.getResult() != ResultCode.OK){
+            if(response.getResult() == ResultCode.INTERNAL_SERVER_ERROR){
+                this.addActionError("Erreur : Le service a rencontré une erreur...");
+                actionReturned = ActionSupport.ERROR;
+            }
+            else if(response.getResult() == ResultCode.UNAUTHORIZED){
+                session.clear();
+                actionReturned = ActionSupport.LOGIN;
+            }
+        }
+        else{
+            setBorrowedBooks(response.getBookBorrowed());
+            actionReturned = ActionSupport.SUCCESS;
+        }
+
         return actionReturned;
     }
 
@@ -137,6 +120,14 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         else return ActionSupport.ERROR;
     }
 
+    public String history(){
+
+        if(borrowing().equals(ActionSupport.SUCCESS)){
+            return reservations();
+        }
+        else return actionReturned;
+    }
+
     public User getUser() {
         return (User) session.get("user");
     }
@@ -155,17 +146,11 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
     }
 
     public List<BookBorrowed> getBorrowedBooks() {
-
-        if(borrowedBooks == null){
-            LibraryService service = ServiceFactory.getLibraryService();
-
-            UserBookList userBookList = new UserBookList();
-            userBookList.setToken(Token.getToken());
-
-            borrowedBooks = service.userBookList(userBookList).getBookBorrowed();
-        }
-
         return borrowedBooks;
+    }
+
+    public void setBorrowedBooks(List<BookBorrowed> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
     }
 
     public List<BookReserved> getReservedBooks() {

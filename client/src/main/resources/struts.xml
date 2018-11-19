@@ -62,14 +62,6 @@
     </package>
     
     <package name="private" extends="default, json-default">
-    
-        <!-- [USER] Action -->
-        <action name="user" class="fr.kybox.action.UserAction">
-            <interceptor-ref name="authenticatedStack"/>
-            <result name="success">jsp/user.jsp</result>
-            <result name="login" type="redirectAction">login</result>
-            <result name="error" type="redirectAction">error</result>
-        </action>
 
         <!-- [USER INFO] Action -->
         <action name="userInfo" class="fr.kybox.action.UserAction" method="informations">
@@ -86,14 +78,30 @@
             <result name="login" type="redirectAction">login</result>
             <result name="error" type="redirectAction">error</result>
         </action>
-        
+
+        <!-- [USER BORROWING] Action -->
+        <action name="userBorrowing" class="fr.kybox.action.UserAction" method="borrowing">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
+        <!-- [USER HISTORY] Action -->
+        <action name="userHistory" class="fr.kybox.action.UserAction" method="history">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
         <!-- [EXTEND BORROWING] Action -->
         <action name="extendBorrowing" class="fr.kybox.action.UserAction" method="extendBorrowing">
             <interceptor-ref name="authenticatedStack"/>
             <result type="json"/>
         </action>
 
-        <!-- [RESERVE] Action (Summary) -->
+        <!-- [RESERVE SUMMARY] Action -->
         <action name="reserveSummary" class="fr.kybox.action.ReserveAction" method="summary">
             <interceptor-ref name="authenticatedStack"/>
             <result name="success">jsp/reserve.jsp</result>

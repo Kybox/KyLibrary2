@@ -1,10 +1,7 @@
 package fr.kybox.action;
 
 import com.opensymphony.xwork2.ActionSupport;
-import fr.kybox.gencode.Book;
-import fr.kybox.gencode.GetBook;
-import fr.kybox.gencode.GetBookResponse;
-import fr.kybox.gencode.LibraryService;
+import fr.kybox.gencode.*;
 import fr.kybox.security.Token;
 import fr.kybox.utils.ResultCode;
 import fr.kybox.utils.ServiceFactory;
@@ -22,6 +19,7 @@ public class ReserveAction extends ActionSupport implements SessionAware {
     private String isbn;
     private int result;
     private Book book;
+    private boolean authorizedReservation;
 
     @Override
     public void setSession(Map<String, Object> map) {
@@ -37,6 +35,17 @@ public class ReserveAction extends ActionSupport implements SessionAware {
         GetBookResponse response = service.getBook(getBook);
         result = response.getResult();
         setBook(response.getBook());
+
+        ReservedBookList auth = new ReservedBookList();
+        auth.setToken(Token.getToken());
+        ReservedBookListResponse bookList = service.reservedBookList(auth);
+        setAuthorizedReservation(true);
+        for(BookReserved bookReserved : bookList.getBookReserved()) {
+            if (bookReserved.getBook().getIsbn().equals(response.getBook().getIsbn()) && bookReserved.isPending()) {
+                setAuthorizedReservation(false);
+                break;
+            }
+        }
 
         if(response.getResult() == ResultCode.OK && getBook().isBookable())
             return ActionSupport.SUCCESS;
@@ -58,6 +67,8 @@ public class ReserveAction extends ActionSupport implements SessionAware {
         else{
             if(result == ResultCode.BAD_REQUEST)
                 this.addActionError("Erreur : BAD_REQUEST - La requête est invalide !");
+            else if(result == ResultCode.FORBIDDEN)
+                this.addActionError("Erreur : FORBIDDEN - Vous ne pouvez pas effectuer cette action !");
 
             actionReturn = ActionSupport.ERROR;
         }
@@ -87,5 +98,13 @@ public class ReserveAction extends ActionSupport implements SessionAware {
 
     public void setConfirmed(String confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public boolean isAuthorizedReservation() {
+        return authorizedReservation;
+    }
+
+    public void setAuthorizedReservation(boolean authorizedReservation) {
+        this.authorizedReservation = authorizedReservation;
     }
 }

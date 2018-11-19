@@ -15,7 +15,7 @@
     </a>
     <s:if test="#session.user">
         <span class="glyphicon glyphicon-minus"></span>
-        <a href="user.action">
+        <a href="userInfo.action">
             <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
                 Mon compte

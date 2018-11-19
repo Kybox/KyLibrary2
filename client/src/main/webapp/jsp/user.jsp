@@ -25,12 +25,11 @@
                 </div>
                 <div class="profile-usermenu">
                     <div class="list-group">
-
-                        <a href="user.action?tab=info" id="info" class="list-group-item">
+                        <a href="userInfo.action?tab=info" id="info" class="list-group-item">
                             <span class="glyphicon glyphicon-user"></span>
                             Mes informations
                         </a>
-                        <a href="user.action?tab=books" id="books" class="list-group-item">
+                        <a href="userBorrowing.action?tab=books" id="books" class="list-group-item">
                             <span class="glyphicon glyphicon-transfer"></span>
                             Livres à rendre
                         </a>
@@ -38,7 +37,7 @@
                             <span class="glyphicon glyphicon-calendar"></span>
                             Réservations
                         </a>
-                        <a href="user.action?tab=history" id="history" class="list-group-item">
+                        <a href="userHistory.action?tab=history" id="history" class="list-group-item">
                             <span class="glyphicon glyphicon-list-alt"></span>
                             Historique
                         </a>
@@ -49,35 +48,18 @@
         </div>
         <div class="col-md-10">
             <div class="profile-content">
-
-                <s:if test="#request['struts.actionMapping'].name=='userReservations'">
+                <s:set var="action" value="#request['struts.actionMapping'].name"/>
+                <s:if test="#action=='userReservations'">
                     <%@ include file="include/user/user_reservation.jsp"%>
                 </s:if>
-
-                <s:else>
-
-                <!-- URL = user.action?tab=... -->
-                <s:set var="content" value="%{#parameters.tab[0]}"/>
-
-                <!-- Borrowed books -->
-                <s:if test="%{#content=='books'}">
+                <s:elseif test="#action=='userBorrowing'">
                     <%@ include file="include/user/user_books.jsp"%>
-                </s:if>
-
-                <!-- History -->
-                <s:elseif test="%{#content=='history'}">
+                </s:elseif>
+                <s:elseif test="#action=='userHistory'">
                     <%@ include file="include/user/user_history.jsp"%>
                 </s:elseif>
-
-                <!-- Reservation -->
-                <s:elseif test="%{#content=='reservations'}">
-                    <%@ include file="include/user/user_reservation.jsp"%>
-                </s:elseif>
-
-                <!-- User info -->
                 <s:else>
                     <%@ include file="include/user/user_info.jsp"%>
-                </s:else>
                 </s:else>
             </div>
         </div>

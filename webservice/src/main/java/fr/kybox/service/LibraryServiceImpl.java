@@ -40,6 +40,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final int INTERNAL_SERVER_ERROR = 500;
     private final int UNAUTHORIZED = 401;
     private final int BAD_REQUEST = 400;
+    private final int FORBIDDEN = 403;
     private final int CONFLICT = 409;
     private final int CREATED = 201;
     private final int OK = 200;
@@ -131,28 +132,39 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @Override
     public int reserveBook(String token, String isbn) {
 
-        int result;
+        int result = 0;
 
         if(isValidToken(token)){
 
             UserEntity userEntity = tokenRepository.findByToken(token).getUserEntity();
             BookEntity bookEntity = bookRepository.findByIsbn(isbn);
 
-            if(bookEntity != null && bookEntity.isBookable()){
+            List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
 
-                ReservedBook reservedBook = new ReservedBook();
-                reservedBook.setUser(userEntity);
-                reservedBook.setBook(bookEntity);
-                reservedBook.setReserveDate(LocalDateTime.now());
-                reservedBook.setPending(true);
-
-                reservedBookRepository.save(reservedBook);
-
-                result = OK;
-
+            for(ReservedBook reservation : bookList) {
+                if (bookEntity.getIsbn().equals(reservation.getBook().getIsbn()) && reservation.isPending()) {
+                    result = FORBIDDEN;
+                    break;
+                }
             }
-            else result = BAD_REQUEST;
 
+            if(result != FORBIDDEN) {
+                if (bookEntity != null && bookEntity.isBookable() && result != FORBIDDEN) {
+
+                    ReservedBook reservedBook = new ReservedBook();
+                    reservedBook.setUser(userEntity);
+                    reservedBook.setBook(bookEntity);
+                    reservedBook.setReserveDate(LocalDateTime.now());
+                    reservedBook.setPending(true);
+
+                    reservedBookRepository.save(reservedBook);
+
+                    checkReservationStatus(reservedBook);
+
+                    result = OK;
+
+                } else result = BAD_REQUEST;
+            }
         }
         else result = UNAUTHORIZED;
 
@@ -290,7 +302,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     bookReserved.setPending(reservedBook.isPending());
                     response.getBookReserved().add(bookReserved);
                 }
-               response.setResult(OK);
+                response.setResult(OK);
             }
             else response.setResult(INTERNAL_SERVER_ERROR);
         }
@@ -427,6 +439,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         else bookEntity.setBookable(true);
 
-
+        bookRepository.save(bookEntity);
     }
 }
