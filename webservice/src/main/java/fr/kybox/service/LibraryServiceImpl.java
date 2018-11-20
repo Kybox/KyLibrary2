@@ -40,6 +40,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final int CONFLICT = 409;
     private final int CREATED = 201;
     private final int OK = 200;
+    private final int FORBIDDEN = 403;
 
     // USER LEVEL
     private final int ADMIN = 1;
@@ -204,15 +205,20 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             BookEntity bookEntity = bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
             BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
 
-            LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
-            localDate = localDate.plusWeeks(nbWeeksToExtend);
-            borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
+            Date now = new Date(Calendar.getInstance().getTime().getTime());
+            if(borrowedBook.getReturnDate().before(now)) {
 
-            borrowedBook.setExtended(true);
+                LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
+                localDate = localDate.plusWeeks(nbWeeksToExtend);
+                borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
 
-            borrowedBooksRepository.save(borrowedBook);
+                borrowedBook.setExtended(true);
 
-            response.setResult(OK);
+                borrowedBooksRepository.save(borrowedBook);
+
+                response.setResult(OK);
+            }
+            else response.setResult(FORBIDDEN);
 
         }
         else response.setResult(UNAUTHORIZED);

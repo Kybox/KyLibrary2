@@ -41,7 +41,7 @@
                             </s:if>
                         </td>
                         <td class="text-center">
-                            <s:if test="extended!=true">
+                            <s:if test="extended!=true && returndate.before(currentDate)">
                                 <button class="btn btn-primary"
                                         id="btnExtend<s:property value="book.isbn"/>"
                                         onclick="extend('<s:property value="book.isbn"/>')">
