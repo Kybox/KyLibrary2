@@ -100,7 +100,18 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         return actionReturned;
     }
 
+    public String history(){
+
+        if(borrowing().equals(ActionSupport.SUCCESS)){
+            return reservations();
+        }
+        else return actionReturned;
+    }
+
+
     public String extendBorrowing(){
+
+        if(getBorrowedBooks() == null) borrowing();
 
         List<BookBorrowed> bookList = getBorrowedBooks();
         LibraryService service = ServiceFactory.getLibraryService();
@@ -120,12 +131,12 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         else return ActionSupport.ERROR;
     }
 
-    public String history(){
+    public String cancelReservation(){
 
-        if(borrowing().equals(ActionSupport.SUCCESS)){
-            return reservations();
-        }
-        else return actionReturned;
+        LibraryService service = ServiceFactory.getLibraryService();
+        if(service.cancelReservation(Token.getToken(), getIsbn()) == ResultCode.OK)
+            return ActionSupport.SUCCESS;
+        else return ActionSupport.ERROR;
     }
 
     public User getUser() {

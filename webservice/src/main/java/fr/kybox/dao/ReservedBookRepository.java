@@ -12,4 +12,5 @@ public interface ReservedBookRepository extends JpaRepository<ReservedBook, Inte
     List<ReservedBook> findAllByBook(BookEntity bookEntity);
     List<ReservedBook> findAllByUser(UserEntity userEntity);
     List<ReservedBook> findAllByBookAndPendingTrueOrderByReserveDateAsc(BookEntity bookEntity);
+    ReservedBook findByUserAndBookAndPendingTrue(UserEntity userEntity, BookEntity bookEntity);
 }

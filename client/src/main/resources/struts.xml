@@ -115,6 +115,12 @@
             <result name="error">jsp/error.jsp</result>
             <result name="login" type="redirectAction">login</result>
         </action>
+
+        <!-- [CANCEL RESERVATION] Action -->
+        <action name="cancelReservation" class="fr.kybox.action.UserAction" method="cancelReservation">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
         
         <!-- [MANAGER] Action -->
         <action name="manager" class="fr.kybox.action.ManagerAction">

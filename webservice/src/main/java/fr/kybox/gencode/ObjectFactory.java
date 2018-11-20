@@ -158,6 +158,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CancelReservation }
+     * 
+     */
+    public CancelReservation createCancelReservation() {
+        return new CancelReservation();
+    }
+
+    /**
+     * Create an instance of {@link CancelReservationResponse }
+     * 
+     */
+    public CancelReservationResponse createCancelReservationResponse() {
+        return new CancelReservationResponse();
+    }
+
+    /**
      * Create an instance of {@link UnreturnedBook }
      * 
      */

@@ -127,6 +127,7 @@
                 </xs:complexType>
             </xs:element>
 
+<!-- ===== R E S E R V A T I O N ==== -->
 
             <!-- [RESERVED BOOK] -->
             <xs:element name="bookReserved">
@@ -168,6 +169,23 @@
                 </xs:complexType>
             </xs:element>
             <xs:element name="reserveBookResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [CANCEL RESERVATION] -->
+            <xs:element name="cancelReservation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cancelReservationResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
@@ -337,6 +355,12 @@
     <wsdl:message name="reserveBookResponse">
         <wsdl:part name="response" element="ws:reserveBookResponse"/>
     </wsdl:message>
+    <wsdl:message name="cancelReservation">
+        <wsdl:part name="parameters" element="ws:cancelReservation"/>
+    </wsdl:message>
+    <wsdl:message name="cancelReservationResponse">
+        <wsdl:part name="response" element="ws:cancelReservationResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -382,6 +406,10 @@
         <wsdl:operation name="reserveBook">
             <wsdl:input message="ws:reserveBook"/>
             <wsdl:output message="ws:reserveBookResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="cancelReservation">
+            <wsdl:input message="ws:cancelReservation"/>
+            <wsdl:output message="ws:cancelReservationResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -488,6 +516,16 @@
 
         <!-- [PRIVATE] RESERVE BOOK -->
         <wsdl:operation name="reserveBook">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] CANCEL RESERVATION -->
+        <wsdl:operation name="cancelReservation">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
