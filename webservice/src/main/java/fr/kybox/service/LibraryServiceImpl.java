@@ -46,6 +46,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final int CREATED = 201;
     private final int OK = 200;
     private final int NOT_MODIFIED = 304;
+    private final int TOKEN_EXPIRED_INVALID = 498;
 
     // USER LEVEL
     private final int ADMIN = 1;
@@ -97,14 +98,22 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     token.generateNew(userEntity);
                     tokenRepository.save(token.getTokenStorage());
                     loginResponse.setToken(token.getTokenStorage().getToken());
-                }
 
-                else logger.warn("Password comparison : [NO]");
+                    loginResponse.setResult(OK);
+                }
+                else loginResponse.setResult(BAD_REQUEST);
             }
-            else logger.warn("UserEntity created : [NO]");
+            else loginResponse.setResult(BAD_REQUEST);
         }
 
         return loginResponse;
+    }
+
+    @Override
+    public int checkToken(String token) {
+
+        if(isValidToken(token)) return OK;
+        else return TOKEN_EXPIRED_INVALID;
     }
 
     @Override
@@ -151,6 +160,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             }
 
             if(result != FORBIDDEN) {
+
                 if (bookEntity != null && bookEntity.getBookable()) {
 
                     ReservedBook reservedBook = new ReservedBook();
@@ -165,10 +175,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
                     result = OK;
 
-                } else result = BAD_REQUEST;
+                }
+                else result = BAD_REQUEST;
             }
         }
-        else result = UNAUTHORIZED;
+        else result = TOKEN_EXPIRED_INVALID;
 
         return result;
     }
@@ -223,21 +234,19 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         response.setResult(BAD_REQUEST);
 
-        if(CheckParams.login(parameters.getLogin())){
-            Login login = parameters.getLogin();
-            UserEntity userEntity = userRepository.findByEmail(login.getLogin());
+        if(isValidToken(parameters.getToken())){
 
-            if(userEntity != null && Password.match(login.getPassword(), userEntity.getPassword())){
-                if(userEntity.getLevel().getId() == MANAGER) {
-                    if(CheckParams.loanReturn(parameters)){
+            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
+
+            if(userEntity != null){
+                if(userEntity.getLevel().getId() <= MANAGER) {
+                    //if(CheckParams.loanReturn(parameters)){
                         try {
 
-                            UserEntity user =
-                                    userRepository.findByEmail(parameters.getUser().getEmail());
                             BookEntity book =
                                     bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
 
-                            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(user, book);
+                            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, book);
 
                             if(!borrowedBook.getReturned()) {
                                 borrowedBook.setReturned(true);
@@ -250,11 +259,13 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                             logger.warn(e.getMessage());
                             response.setResult(INTERNAL_SERVER_ERROR);
                         }
-                    }
+                    //}
                 }
                 else response.setResult(UNAUTHORIZED);
             }
+            else response.setResult(CONFLICT);
         }
+        else response.setResult(TOKEN_EXPIRED_INVALID);
 
         return response;
     }
@@ -291,7 +302,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             response.setResult(OK);
 
         }
-        else response.setResult(UNAUTHORIZED);
+        else response.setResult(TOKEN_EXPIRED_INVALID);
 
         return response;
     }
@@ -332,7 +343,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             }
             else response.setResult(INTERNAL_SERVER_ERROR);
         }
-        else response.setResult(UNAUTHORIZED);
+        else response.setResult(TOKEN_EXPIRED_INVALID);
 
         return response;
     }
@@ -363,10 +374,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                 }
 
                 response.setResult(OK);
-
-            } else response.setResult(INTERNAL_SERVER_ERROR);
+            }
+            else response.setResult(INTERNAL_SERVER_ERROR);
         }
-        else response.setResult(UNAUTHORIZED);
+        else response.setResult(TOKEN_EXPIRED_INVALID);
 
         return response;
     }
@@ -382,7 +393,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
             UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
 
-            if(userEntity != null && userEntity.getLevel().getId() == ADMIN) {
+            logger.debug("USER LEVEL = " + userEntity.getLevel().getLabel());
+
+            if(userEntity.getLevel().getId() == ADMIN) {
 
                 Iterable<BorrowedBook> itemList =
                         borrowedBooksRepository
@@ -407,7 +420,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                 response.setResult(OK);
 
             }
-            else response.setResult(UNAUTHORIZED);
+            else response.setResult(FORBIDDEN);
+        }
+        else {
+            response.setResult(TOKEN_EXPIRED_INVALID);
         }
 
         return response;
@@ -447,7 +463,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             }
             else result = CONFLICT;
         }
-        else result = UNAUTHORIZED;
+        else result = TOKEN_EXPIRED_INVALID;
 
         return result;
     }
@@ -478,12 +494,24 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         if(token != null && !token.isEmpty()){
 
+            logger.debug("Token not null and not empty");
+
             TokenStorage tokenStorage = tokenRepository.findByToken(token);
 
             if(tokenStorage != null){
 
-                if(tokenStorage.getExpireDate().isAfter(LocalDateTime.now())) result = true;
-                else tokenRepository.delete(tokenStorage);
+                logger.debug("Token found !");
+
+                if(tokenStorage.getExpireDate().isAfter(LocalDateTime.now())){
+
+                    logger.debug("This token is valid");
+                    result = true;
+                }
+                else {
+                    logger.debug("This token has expired");
+                    tokenRepository.delete(tokenStorage);
+                    logger.debug("This token is now  deleted");
+                }
             }
         }
 

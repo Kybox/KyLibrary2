@@ -14,40 +14,14 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="id" type="xs:int" minOccurs="0"/>
+                        <xs:element name="email" type="xs:string"/>
                         <xs:element name="firstName" type="xs:string" minOccurs="0"/>
                         <xs:element name="lastName" type="xs:string"/>
                         <xs:element name="birthday" type="xs:date" minOccurs="0"/>
                         <xs:element name="postalAddress" type="xs:string" minOccurs="0"/>
                         <xs:element name="tel" type="xs:string" minOccurs="0"/>
-                        <xs:element name="email" type="xs:string"/>
+                        <xs:element name="alertSender" type="xs:string"/>
                         <xs:element name="level" type="xs:int" minOccurs="0"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-
-            <!-- [LOGIN USER] -->
-            <xs:element name="login">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="login" type="xs:string"/>
-                        <xs:element name="password" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="loginResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element ref="ws:user"/>
-                        <xs:element name="token" type="xs:token"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-
-            <!-- [LOGOUT USER] -->
-            <xs:element name="logout">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="token" type="xs:token"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -81,6 +55,62 @@
                 </xs:complexType>
             </xs:element>
 
+            <!-- [BOOK BORROWED] -->
+            <xs:element name="bookBorrowed">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:book"/>
+                        <xs:element name="returnDate" type="xs:date"/>
+                        <xs:element name="extended" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [LOGIN USER] -->
+            <xs:element name="login">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="login" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0"/>
+                        <xs:element name="token" type="xs:token" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [LOGOUT USER] -->
+            <xs:element name="logout">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [CHECK TOKEN] -->
+            <xs:element name="checkToken">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="checkTokenResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <!-- [GET BOOK] -->
             <xs:element name="getBook">
                 <xs:complexType>
@@ -94,18 +124,6 @@
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
                         <xs:element ref="ws:book"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-
-            <!-- [BOOK BORROWED] -->
-            <xs:element name="bookBorrowed">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element ref="ws:book"/>
-                        <xs:element name="returnDate" type="xs:date"/>
-                        <xs:element name="extended" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -275,8 +293,7 @@
             <xs:element name="loanReturn">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:login"/>
-                        <xs:element ref="ws:user"/>
+                        <xs:element name="token" type="xs:token"/>
                         <xs:element ref="ws:bookBorrowed"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -361,6 +378,12 @@
     <wsdl:message name="cancelReservationResponse">
         <wsdl:part name="response" element="ws:cancelReservationResponse"/>
     </wsdl:message>
+    <wsdl:message name="checkToken">
+        <wsdl:part name="parameter" element="ws:checkToken"/>
+    </wsdl:message>
+    <wsdl:message name="checkTokenResponse">
+        <wsdl:part name="response" element="ws:checkTokenResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -410,6 +433,10 @@
         <wsdl:operation name="cancelReservation">
             <wsdl:input message="ws:cancelReservation"/>
             <wsdl:output message="ws:cancelReservationResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkToken">
+            <wsdl:input message="ws:checkToken"/>
+            <wsdl:output message="ws:checkTokenResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -466,6 +493,16 @@
 
         <!-- SEARCH BOOK -->
         <wsdl:operation name="searchBook">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- CHECK TOKEN -->
+        <wsdl:operation name="checkToken">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

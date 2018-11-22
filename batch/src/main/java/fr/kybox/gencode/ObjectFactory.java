@@ -38,30 +38,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Login }
-     * 
-     */
-    public Login createLogin() {
-        return new Login();
-    }
-
-    /**
-     * Create an instance of {@link LoginResponse }
-     * 
-     */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link Logout }
-     * 
-     */
-    public Logout createLogout() {
-        return new Logout();
-    }
-
-    /**
      * Create an instance of {@link Book }
      * 
      */
@@ -86,6 +62,62 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Login }
+     * 
+     */
+    public Login createLogin() {
+        return new Login();
+    }
+
+    /**
+     * Create an instance of {@link LoginResponse }
+     * 
+     */
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link Logout }
+     * 
+     */
+    public Logout createLogout() {
+        return new Logout();
+    }
+
+    /**
+     * Create an instance of {@link CheckToken }
+     * 
+     */
+    public CheckToken createCheckToken() {
+        return new CheckToken();
+    }
+
+    /**
+     * Create an instance of {@link CheckTokenResponse }
+     * 
+     */
+    public CheckTokenResponse createCheckTokenResponse() {
+        return new CheckTokenResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetBook }
+     * 
+     */
+    public GetBook createGetBook() {
+        return new GetBook();
+    }
+
+    /**
+     * Create an instance of {@link GetBookResponse }
+     * 
+     */
+    public GetBookResponse createGetBookResponse() {
+        return new GetBookResponse();
+    }
+
+    /**
      * Create an instance of {@link ExtendBorrowing }
      * 
      */
@@ -102,11 +134,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReservedBook }
+     * Create an instance of {@link BookReserved }
      * 
      */
-    public ReservedBook createReservedBook() {
-        return new ReservedBook();
+    public BookReserved createBookReserved() {
+        return new BookReserved();
     }
 
     /**
@@ -123,6 +155,38 @@ public class ObjectFactory {
      */
     public ReservedBookListResponse createReservedBookListResponse() {
         return new ReservedBookListResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReserveBook }
+     * 
+     */
+    public ReserveBook createReserveBook() {
+        return new ReserveBook();
+    }
+
+    /**
+     * Create an instance of {@link ReserveBookResponse }
+     * 
+     */
+    public ReserveBookResponse createReserveBookResponse() {
+        return new ReserveBookResponse();
+    }
+
+    /**
+     * Create an instance of {@link CancelReservation }
+     * 
+     */
+    public CancelReservation createCancelReservation() {
+        return new CancelReservation();
+    }
+
+    /**
+     * Create an instance of {@link CancelReservationResponse }
+     * 
+     */
+    public CancelReservationResponse createCancelReservationResponse() {
+        return new CancelReservationResponse();
     }
 
     /**

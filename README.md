@@ -60,7 +60,7 @@ mail.smtp.starttls.enable=true
 mail.smtp.auth=true
 
 # Authentication
-mail.auth.user=email@gmail.com
+mail.auth.user=alertSender@gmail.com
 mail.auth.pass=***
 ```
 

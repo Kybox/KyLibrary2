@@ -38,8 +38,6 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
 
         String result = ActionSupport.SUCCESS;
 
-
-
         return result;
 
     }
@@ -59,13 +57,21 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         ReservedBookListResponse response = service.reservedBookList(bookList);
 
         if(response.getResult() != ResultCode.OK){
-            if(response.getResult() == ResultCode.INTERNAL_SERVER_ERROR){
-                this.addActionError("Erreur : Le service a recontré une erreur...");
-                actionReturned = ActionSupport.ERROR;
-            }
-            else if(response.getResult() == ResultCode.UNAUTHORIZED){
-                session.clear();
-                actionReturned = ActionSupport.LOGIN;
+
+            switch (response.getResult()){
+
+                case ResultCode.BAD_REQUEST:
+                    this.addActionError("Erreur : BAD REQUEST");
+                    actionReturned = ActionSupport.ERROR;
+                    break;
+                case ResultCode.FORBIDDEN:
+                    this.addActionError("Erreur : FORBIDDEN");
+                    actionReturned = ActionSupport.ERROR;
+                    break;
+                case ResultCode.TOKEN_EXPIRED_INVALID:
+                    session.clear();
+                    actionReturned = ActionSupport.LOGIN;
+                    break;
             }
         }
         else{
@@ -83,13 +89,17 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         UserBookListResponse response = service.userBookList(userBookList);
 
         if(response.getResult() != ResultCode.OK){
-            if(response.getResult() == ResultCode.INTERNAL_SERVER_ERROR){
-                this.addActionError("Erreur : Le service a rencontré une erreur...");
-                actionReturned = ActionSupport.ERROR;
-            }
-            else if(response.getResult() == ResultCode.UNAUTHORIZED){
-                session.clear();
-                actionReturned = ActionSupport.LOGIN;
+
+            switch (response.getResult()){
+
+                case ResultCode.INTERNAL_SERVER_ERROR:
+                    this.addActionError("Erreur : INTERNAL_SERVER_ERROR");
+                    actionReturned = ActionSupport.ERROR;
+                    break;
+                case ResultCode.TOKEN_EXPIRED_INVALID:
+                    session.clear();
+                    actionReturned = ActionSupport.LOGIN;
+                    break;
             }
         }
         else{

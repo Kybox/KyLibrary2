@@ -6,7 +6,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -19,8 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}login"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
+ *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookBorrowed"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -32,8 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "login",
-    "user",
+    "token",
     "bookBorrowed"
 })
 @XmlRootElement(name = "loanReturn")
@@ -42,59 +43,35 @@ public class LoanReturn
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected Login login;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected User user;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "token")
+    protected String token;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
     protected BookBorrowed bookBorrowed;
 
     /**
-     * Obtient la valeur de la propriété login.
+     * Obtient la valeur de la propriété token.
      * 
      * @return
      *     possible object is
-     *     {@link Login }
+     *     {@link String }
      *     
      */
-    public Login getLogin() {
-        return login;
+    public String getToken() {
+        return token;
     }
 
     /**
-     * Définit la valeur de la propriété login.
+     * Définit la valeur de la propriété token.
      * 
      * @param value
      *     allowed object is
-     *     {@link Login }
+     *     {@link String }
      *     
      */
-    public void setLogin(Login value) {
-        this.login = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété user.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Définit la valeur de la propriété user.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
-     */
-    public void setUser(User value) {
-        this.user = value;
+    public void setToken(String value) {
+        this.token = value;
     }
 
     /**

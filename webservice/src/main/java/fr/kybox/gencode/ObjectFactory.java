@@ -38,6 +38,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Book }
+     * 
+     */
+    public Book createBook() {
+        return new Book();
+    }
+
+    /**
+     * Create an instance of {@link BookList }
+     * 
+     */
+    public BookList createBookList() {
+        return new BookList();
+    }
+
+    /**
+     * Create an instance of {@link BookBorrowed }
+     * 
+     */
+    public BookBorrowed createBookBorrowed() {
+        return new BookBorrowed();
+    }
+
+    /**
      * Create an instance of {@link Login }
      * 
      */
@@ -62,19 +86,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Book }
+     * Create an instance of {@link CheckToken }
      * 
      */
-    public Book createBook() {
-        return new Book();
+    public CheckToken createCheckToken() {
+        return new CheckToken();
     }
 
     /**
-     * Create an instance of {@link BookList }
+     * Create an instance of {@link CheckTokenResponse }
      * 
      */
-    public BookList createBookList() {
-        return new BookList();
+    public CheckTokenResponse createCheckTokenResponse() {
+        return new CheckTokenResponse();
     }
 
     /**
@@ -91,14 +115,6 @@ public class ObjectFactory {
      */
     public GetBookResponse createGetBookResponse() {
         return new GetBookResponse();
-    }
-
-    /**
-     * Create an instance of {@link BookBorrowed }
-     * 
-     */
-    public BookBorrowed createBookBorrowed() {
-        return new BookBorrowed();
     }
 
     /**

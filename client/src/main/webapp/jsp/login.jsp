@@ -21,8 +21,8 @@
         <br>
         <form method="post" action="login.action">
             <span class="glyphicon glyphicon-envelope" style="margin-right:6px;"></span>
-            <label for="email">Adresse e-mail :</label>
-            <input type="email" class="form-control" name="login" id="email" required>
+            <label for="alertSender">Adresse e-mail :</label>
+            <input type="alertSender" class="form-control" name="login" id="alertSender" required>
             <br>
             <span class="glyphicon glyphicon-lock" style="margin-right:6px;"></span>
             <label for="password">Mot de passe :</label>

@@ -26,6 +26,7 @@ public class CheckParams {
         else return false;
     }
 
+    /*
     public static boolean loanReturn(LoanReturn params){
 
         if(params != null && params.getLogin() != null){
@@ -37,6 +38,7 @@ public class CheckParams {
         }
         else return false;
     }
+    */
 
     private static boolean checkSignInParams(String login, String pass){
         return login != null && !login.isEmpty() && pass != null && !pass.isEmpty();

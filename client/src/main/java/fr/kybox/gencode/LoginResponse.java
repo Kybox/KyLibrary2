@@ -22,8 +22,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
- *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
+ *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user" minOccurs="0"/&gt;
+ *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+    "result",
     "user",
     "token"
 })
@@ -43,12 +45,28 @@ public class LoginResponse
 {
 
     private final static long serialVersionUID = 1L;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected int result;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73")
     protected User user;
-    @XmlElement(required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
+
+    /**
+     * Obtient la valeur de la propriété result.
+     * 
+     */
+    public int getResult() {
+        return result;
+    }
+
+    /**
+     * Définit la valeur de la propriété result.
+     * 
+     */
+    public void setResult(int value) {
+        this.result = value;
+    }
 
     /**
      * Obtient la valeur de la propriété user.

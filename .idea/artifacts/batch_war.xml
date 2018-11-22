@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="batch:war">
+    <output-path>$PROJECT_DIR$/batch/target</output-path>
+    <root id="archive" name="KyLibrary#WebService#Batch.war">
+      <element id="artifact" artifact-name="batch:war exploded" />
+    </root>
+  </artifact>
+</component>
