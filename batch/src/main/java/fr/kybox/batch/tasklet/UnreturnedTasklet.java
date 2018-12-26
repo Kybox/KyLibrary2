@@ -26,31 +26,36 @@ import java.util.Date;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class ReminderTasklet implements Tasklet, StepExecutionListener {
+public class UnreturnedTasklet implements Tasklet, StepExecutionListener {
 
     private final LibraryService libraryService = ServiceFactory.getLibraryService();
-    private static Logger logger = LogManager.getLogger(ReminderTasklet.class);
+    private static Logger logger = LogManager.getLogger(UnreturnedTasklet.class);
 
-    @Autowired private ObjectFactory objectFactory;
-    @Autowired private MailService mailService;
-    @Autowired private Email email;
+    private final ObjectFactory objectFactory;
+    private final MailService mailService;
+    private final Email email;
 
     @Value("${auth.email}") private String batchEmail;
     @Value("${auth.pass}") private String batchPass;
-    @Value("${reminder.subject}") private String reminderSubject;
-    @Value("${reminder.intro}") private String reminderIntro;
-    @Value("${reminder.message}") private String reminderMessage;
-    @Value("${reminder.outro}") private String reminderOutro;
-    @Value("${reminder.signature}") private String reminderSignature;
+    @Value("${unreturned.subject}") private String reminderSubject;
+    @Value("${unreturned.intro}") private String reminderIntro;
+    @Value("${unreturned.message}") private String reminderMessage;
+    @Value("${unreturned.outro}") private String reminderOutro;
+    @Value("${unreturned.signature}") private String reminderSignature;
 
     private String token;
+
+    @Autowired
+    public UnreturnedTasklet(ObjectFactory objectFactory, MailService mailService, Email email) {
+        this.objectFactory = objectFactory;
+        this.mailService = mailService;
+        this.email = email;
+    }
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
 
         logger.debug("BeforeStep method");
-
-
     }
 
     @Override

@@ -190,6 +190,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CheckReservedBooks }
+     * 
+     */
+    public CheckReservedBooks createCheckReservedBooks() {
+        return new CheckReservedBooks();
+    }
+
+    /**
+     * Create an instance of {@link CheckReservedBooksResponse }
+     * 
+     */
+    public CheckReservedBooksResponse createCheckReservedBooksResponse() {
+        return new CheckReservedBooksResponse();
+    }
+
+    /**
      * Create an instance of {@link UnreturnedBook }
      * 
      */

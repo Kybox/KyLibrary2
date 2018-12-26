@@ -16,14 +16,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.Date;
 
 @PropertySource("classpath:application.properties")
-public class BatchScheduler {
+public class UnreturnedScheduler {
 
     @Autowired JobLauncher jobLauncher;
     @Autowired Job job;
-    @Value("${batch.cron}") String cron;
+    @Value("${unreturned.cron}") String cron;
 
-    @Scheduled(cron = "${batch.cron}")
-    public void BatchScheduler()
+    @Scheduled(cron = "${unreturned.cron}")
+    public void unreturnedScheduler()
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
 
