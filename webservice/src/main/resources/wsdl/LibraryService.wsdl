@@ -145,7 +145,7 @@
                 </xs:complexType>
             </xs:element>
 
-<!-- ===== R E S E R V A T I O N ==== -->
+<!-- ===== R E S E R V A T I O N ===== -->
 
             <!-- [RESERVED BOOK] -->
             <xs:element name="bookReserved">
@@ -210,6 +210,26 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+            <!-- [CHECK RESERVED BOOKS] -->
+            <xs:element name="checkReservedBooks">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="checkReservedBooksResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element ref="ws:bookReserved" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+<!-- ===== U N R E T U R N E D ===== -->
 
             <!-- [UNRETURNED BOOK] -->
             <xs:element name="unreturnedBook">
@@ -384,6 +404,12 @@
     <wsdl:message name="checkTokenResponse">
         <wsdl:part name="response" element="ws:checkTokenResponse"/>
     </wsdl:message>
+    <wsdl:message name="checkReservedBooks">
+        <wsdl:part name="parameter" element="ws:checkReservedBooks"/>
+    </wsdl:message>
+    <wsdl:message name="checkReservedBooksResponse">
+        <wsdl:part name="response" element="ws:checkReservedBooksResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -437,6 +463,10 @@
         <wsdl:operation name="checkToken">
             <wsdl:input message="ws:checkToken"/>
             <wsdl:output message="ws:checkTokenResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkReservedBooks">
+            <wsdl:input message="ws:checkReservedBooks"/>
+            <wsdl:output message="ws:checkReservedBooksResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -563,6 +593,16 @@
 
         <!-- [PRIVATE] CANCEL RESERVATION -->
         <wsdl:operation name="cancelReservation">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] CHECK RESERVED BOOKS -->
+        <wsdl:operation name="checkReservedBooks">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

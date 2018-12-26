@@ -52,18 +52,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     private final int ADMIN = 1;
     private final int MANAGER = 2;
 
-    @Autowired
-    BorrowedBooksRepository borrowedBooksRepository;
-    @Autowired
-    AuthorRepository authorRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    BookRepository bookRepository;
-    @Autowired
-    TokenRepository tokenRepository;
-    @Autowired
-    ReservedBookRepository reservedBookRepository;
+    @Autowired private BorrowedBooksRepository borrowedBooksRepository;
+    @Autowired private AuthorRepository authorRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private BookRepository bookRepository;
+    @Autowired private TokenRepository tokenRepository;
+    @Autowired private ReservedBookRepository reservedBookRepository;
 
     @Value("${settings.nbWeeksToExtend}")
     private int nbWeeksToExtend;
@@ -71,11 +65,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @Value("${settings.multiplierReservation}")
     private int multiplierReservation;
 
-    @Autowired
-    private Token token;
+    @Autowired private Token tokenManager;
+    @Autowired private ObjectFactory objectFactory;
 
-    @Autowired
-    private ObjectFactory objectFactory;
+    private Map<String, Object> tokenData;
 
     @Override
     @WebMethod
@@ -95,9 +88,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                     TokenStorage tokenStorage = tokenRepository.findByUserEntity(userEntity);
                     if(tokenStorage != null) tokenRepository.delete(tokenStorage);
 
-                    token.generateNew(userEntity);
-                    tokenRepository.save(token.getTokenStorage());
-                    loginResponse.setToken(token.getTokenStorage().getToken());
+                    tokenManager.generateNew(userEntity);
+                    tokenRepository.save(tokenManager.getTokenStorage());
+                    loginResponse.setToken(tokenManager.getTokenStorage().getToken());
 
                     loginResponse.setResult(OK);
                 }
@@ -110,22 +103,24 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
+    @WebMethod
     public int checkToken(String token) {
 
-        if(isValidToken(token)) return OK;
+        tokenData = tokenManager.checkToken(token);
+        if(tokenData.get("active") == Boolean.TRUE) return OK;
         else return TOKEN_EXPIRED_INVALID;
     }
 
     @Override
+    @WebMethod
     public void logout(String token) {
 
-        TokenStorage tokenStorage = tokenRepository.findByToken(token);
-
-        if(tokenStorage != null) tokenRepository.delete(tokenStorage);
-
+        Optional<TokenStorage> optTokenStorage = tokenRepository.findByToken(token);
+        optTokenStorage.ifPresent(t -> tokenRepository.delete(t));
     }
 
     @Override
+    @WebMethod
     public GetBookResponse getBook(GetBook parameter) {
 
         GetBookResponse response = objectFactory.createGetBookResponse();
@@ -141,13 +136,16 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
+    @WebMethod
     public int reserveBook(String token, String isbn) {
 
         int result = 0;
 
-        if(isValidToken(token)){
+        tokenData = tokenManager.checkToken(token);
 
-            UserEntity userEntity = tokenRepository.findByToken(token).getUserEntity();
+        if(tokenData.get("active") == Boolean.TRUE){
+
+            UserEntity userEntity = (UserEntity) tokenData.get("user");
             BookEntity bookEntity = bookRepository.findByIsbn(isbn);
 
             List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
@@ -232,119 +230,115 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         LoanReturnResponse response = objectFactory.createLoanReturnResponse();
 
-        response.setResult(BAD_REQUEST);
+        tokenData = tokenManager.checkToken(parameters.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
+        }
 
-        if(isValidToken(parameters.getToken())){
+        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        if(userEntity.getLevel().getId() >= MANAGER){
+            response.setResult(UNAUTHORIZED);
+            return response;
+        }
 
-            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
+        try {
 
-            if(userEntity != null){
-                if(userEntity.getLevel().getId() <= MANAGER) {
-                    //if(CheckParams.loanReturn(parameters)){
-                        try {
+            BookEntity book = bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, book);
 
-                            BookEntity book =
-                                    bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
-
-                            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, book);
-
-                            if(!borrowedBook.getReturned()) {
-                                borrowedBook.setReturned(true);
-                                borrowedBooksRepository.save(borrowedBook);
-                                response.setResult(OK);
-                            }
-                            else response.setResult(CONFLICT);
-                        }
-                        catch (HibernateException e){
-                            logger.warn(e.getMessage());
-                            response.setResult(INTERNAL_SERVER_ERROR);
-                        }
-                    //}
-                }
-                else response.setResult(UNAUTHORIZED);
+            if(!borrowedBook.getReturned()) {
+                borrowedBook.setReturned(true);
+                borrowedBooksRepository.save(borrowedBook);
+                response.setResult(OK);
             }
             else response.setResult(CONFLICT);
         }
-        else response.setResult(TOKEN_EXPIRED_INVALID);
+        catch (HibernateException e){
+            logger.warn(e.getMessage());
+            response.setResult(INTERNAL_SERVER_ERROR);
+        }
 
         return response;
     }
 
     @Override
+    @WebMethod
     public ExtendBorrowingResponse extendBorrowing(ExtendBorrowing parameters) {
 
         ExtendBorrowingResponse response = objectFactory.createExtendBorrowingResponse();
 
-        if(isValidToken(parameters.getToken())){
-
-            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
-            BookEntity bookEntity = bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
-            BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
-
-            LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
-            localDate = localDate.plusWeeks(nbWeeksToExtend);
-            borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
-
-            borrowedBook.setExtended(true);
-
-            borrowedBooksRepository.save(borrowedBook);
-
-            if(bookEntity.getBookable()){
-
-                Boolean dateChecked = DateUtils.isDateBefore(borrowedBook.getReturnDate(), bookEntity.getReturnDate());
-
-                if(dateChecked != null && !dateChecked) {
-                    bookEntity.setReturnDate(borrowedBook.getReturnDate());
-                    bookRepository.save(bookEntity);
-                }
-            }
-
-            response.setResult(OK);
-
+        tokenData = tokenManager.checkToken(parameters.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
         }
-        else response.setResult(TOKEN_EXPIRED_INVALID);
 
+        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        BookEntity bookEntity = bookRepository.findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
+
+        LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
+        localDate = localDate.plusWeeks(nbWeeksToExtend);
+        borrowedBook.setReturnDate(Converter.DateToSQLDate(localDate.toDate()));
+
+        borrowedBook.setExtended(true);
+
+        borrowedBooksRepository.save(borrowedBook);
+
+        if(bookEntity.getBookable()){
+
+            Boolean dateChecked = DateUtils.isDateBefore(borrowedBook.getReturnDate(), bookEntity.getReturnDate());
+
+            if(dateChecked != null && !dateChecked) {
+                bookEntity.setReturnDate(borrowedBook.getReturnDate());
+                bookRepository.save(bookEntity);
+            }
+        }
+
+        response.setResult(OK);
         return response;
     }
 
     @Override
+    @WebMethod
     public ReservedBookListResponse reservedBookList(ReservedBookList parameters) {
 
         ReservedBookListResponse response = objectFactory.createReservedBookListResponse();
 
-        if(isValidToken(parameters.getToken())){
-            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
-            if(userEntity != null){
-                List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
-                for(ReservedBook reservedBook : bookList){
-                    BookReserved bookReserved = new BookReserved();
-                    Book book = (Book) Reflection.EntityToWS(reservedBook.getBook());
-                    bookReserved.setBook(book);
-                    Instant instant = reservedBook.getReserveDate().atZone(ZoneId.systemDefault()).toInstant();
-                    bookReserved.setReserveDate(Date.from(instant));
-                    bookReserved.setPending(reservedBook.isPending());
-                    response.getBookReserved().add(bookReserved);
+        tokenData = tokenManager.checkToken(parameters.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
+        }
 
-                    if(reservedBook.isPending()) {
-                        List<ReservedBook> reservedBookList = reservedBookRepository
-                                .findAllByBookAndPendingTrueOrderByReserveDateAsc(reservedBook.getBook());
-                        bookReserved.setTotal(reservedBookList.size());
+        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
 
-                        for(int i = 0; i < reservedBookList.size(); i++){
-                            if(reservedBookList.get(i).getUser().getId().equals(userEntity.getId())){
-                                bookReserved.setPosition(i + 1);
-                                break;
-                            }
-                        }
+        for(ReservedBook reservedBook : bookList){
+            BookReserved bookReserved = new BookReserved();
+            Book book = (Book) Reflection.EntityToWS(reservedBook.getBook());
+            bookReserved.setBook(book);
+            Instant instant = reservedBook.getReserveDate().atZone(ZoneId.systemDefault()).toInstant();
+            bookReserved.setReserveDate(Date.from(instant));
+            bookReserved.setPending(reservedBook.isPending());
+            response.getBookReserved().add(bookReserved);
+
+            if(reservedBook.isPending()) {
+                List<ReservedBook> reservedBookList = reservedBookRepository
+                        .findAllByBookAndPendingTrueOrderByReserveDateAsc(reservedBook.getBook());
+                bookReserved.setTotal(reservedBookList.size());
+
+                for(int i = 0; i < reservedBookList.size(); i++){
+                    if(reservedBookList.get(i).getUser().getId().equals(userEntity.getId())){
+                        bookReserved.setPosition(i + 1);
+                        break;
                     }
                 }
-
-                response.setResult(OK);
             }
-            else response.setResult(INTERNAL_SERVER_ERROR);
         }
-        else response.setResult(TOKEN_EXPIRED_INVALID);
 
+        response.setResult(OK);
         return response;
     }
 
@@ -354,44 +348,88 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         UserBookListResponse response = objectFactory.createUserBookListResponse();
 
-        if(isValidToken(parameter.getToken())){
-
-            UserEntity userEntity = tokenRepository.findByToken(parameter.getToken()).getUserEntity();
-
-            if (userEntity != null) {
-
-                List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedAsc(userEntity);
-
-                for (BorrowedBook borrowedBook : bookList) {
-
-                    BookBorrowed bookBorrowed = new BookBorrowed();
-                    bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
-                    bookBorrowed.setExtended(borrowedBook.getExtended());
-                    bookBorrowed.setReturnDate(borrowedBook.getReturnDate());
-                    bookBorrowed.setReturned(borrowedBook.getReturned());
-
-                    response.getBookBorrowed().add(bookBorrowed);
-                }
-
-                response.setResult(OK);
-            }
-            else response.setResult(INTERNAL_SERVER_ERROR);
+        tokenData = tokenManager.checkToken(parameter.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
         }
-        else response.setResult(TOKEN_EXPIRED_INVALID);
 
+        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedAsc(userEntity);
+
+        for (BorrowedBook borrowedBook : bookList) {
+
+            BookBorrowed bookBorrowed = new BookBorrowed();
+            bookBorrowed.setBook((Book) Reflection.EntityToWS(borrowedBook.getBook()));
+            bookBorrowed.setExtended(borrowedBook.getExtended());
+            bookBorrowed.setReturnDate(borrowedBook.getReturnDate());
+            bookBorrowed.setReturned(borrowedBook.getReturned());
+
+            response.getBookBorrowed().add(bookBorrowed);
+        }
+
+        response.setResult(OK);
         return response;
     }
 
     @Override
+    @WebMethod
+    public CheckReservedBooksResponse checkReservedBooks(CheckReservedBooks parameter) {
+
+        CheckReservedBooksResponse response = objectFactory.createCheckReservedBooksResponse();
+
+        tokenData = tokenManager.checkToken(parameter.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE) {
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
+        }
+
+        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        if(!userEntity.getLevel().getId().equals(ADMIN)){
+            response.setResult(FORBIDDEN);
+            return response;
+        }
+
+        List<BookEntity> bookList = bookRepository.findAllByBookable(true);
+
+        for(BookEntity bookEntity : bookList){
+
+            if(bookEntity.getAvailable() == 0) continue;
+
+            List<ReservedBook> reservedBookList = reservedBookRepository
+                    .findAllByBookAndPendingTrueOrderByReserveDateAsc(bookEntity);
+
+            for(int i = 0; i < bookEntity.getAvailable(); i++){
+
+                Optional<UserEntity> optUser = userRepository
+                        .findById(reservedBookList.get(i).getUser().getId());
+
+                if(optUser.isPresent()){
+
+                    BookReserved bookReserved = (BookReserved) Reflection.EntityToWS(reservedBookList.get(i));
+                    response.getBookReserved().add(bookReserved);
+
+                    User user = (User) Reflection.EntityToWS(optUser.get());
+                    response.getUser().add(user);
+                }
+            }
+        }
+        response.setResult(OK);
+        return response;
+    }
+
+    @Override
+    @WebMethod
     public UnreturnedBookListResponse unreturnedBookList(UnreturnedBookList parameters) {
 
         UnreturnedBookListResponse response = objectFactory.createUnreturnedBookListResponse();
 
         response.setResult(BAD_REQUEST);
 
-        if(isValidToken(parameters.getToken())){
+        tokenData = tokenManager.checkToken(parameters.getToken());
+        if(tokenData.get(Token.ACTIVE) == Boolean.TRUE){
 
-            UserEntity userEntity = tokenRepository.findByToken(parameters.getToken()).getUserEntity();
+            UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
 
             logger.debug("USER LEVEL = " + userEntity.getLevel().getLabel());
 
@@ -430,13 +468,15 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
+    @WebMethod
     public int cancelReservation(String token, String isbn) {
 
         int result = 0;
 
-        if(isValidToken(token)){
+        tokenData = tokenManager.checkToken(token);
+        if(tokenData.get(Token.ACTIVE) == Boolean.TRUE){
 
-            UserEntity userEntity = tokenRepository.findByToken(token).getUserEntity();
+            UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
 
             if(userEntity != null){
 
@@ -486,36 +526,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         searchBookResponse.setBookList(resultList);
 
         return searchBookResponse;
-    }
-
-    private boolean isValidToken(String token){
-
-        boolean result = false;
-
-        if(token != null && !token.isEmpty()){
-
-            logger.debug("Token not null and not empty");
-
-            TokenStorage tokenStorage = tokenRepository.findByToken(token);
-
-            if(tokenStorage != null){
-
-                logger.debug("Token found !");
-
-                if(tokenStorage.getExpireDate().isAfter(LocalDateTime.now())){
-
-                    logger.debug("This token is valid");
-                    result = true;
-                }
-                else {
-                    logger.debug("This token has expired");
-                    tokenRepository.delete(tokenStorage);
-                    logger.debug("This token is now  deleted");
-                }
-            }
-        }
-
-        return result;
     }
 
     private void checkReservationStatus(BookEntity bookEntity){
