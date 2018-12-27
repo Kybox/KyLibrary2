@@ -154,6 +154,7 @@
                         <xs:element ref="ws:book"/>
                         <xs:element name="reserveDate" type="xs:dateTime"/>
                         <xs:element name="pending" type="xs:boolean"/>
+                        <xs:element name="notified" type="xs:boolean"/>
                         <xs:element name="position" type="xs:int"/>
                         <xs:element name="total" type="xs:int"/>
                     </xs:sequence>
@@ -225,6 +226,25 @@
                         <xs:element name="result" type="xs:int"/>
                         <xs:element ref="ws:user" minOccurs="0" maxOccurs="unbounded"/>
                         <xs:element ref="ws:bookReserved" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SET RESERVATION NOTIFIED] -->
+            <xs:element name="setReservationNotified">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="bookid" type="xs:int"/>
+                        <xs:element name="userid" type="xs:int"/>
+                        <xs:element name="reserveDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="setReservationNotifiedResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -410,6 +430,12 @@
     <wsdl:message name="checkReservedBooksResponse">
         <wsdl:part name="response" element="ws:checkReservedBooksResponse"/>
     </wsdl:message>
+    <wsdl:message name="setReservationNotified">
+        <wsdl:part name="parameters" element="ws:setReservationNotified"/>
+    </wsdl:message>
+    <wsdl:message name="setReservationNotifiedResponse">
+        <wsdl:part name="response" element="ws:setReservationNotifiedResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -467,6 +493,10 @@
         <wsdl:operation name="checkReservedBooks">
             <wsdl:input message="ws:checkReservedBooks"/>
             <wsdl:output message="ws:checkReservedBooksResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="setReservationNotified">
+            <wsdl:input message="ws:setReservationNotified"/>
+            <wsdl:output message="ws:setReservationNotifiedResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -611,12 +641,22 @@
             </wsdl:output>
         </wsdl:operation>
 
+        <!-- [PRIVATE] SET RESERVATION NOTIFIED -->
+        <wsdl:operation name="setReservationNotified">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
     </wsdl:binding>
 
     <!-- [SERVICE] -->
     <wsdl:service name="LibraryWebService">
         <wsdl:documentation>
-            Provides services from KyLibrary
+            Provide services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
             <!-- DEV WSDL Address -->

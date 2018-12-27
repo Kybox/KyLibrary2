@@ -24,6 +24,9 @@ public class ReservedBook {
     @Column(name = "pending")
     private boolean pending;
 
+    @Column(name = "notified")
+    private boolean notified;
+
     public ReservedBook() {}
 
     public ReservedBookPK getReservedBookPK() {
@@ -64,5 +67,13 @@ public class ReservedBook {
 
     public void setPending(boolean pending) {
         this.pending = pending;
+    }
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
     }
 }

@@ -4,6 +4,7 @@ import fr.kybox.entities.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
-    BookEntity findByIsbn(String isbn);
+    Optional<BookEntity> findByIsbn(String isbn);
 
     Iterable<BookEntity> findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
             (String title, String author, String genre);
