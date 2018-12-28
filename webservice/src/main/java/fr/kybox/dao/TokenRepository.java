@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<TokenStorage, String> {
 
-    TokenStorage findByUserEntity(UserEntity userEntity);
+    Optional<TokenStorage> findByUserEntity(UserEntity user);
 
     Optional<TokenStorage> findByToken(String token);
 }

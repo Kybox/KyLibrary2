@@ -1,4 +1,4 @@
-package fr.kybox.service.utils;
+package fr.kybox.utils;
 
 import fr.kybox.gencode.*;
 import org.apache.logging.log4j.LogManager;

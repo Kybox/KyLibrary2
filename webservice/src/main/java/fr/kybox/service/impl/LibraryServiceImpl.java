@@ -1,20 +1,19 @@
-package fr.kybox.service;
+package fr.kybox.service.impl;
 
-import fr.kybox.dao.*;
 import fr.kybox.entities.*;
 import fr.kybox.entities.ReservedBook;
 import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.*;
 
 import fr.kybox.security.Password;
-import fr.kybox.service.utils.CheckParams;
+import fr.kybox.service.BookService;
+import fr.kybox.service.UserService;
+import fr.kybox.utils.CheckParams;
 import fr.kybox.utils.Converter;
 import fr.kybox.utils.DateUtils;
 import fr.kybox.utils.Reflection;
-import fr.kybox.utils.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +26,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+import static fr.kybox.utils.ValueTypes.*;
+
 /**
  * @author Kybox
  * @version 1.0
@@ -37,75 +38,60 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
     private final static Logger logger = LogManager.getLogger(LibraryServiceImpl.class);
 
-    // ERROR CODE
-    private final int INTERNAL_SERVER_ERROR = 500;
-    private final int UNAUTHORIZED = 401;
-    private final int BAD_REQUEST = 400;
-    private final int FORBIDDEN = 403;
-    private final int CONFLICT = 409;
-    private final int CREATED = 201;
-    private final int OK = 200;
-    private final int NOT_MODIFIED = 304;
-    private final int TOKEN_EXPIRED_INVALID = 498;
-
-    // USER LEVEL
-    private final int ADMIN = 1;
-    private final int MANAGER = 2;
-
-    @Autowired private BorrowedBooksRepository borrowedBooksRepository;
-    @Autowired private AuthorRepository authorRepository;
-    @Autowired private UserRepository userRepository;
-    @Autowired private BookRepository bookRepository;
-    @Autowired private TokenRepository tokenRepository;
-    @Autowired private ReservedBookRepository reservedBookRepository;
-
     @Value("${settings.nbWeeksToExtend}")
     private int nbWeeksToExtend;
 
     @Value("${settings.multiplierReservation}")
     private int multiplierReservation;
 
-    @Autowired private Token tokenManager;
     @Autowired private ObjectFactory objectFactory;
+    @Autowired private BookService bookService;
+    @Autowired private UserService userService;
 
     @Override
     @WebMethod
     public LoginResponse login(Login parameters) {
 
-        LoginResponse loginResponse = objectFactory.createLoginResponse();
+        LoginResponse response = objectFactory.createLoginResponse();
 
-        if(CheckParams.login(parameters)){
+        String login = parameters.getLogin();
+        String password = parameters.getPassword();
 
-            UserEntity userEntity = userRepository.findByEmail(parameters.getLogin());
-
-            if (userEntity != null) {
-
-                if (Password.match(parameters.getPassword(), userEntity.getPassword())) {
-                    loginResponse.setUser((User) Reflection.EntityToWS(userEntity));
-
-                    TokenStorage tokenStorage = tokenRepository.findByUserEntity(userEntity);
-                    if(tokenStorage != null) tokenRepository.delete(tokenStorage);
-
-                    tokenManager.generateNew(userEntity);
-                    tokenRepository.save(tokenManager.getTokenStorage());
-                    loginResponse.setToken(tokenManager.getTokenStorage().getToken());
-
-                    loginResponse.setResult(OK);
-                }
-                else loginResponse.setResult(BAD_REQUEST);
-            }
-            else loginResponse.setResult(BAD_REQUEST);
+        if(login == null || login.isEmpty() || password == null || password.isEmpty()) {
+            response.setResult(BAD_REQUEST);
+            return response;
         }
 
-        return loginResponse;
+        Optional<UserEntity> optUser = userService.findUserByEmail(login);
+        if(!optUser.isPresent()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
+
+        UserEntity user = optUser.get();
+        if (Password.match(parameters.getPassword(), user.getPassword())) {
+            response.setUser((User) Reflection.EntityToWS(user));
+
+            Optional<TokenStorage> optToken = userService.findTokenByUser(user);
+            optToken.ifPresent(t -> userService.deleteToken(t));
+
+            TokenStorage tokenStorage = userService.generateNewTokenForUser(user);
+            userService.saveToken(tokenStorage);
+            response.setToken(tokenStorage.getToken());
+
+            response.setResult(OK);
+        }
+        else response.setResult(BAD_REQUEST);
+
+        return response;
     }
 
     @Override
     @WebMethod
     public int checkToken(String token) {
 
-        Map<String, Object> tokenData = tokenManager.checkToken(token);
-        if(tokenData.get("active") == Boolean.TRUE) return OK;
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.TRUE) return OK;
         else return TOKEN_EXPIRED_INVALID;
     }
 
@@ -113,8 +99,8 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public void logout(String token) {
 
-        Optional<TokenStorage> optTokenStorage = tokenRepository.findByToken(token);
-        optTokenStorage.ifPresent(t -> tokenRepository.delete(t));
+        Optional<TokenStorage> optTokenStorage = userService.findTokenByHash(token);
+        optTokenStorage.ifPresent(t -> userService.deleteToken(t));
     }
 
     @Override
@@ -123,7 +109,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         GetBookResponse response = objectFactory.createGetBookResponse();
 
-        Optional<BookEntity> optBookEntity = bookRepository.findByIsbn(parameter.getIsbn());
+        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(parameter.getIsbn());
         if(!optBookEntity.isPresent()){
             response.setResult(BAD_REQUEST);
             return response;
@@ -140,39 +126,39 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         int result = 0;
 
-        Map<String, Object> tokenData = tokenManager.checkToken(token);
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             result = TOKEN_EXPIRED_INVALID;
             return result;
         }
 
-        Optional<BookEntity> optBookEntity = bookRepository.findByIsbn(isbn);
+        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
         if(!optBookEntity.isPresent()){
             result = BAD_REQUEST;
             return result;
         }
 
-        BookEntity bookEntity = optBookEntity.get();
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        BookEntity book = optBookEntity.get();
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
 
-        List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
+        List<ReservedBook> bookList = bookService.findAllReservedBooksByUser(user);
 
         for(ReservedBook reservation : bookList) {
-            if (bookEntity.getIsbn().equals(reservation.getBook().getIsbn()) && reservation.isPending()) {
+            if (book.getIsbn().equals(reservation.getBook().getIsbn()) && reservation.isPending()) {
                 result = FORBIDDEN;
                 return result;
             }
         }
 
-        if (bookEntity.getBookable()) {
+        if (book.getBookable()) {
 
             ReservedBook reservedBook = new ReservedBook();
-            reservedBook.setUser(userEntity);
-            reservedBook.setBook(bookEntity);
+            reservedBook.setUser(user);
+            reservedBook.setBook(book);
             reservedBook.setReserveDate(LocalDateTime.now());
             reservedBook.setPending(true);
 
-            reservedBookRepository.save(reservedBook);
+            bookService.saveReservedBook(reservedBook);
 
             checkReservationStatus(reservedBook.getBook());
 
@@ -189,36 +175,31 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         CreateUserResponse response = objectFactory.createCreateUserResponse();
 
-        response.setResult(BAD_REQUEST);
+        if(!CheckParams.createUser(parameters)){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
 
-        if(CheckParams.createUser(parameters)){
+        String email = parameters.getLogin().getLogin();
+        Optional<UserEntity> optUser = userService.findUserByEmail(email);
+        if(!optUser.isPresent()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
 
-            Login login = parameters.getLogin();
+        UserEntity user = optUser.get();
+        Login login = parameters.getLogin();
+        if(Password.match(login.getPassword(), user.getPassword())){
 
-            UserEntity userEntity = userRepository.findByEmail(login.getLogin());
+            if(user.getLevel().getId() == MANAGER) {
 
-            if(userEntity != null){
-
-                if(Password.match(login.getPassword(), userEntity.getPassword())){
-
-                    if(userEntity.getLevel().getId() == MANAGER) {
-
-                        userEntity = (UserEntity) Reflection.WStoEntity(parameters.getUser());
-
-                        try {
-                            userRepository.save(userEntity);
-                            response.setResult(CREATED);
-                        }
-                        catch (HibernateException e){
-                            logger.warn(e.getMessage());
-                            response.setResult(INTERNAL_SERVER_ERROR);
-                        }
-                    }
-                    else {
-                        logger.warn("Unauthorized action with this login");
-                        response.setResult(UNAUTHORIZED);
-                    }
-                }
+                user = (UserEntity) Reflection.WStoEntity(parameters.getUser());
+                userService.saveUser(user);
+                response.setResult(CREATED);
+            }
+            else {
+                logger.warn("Unauthorized action with this login");
+                response.setResult(UNAUTHORIZED);
             }
         }
 
@@ -231,31 +212,31 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         LoanReturnResponse response = objectFactory.createLoanReturnResponse();
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameters.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(parameters.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        if(userEntity.getLevel().getId() >= MANAGER){
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        if(user.getLevel().getId() >= MANAGER){
             response.setResult(UNAUTHORIZED);
             return response;
         }
 
-        Optional<BookEntity> optBookEntity = bookRepository
-                .findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+        String isbn = parameters.getBookBorrowed().getBook().getIsbn();
+        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
         if(!optBookEntity.isPresent()){
             response.setResult(BAD_REQUEST);
             return response;
         }
 
-        BorrowedBook borrowedBook = borrowedBooksRepository
-                .findByUserAndBook(userEntity, optBookEntity.get());
+        BookEntity book = optBookEntity.get();
+        BorrowedBook borrowedBook = bookService.findBorrowedBookByUserAndBook(user, book);
 
         if(!borrowedBook.getReturned()) {
             borrowedBook.setReturned(true);
-            borrowedBooksRepository.save(borrowedBook);
+            bookService.saveBorrowedBook(borrowedBook);
             response.setResult(OK);
         }
         else response.setResult(CONFLICT);
@@ -268,23 +249,26 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         int response;
 
-        Map<String, Object> tokenData = tokenManager.checkToken(token);
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response = TOKEN_EXPIRED_INVALID;
             return response;
         }
 
-        Optional<BookEntity> optBookEntity = bookRepository.findById(bookid);
+        Optional<BookEntity> optBookEntity = bookService.findBookById(bookid);
         if(!optBookEntity.isPresent()){
             response = BAD_REQUEST;
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        BookEntity bookEntity = optBookEntity.get();
+        /**
+         * Warning userID is not the same as the one in the token
+         */
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        BookEntity book = optBookEntity.get();
 
-        Optional<ReservedBook> optReservedBook = reservedBookRepository
-                .findByUserAndBookAndPendingTrue(userEntity, bookEntity);
+        Optional<ReservedBook> optReservedBook = bookService
+                .findReservedBookByUserAndBookAndPendingTrue(user, book);
         if(!optReservedBook.isPresent()){
             response = BAD_REQUEST;
             return response;
@@ -305,7 +289,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         if(!reservedBook.isNotified()) {
             reservedBook.setNotified(true);
-            reservedBookRepository.save(reservedBook);
+            bookService.saveReservedBook(reservedBook);
         }
 
         response = OK;
@@ -318,23 +302,23 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         ExtendBorrowingResponse response = objectFactory.createExtendBorrowingResponse();
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameters.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(parameters.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        Optional<BookEntity> optBookEntity = bookRepository
-                .findByIsbn(parameters.getBookBorrowed().getBook().getIsbn());
+        String isbn = parameters.getBookBorrowed().getBook().getIsbn();
+        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
 
         if(!optBookEntity.isPresent()){
             response.setResult(BAD_REQUEST);
             return response;
         }
 
-        BookEntity bookEntity = optBookEntity.get();
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        BorrowedBook borrowedBook = borrowedBooksRepository.findByUserAndBook(userEntity, bookEntity);
+        BookEntity book = optBookEntity.get();
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        BorrowedBook borrowedBook = bookService.findBorrowedBookByUserAndBook(user, book);
 
         LocalDate localDate = LocalDate.fromDateFields(borrowedBook.getReturnDate());
         localDate = localDate.plusWeeks(nbWeeksToExtend);
@@ -342,15 +326,15 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         borrowedBook.setExtended(true);
 
-        borrowedBooksRepository.save(borrowedBook);
+        bookService.saveBorrowedBook(borrowedBook);
 
-        if(bookEntity.getBookable()){
+        if(book.getBookable()){
 
-            Boolean dateChecked = DateUtils.isDateBefore(borrowedBook.getReturnDate(), bookEntity.getReturnDate());
+            Boolean dateChecked = DateUtils.isDateBefore(borrowedBook.getReturnDate(), book.getReturnDate());
 
             if(dateChecked != null && !dateChecked) {
-                bookEntity.setReturnDate(borrowedBook.getReturnDate());
-                bookRepository.save(bookEntity);
+                book.setReturnDate(borrowedBook.getReturnDate());
+                bookService.saveBook(book);
             }
         }
 
@@ -364,14 +348,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         ReservedBookListResponse response = objectFactory.createReservedBookListResponse();
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameters.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(parameters.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        List<ReservedBook> bookList = reservedBookRepository.findAllByUser(userEntity);
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        List<ReservedBook> bookList = bookService.findAllReservedBooksByUser(user);
 
         for(ReservedBook reservedBook : bookList){
             BookReserved bookReserved = new BookReserved();
@@ -384,12 +368,12 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             response.getBookReserved().add(bookReserved);
 
             if(reservedBook.isPending()) {
-                List<ReservedBook> reservedBookList = reservedBookRepository
-                        .findAllByBookAndPendingTrueOrderByReserveDateAsc(reservedBook.getBook());
+                List<ReservedBook> reservedBookList = bookService
+                        .findAllReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(reservedBook.getBook());
                 bookReserved.setTotal(reservedBookList.size());
 
                 for(int i = 0; i < reservedBookList.size(); i++){
-                    if(reservedBookList.get(i).getUser().getId().equals(userEntity.getId())){
+                    if(reservedBookList.get(i).getUser().getId().equals(user.getId())){
                         bookReserved.setPosition(i + 1);
                         break;
                     }
@@ -407,14 +391,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         UserBookListResponse response = objectFactory.createUserBookListResponse();
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameter.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(parameter.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        List<BorrowedBook> bookList = borrowedBooksRepository.findAllByUserOrderByReturnedAsc(userEntity);
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        List<BorrowedBook> bookList = bookService.findAllBorrowedBooksByUserOrderByReturnedAsc(user);
 
         for (BorrowedBook borrowedBook : bookList) {
 
@@ -437,31 +421,31 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         CheckReservedBooksResponse response = objectFactory.createCheckReservedBooksResponse();
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameter.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE) {
+        Map<String, Object> tokenData = userService.checkTokenData(parameter.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE) {
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
+        UserEntity userEntity = (UserEntity) tokenData.get(USER_FROM_TOKEN);
         if(!userEntity.getLevel().getId().equals(ADMIN)){
             response.setResult(FORBIDDEN);
             return response;
         }
 
-        List<BookEntity> bookList = bookRepository.findAllByBookable(true);
+        List<BookEntity> bookList = bookService.findAllBooksByBookable(true);
 
-        for(BookEntity bookEntity : bookList){
+        for(BookEntity book : bookList){
 
-            if(bookEntity.getAvailable() == 0) continue;
+            if(book.getAvailable() == 0) continue;
 
-            List<ReservedBook> reservedBookList = reservedBookRepository
-                    .findAllByBookAndPendingTrueOrderByReserveDateAsc(bookEntity);
+            List<ReservedBook> reservedBookList = bookService
+                    .findAllReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(book);
 
-            for(int i = 0; i < bookEntity.getAvailable(); i++){
+            for(int i = 0; i < book.getAvailable(); i++){
 
-                Optional<UserEntity> optUser = userRepository
-                        .findById(reservedBookList.get(i).getUser().getId());
+                Optional<UserEntity> optUser = userService
+                        .findUserById(reservedBookList.get(i).getUser().getId());
 
                 if(optUser.isPresent()){
 
@@ -485,23 +469,23 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         response.setResult(BAD_REQUEST);
 
-        Map<String, Object> tokenData = tokenManager.checkToken(parameters.getToken());
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(parameters.getToken());
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response.setResult(TOKEN_EXPIRED_INVALID);
             return response;
         }
 
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        if(userEntity.getLevel().getId() != ADMIN){
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        if(user.getLevel().getId() != ADMIN){
             response.setResult(FORBIDDEN);
             return response;
         }
 
-        Iterable<BorrowedBook> itemList =
-                borrowedBooksRepository
-                        .findAllByReturnDateBeforeAndReturnedFalse(new Date(System.currentTimeMillis()));
+        Date dateBefore = new Date(System.currentTimeMillis());
+        List<BorrowedBook> borrowedBookList = bookService
+                .findAllBorrowedBooksNotReturnedAndReturnDateBefore(dateBefore);
 
-        for(BorrowedBook borrowedBook : itemList){
+        for(BorrowedBook borrowedBook : borrowedBookList){
 
             UnreturnedBook unreturnedBook = new UnreturnedBook();
             unreturnedBook.setUser((User) Reflection.EntityToWS(borrowedBook.getUser()));
@@ -527,29 +511,29 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         int response;
 
-        Map<String, Object> tokenData = tokenManager.checkToken(token);
-        if(tokenData.get(Token.ACTIVE) == Boolean.FALSE){
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
             response = TOKEN_EXPIRED_INVALID;
             return response;
         }
 
-        Optional<BookEntity> optBookEntity = bookRepository.findByIsbn(isbn);
+        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
         if(!optBookEntity.isPresent()){
             response = BAD_REQUEST;
             return response;
         }
 
-        BookEntity bookEntity = optBookEntity.get();
-        UserEntity userEntity = (UserEntity) tokenData.get(Token.USER);
-        Optional<ReservedBook> optReservedBook = reservedBookRepository
-                .findByUserAndBookAndPendingTrue(userEntity, bookEntity);
+        BookEntity book = optBookEntity.get();
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        Optional<ReservedBook> optReservedBook = bookService
+                .findReservedBookByUserAndBookAndPendingTrue(user, book);
 
         if(!optReservedBook.isPresent()) {
             response = NOT_MODIFIED;
             return response;
         }
 
-        reservedBookRepository.delete(optReservedBook.get());
+        bookService.deleteReservedBook(optReservedBook.get());
         response = OK;
         return response;
     }
@@ -558,10 +542,8 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
-        Iterable<BookEntity> bookList =
-                bookRepository.
-                        findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
-                                (parameters.getKeywords(), parameters.getKeywords(), parameters.getKeywords());
+        List<BookEntity> bookList = bookService
+                .findAllBooksByTitleOrByAuthorOrByGenreContaining(parameters.getKeywords());
 
         BookList resultList = new BookList();
 
@@ -574,31 +556,30 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         return searchBookResponse;
     }
 
-    private void checkReservationStatus(BookEntity bookEntity){
+    private void checkReservationStatus(BookEntity book){
 
-        int nbCopies = bookEntity.getNbCopies();
+        int nbCopies = book.getNbCopies();
         int maxReservedBook = nbCopies * multiplierReservation;
 
-        List<ReservedBook> reservedBookList = reservedBookRepository
-                .findAllByBookAndPendingTrueOrderByReserveDateAsc(bookEntity);
-
+        List<ReservedBook> reservedBookList = bookService
+                .findAllReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(book);
 
         if(reservedBookList.size() >= maxReservedBook) {
-            bookEntity.setBookable(false);
-            bookEntity.setReturnDate(null);
+            book.setBookable(false);
+            book.setReturnDate(null);
         }
         else {
-            bookEntity.setBookable(true);
-            bookEntity.setReturnDate(getNextReturnDate(bookEntity));
+            book.setBookable(true);
+            book.setReturnDate(getNextReturnDate(book));
         }
 
-        bookRepository.save(bookEntity);
+        bookService.saveBook(book);
     }
 
-    private Date getNextReturnDate(BookEntity bookEntity){
+    private Date getNextReturnDate(BookEntity book){
 
-        List<BorrowedBook> borrowedBookList = borrowedBooksRepository
-                .findAllByBookAndReturnedFalseOrderByReturnDateAsc(bookEntity);
+        List<BorrowedBook> borrowedBookList = bookService.
+                findAllBorrowedBooksByBookAndNotReturnedAndOrderByReturnDateAsc(book);
 
         // Nearest return date (order by asc)
         return borrowedBookList.get(0).getReturnDate();

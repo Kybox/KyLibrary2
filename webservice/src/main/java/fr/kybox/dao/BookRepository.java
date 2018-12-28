@@ -15,7 +15,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
     Optional<BookEntity> findByIsbn(String isbn);
 
-    Iterable<BookEntity> findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
+    List<BookEntity> findAllByTitleContainingOrAuthor_NameContainingOrGenre_NameContainingAllIgnoreCase
             (String title, String author, String genre);
 
     List<BookEntity> findAllByBookable(boolean bookable);
