@@ -6,6 +6,7 @@ public class ValueTypes {
     public final static int UNAUTHORIZED = 401;
     public final static int BAD_REQUEST = 400;
     public final static int FORBIDDEN = 403;
+    public final static int NOT_FOUND = 404;
     public final static int CONFLICT = 409;
     public final static int CREATED = 201;
     public final static int OK = 200;

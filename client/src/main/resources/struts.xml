@@ -127,5 +127,23 @@
             <interceptor-ref name="authenticatedStack"/>
             <result>jsp/manager.jsp</result>
         </action>
+
+        <!-- [ADMIN] Action -->
+        <action name="admin" class="fr.kybox.action.AdminAction">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
+        </action>
+
+        <!-- [ADMIN AJAX SEARCH BOOK BY ISBN] Action -->
+        <action name="adminSearchByIsbn" class="fr.kybox.action.AdminAction" method="searchBookByIsbn">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success" type="json"/>
+        </action>
+
+        <!-- [ADMIN NEW LOAN] Action -->
+        <action name="adminNewLoan" class="fr.kybox.action.AdminAction" method="newLoan">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
+        </action>
     </package>
 </struts>

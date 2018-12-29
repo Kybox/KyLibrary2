@@ -109,9 +109,15 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         GetBookResponse response = objectFactory.createGetBookResponse();
 
+        String isbn = parameter.getIsbn();
+        if(isbn == null || isbn.isEmpty()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
+
         Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(parameter.getIsbn());
         if(!optBookEntity.isPresent()){
-            response.setResult(BAD_REQUEST);
+            response.setResult(NOT_FOUND);
             return response;
         }
 
