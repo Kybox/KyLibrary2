@@ -127,7 +127,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         }
 
         String isbn = parameters.getIsbn();
-        logger.info("ISBN = " + isbn);
         Optional<BookEntity> optBook = bookService.findBookByIsbn(isbn);
         if(!optBook.isPresent()){
             response.setResult(BAD_REQUEST);
@@ -135,7 +134,6 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         }
 
         Boolean returned = parameters.isReturned();
-        logger.info("RETURNED = " + returned);
         List<BorrowedBook> bookList = bookService.findAllBorrowedBooksByBook(optBook.get());
 
         for(BorrowedBook borrowedBook : bookList){
@@ -310,6 +308,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         borrowedBook.setReturnDate(new Date(Calendar.getInstance().getTime().getTime()));
 
         bookService.saveBorrowedBook(borrowedBook);
+
         response = OK;
         return response;
     }
@@ -495,9 +494,15 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             return response;
         }
 
+        BookEntity book = optBook.get();
+        if(book.getAvailable() == ZERO){
+            response.setResult(CONFLICT);
+            logger.info("Error : " + response.getResult());
+        }
+
         BorrowedBook borrowedBook = new BorrowedBook();
         borrowedBook.setUser(optUser.get());
-        borrowedBook.setBook(optBook.get());
+        borrowedBook.setBook(book);
         borrowedBook.setExtended(false);
         borrowedBook.setReturned(false);
 
@@ -507,6 +512,11 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         borrowedBook.setBorrowingDate(LocalDateTime.now());
 
         bookService.saveBorrowedBook(borrowedBook);
+
+        book.setAvailable(book.getAvailable() - ONE);
+        if(book.getAvailable() == ZERO) book.setBookable(true);
+        bookService.saveBook(book);
+
         response.setResult(OK);
         return response;
     }

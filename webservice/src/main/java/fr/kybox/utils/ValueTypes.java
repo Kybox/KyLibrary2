@@ -18,4 +18,7 @@ public class ValueTypes {
 
     public final static String TOKEN_ACTIVE = "active";
     public final static String USER_FROM_TOKEN = "userFromToken";
+
+    public final static int ZERO = 0;
+    public final static int ONE = 1;
 }
