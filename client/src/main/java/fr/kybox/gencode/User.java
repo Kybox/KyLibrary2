@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="birthday" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
  *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="alertSender" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="level" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -48,7 +47,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "birthday",
     "postalAddress",
     "tel",
-    "alertSender",
     "level"
 })
 @XmlRootElement(name = "user")
@@ -69,8 +67,6 @@ public class User
     protected Date birthday;
     protected String postalAddress;
     protected String tel;
-    @XmlElement(required = true)
-    protected String alertSender;
     protected Integer level;
 
     /**
@@ -239,30 +235,6 @@ public class User
      */
     public void setTel(String value) {
         this.tel = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété alertSender.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAlertSender() {
-        return alertSender;
-    }
-
-    /**
-     * Définit la valeur de la propriété alertSender.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAlertSender(String value) {
-        this.alertSender = value;
     }
 
     /**

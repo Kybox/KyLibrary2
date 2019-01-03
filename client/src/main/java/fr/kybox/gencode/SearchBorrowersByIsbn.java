@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
  *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element name="returned" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -38,10 +38,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "", propOrder = {
     "token",
     "isbn",
-    "email"
+    "returned"
 })
-@XmlRootElement(name = "loanReturn")
-public class LoanReturn
+@XmlRootElement(name = "searchBorrowersByIsbn")
+public class SearchBorrowersByIsbn
     implements Serializable
 {
 
@@ -54,10 +54,7 @@ public class LoanReturn
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     @XmlSchemaType(name = "normalizedString")
     protected String isbn;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String email;
+    protected Boolean returned;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -108,27 +105,27 @@ public class LoanReturn
     }
 
     /**
-     * Obtient la valeur de la propriété email.
+     * Obtient la valeur de la propriété returned.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public String getEmail() {
-        return email;
+    public Boolean isReturned() {
+        return returned;
     }
 
     /**
-     * Définit la valeur de la propriété email.
+     * Définit la valeur de la propriété returned.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public void setEmail(String value) {
-        this.email = value;
+    public void setReturned(Boolean value) {
+        this.returned = value;
     }
 
 }

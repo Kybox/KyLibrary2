@@ -2,18 +2,18 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <div class="row">
     <div class="alert alert-warning text-right">
-        <b><i>Enregistrer un nouvel emprunt</i></b>
+        <b><i>Enregistrer le retour d'un emprunt</i></b>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="alert alert-default text-left">
             <form class="form" id="formSearchBookByIsbn">
                 <div class="input-group">
                     <input type="text" class="form-control" name="isbn" id="isbn"
                            placeholder="Saisir le numéro ISBN" required>
                     <span class="input-group-btn">
-                <button class="btn btn-default" type="submit" id="btnSearchBook">
+                <button class="btn btn-success" type="submit" id="btnSearchBook">
                     <i class="glyphicon glyphicon-search"></i>
                     Rechercher le livre
                 </button>
@@ -22,39 +22,30 @@
             </form>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="alert alert-default text-right">
-            <form class="form-group form-inline" id="formSearchUserByName">
-                <input type="text" class="form-control" name="firstName" id="firstName"
-                       placeholder="Saisir le nom du client" required>
-                <input type="text" class="form-control" name="lastName" id="lastName"
-                       placeholder="Saisir le prénom du client" required>
-                <button class="btn btn-default" type="submit" id="btnSearchUser">
-                    <i class="glyphicon glyphicon-search"></i>
-                    Rechercher un client
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="alert alert-default" id="resultBookSearch">
-            <div class="col-md-2 text-left" id="bookCover"></div>
-            <div id="bookInfo"></div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="alert alert-default" id="resultUserSearch"></div>
-    </div>
 </div>
 <hr>
-<div class="alert alert-default col-md-12 text-center">
-    <button class="btn btn-primary" type="button" id="btn_register_new_loan" disabled>
-        Enregistrer l'emprunt
-    </button>
+<div class="row" id="resultSearch" hidden>
+    <div class="col-md-12">
+        <div class="col-md-2" id="bookCover"></div>
+        <div class="col-md-10">
+            <table class="table table-hover" id="resultTable">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th class="text-center">Date d'emprunt</th>
+                    <th class="text-center">Date limite de retour</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<div class="modal fade" id="registerLoanModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="registerLoanReturnModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -68,7 +59,7 @@
                 <div class="alert alert-danger" id="modalAlert" role="alert">
                     <p>
                         <span class="glyphicon glyphicon-alert" style="margin-right:6px;"></span>
-                        <span id="modalMsgTitle"><b><i>Une erreur s'est produite !</i></b></span>
+                        <span id="modalMsgTitle"></span>
                     </p>
                     <br>
                     <span id="modalMessage"></span>
@@ -78,4 +69,3 @@
         </div>
     </div>
 </div>
-

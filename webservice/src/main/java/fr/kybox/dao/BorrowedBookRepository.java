@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface BorrowedBookRepository extends JpaRepository<BorrowedBook, Integer> {
 
@@ -14,4 +15,6 @@ public interface BorrowedBookRepository extends JpaRepository<BorrowedBook, Inte
     BorrowedBook findByUserAndBook(UserEntity user, BookEntity bookEntity);
     List<BorrowedBook> findAllByReturnDateBeforeAndReturnedFalse(Date date);
     List<BorrowedBook> findAllByBookAndReturnedFalseOrderByReturnDateAsc(BookEntity bookEntity);
+    List<BorrowedBook> findAllByBook(BookEntity bookEntity);
+    Optional<BorrowedBook> findByBook_IsbnAndUser_EmailAndAndReturnedFalse(String isbn, String email);
 }

@@ -47,7 +47,7 @@
     </s:elseif>
     <s:elseif test="#session.admin">
         <span class="glyphicon glyphicon-minus"></span>
-        <a href="admin.action">
+        <a href="adminDefault.action">
             <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
                 Administrer

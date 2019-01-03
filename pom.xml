@@ -165,14 +165,14 @@
                                 <sourceRoot>${basedir}/src/main/java</sourceRoot>
                                 <wsdlOptions>
                                     <wsdlOption>
-                                        <wsdl>http://kybox.fr/kylibrary/test/wsdl/LibraryService.wsdl</wsdl>
+                                        <wsdl>https://kybox.fr/kylibrary/wsdl/LibraryService.wsdl</wsdl>
                                         <extraargs>
                                             <extraarg>-p</extraarg>
                                             <extraarg>fr.kybox.gencode</extraarg>
                                         </extraargs>
                                         <bindingFiles>
                                             <bindingFile>
-                                                http://kybox.fr/kylibrary/test/wsdl/binding/LibraryServiceBinding.xml
+                                                https://kybox.fr/kylibrary/wsdl/binding/LibraryServiceBinding.xml
                                             </bindingFile>
                                         </bindingFiles>
                                     </wsdlOption>

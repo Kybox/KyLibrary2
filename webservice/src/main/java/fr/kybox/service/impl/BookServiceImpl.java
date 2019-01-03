@@ -105,6 +105,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BorrowedBook> findAllBorrowedBooksByBook(BookEntity book) {
+        return borrowingDao.findAllByBook(book);
+    }
+
+    @Override
+    public Optional<BorrowedBook> findBorrowedBookByIsbnAndUserEmail(String isbn, String email) {
+        return borrowingDao.findByBook_IsbnAndUser_EmailAndAndReturnedFalse(isbn, email);
+    }
+
+    @Override
     public void saveBorrowedBook(BorrowedBook book) {
         borrowingDao.save(book);
     }

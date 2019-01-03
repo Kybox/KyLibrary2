@@ -68,8 +68,9 @@ public class AuthAction extends ActionSupport implements SessionAware {
         }
 
         Token.setToken(loginResponse.getToken());
+        session.put(TOKEN, loginResponse.getToken());
 
-        if(user.getLevel() < 3) result = "admin";
+        if(user.getLevel() < 3) result = LEVEL_ADMIN;
         else result = ActionSupport.SUCCESS;
 
         return result;

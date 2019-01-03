@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -56,7 +56,7 @@ public class BookReserved
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected Date reserveDate;
+    protected LocalDateTime reserveDate;
     protected boolean pending;
     protected boolean notified;
     protected int position;
@@ -94,7 +94,7 @@ public class BookReserved
      *     {@link String }
      *     
      */
-    public Date getReserveDate() {
+    public LocalDateTime getReserveDate() {
         return reserveDate;
     }
 
@@ -106,7 +106,7 @@ public class BookReserved
      *     {@link String }
      *     
      */
-    public void setReserveDate(Date value) {
+    public void setReserveDate(LocalDateTime value) {
         this.reserveDate = value;
     }
 

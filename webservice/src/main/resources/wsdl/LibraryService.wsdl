@@ -20,7 +20,6 @@
                         <xs:element name="birthday" type="xs:date" minOccurs="0"/>
                         <xs:element name="postalAddress" type="xs:string" minOccurs="0"/>
                         <xs:element name="tel" type="xs:string" minOccurs="0"/>
-                        <xs:element name="alertSender" type="xs:string"/>
                         <xs:element name="level" type="xs:int" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -63,6 +62,17 @@
                         <xs:element name="returnDate" type="xs:date"/>
                         <xs:element name="extended" type="xs:boolean" minOccurs="0"/>
                         <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="borrowingDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [BORROWER] -->
+            <xs:element name="borrower">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:user"/>
+                        <xs:element ref="ws:bookBorrowed"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -91,6 +101,24 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SEARCH USER] -->
+            <xs:element name="searchUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="keywords" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -128,6 +156,8 @@
                 </xs:complexType>
             </xs:element>
 
+<!-- ===== B O R R O W I N G ===== -->
+
             <!-- [EXTEND BORROWING] -->
             <xs:element name="extendBorrowing">
                 <xs:complexType>
@@ -141,6 +171,25 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SEARCH BORROWERS BY ISBN] -->
+            <xs:element name="searchBorrowersByIsbn">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchBorrowersByIsbnResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:borrower" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -329,12 +378,31 @@
                 </xs:complexType>
             </xs:element>
 
+            <!-- [REGISTER A NEW LOAN] -->
+            <xs:element name="registerNewLoan">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element ref="ws:user"/>
+                        <xs:element ref="ws:book"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="registerNewLoanResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <!-- [LOAN RETURN] -->
             <xs:element name="loanReturn">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="token" type="xs:token"/>
-                        <xs:element ref="ws:bookBorrowed"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:normalizedString"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -436,6 +504,24 @@
     <wsdl:message name="setReservationNotifiedResponse">
         <wsdl:part name="response" element="ws:setReservationNotifiedResponse"/>
     </wsdl:message>
+    <wsdl:message name="searchUser">
+        <wsdl:part name="parameters" element="ws:searchUser"/>
+    </wsdl:message>
+    <wsdl:message name="searchUserResponse">
+        <wsdl:part name="response" element="ws:searchUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="registerNewLoan">
+        <wsdl:part name="parameters" element="ws:registerNewLoan"/>
+    </wsdl:message>
+    <wsdl:message name="registerNewLoanResponse">
+        <wsdl:part name="response" element="ws:registerNewLoanResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchBorrowersByIsbn">
+        <wsdl:part name="parameters" element="ws:searchBorrowersByIsbn"/>
+    </wsdl:message>
+    <wsdl:message name="searchBorrowersByIsbnResponse">
+        <wsdl:part name="response" element="ws:searchBorrowersByIsbnResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -497,6 +583,18 @@
         <wsdl:operation name="setReservationNotified">
             <wsdl:input message="ws:setReservationNotified"/>
             <wsdl:output message="ws:setReservationNotifiedResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchUser">
+            <wsdl:input message="ws:searchUser"/>
+            <wsdl:output message="ws:searchUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="registerNewLoan">
+            <wsdl:input message="ws:registerNewLoan"/>
+            <wsdl:output message="ws:registerNewLoanResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchBorrowersByIsbn">
+            <wsdl:input message="ws:searchBorrowersByIsbn"/>
+            <wsdl:output message="ws:searchBorrowersByIsbnResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -643,6 +741,36 @@
 
         <!-- [PRIVATE] SET RESERVATION NOTIFIED -->
         <wsdl:operation name="setReservationNotified">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] SEARCH USER -->
+        <wsdl:operation name="searchUser">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] REGISTER A NEW LOAN -->
+        <wsdl:operation name="registerNewLoan">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] SEARCH BORROWERS BY ISBN -->
+        <wsdl:operation name="searchBorrowersByIsbn">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

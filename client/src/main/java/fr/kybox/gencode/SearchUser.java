@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -24,8 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element name="keywords" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,11 +35,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "isbn",
-    "email"
+    "keywords"
 })
-@XmlRootElement(name = "loanReturn")
-public class LoanReturn
+@XmlRootElement(name = "searchUser")
+public class SearchUser
     implements Serializable
 {
 
@@ -51,13 +48,7 @@ public class LoanReturn
     @XmlSchemaType(name = "token")
     protected String token;
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String isbn;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String email;
+    protected String keywords;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -84,51 +75,27 @@ public class LoanReturn
     }
 
     /**
-     * Obtient la valeur de la propriété isbn.
+     * Obtient la valeur de la propriété keywords.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getIsbn() {
-        return isbn;
+    public String getKeywords() {
+        return keywords;
     }
 
     /**
-     * Définit la valeur de la propriété isbn.
+     * Définit la valeur de la propriété keywords.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setIsbn(String value) {
-        this.isbn = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété email.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Définit la valeur de la propriété email.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEmail(String value) {
-        this.email = value;
+    public void setKeywords(String value) {
+        this.keywords = value;
     }
 
 }

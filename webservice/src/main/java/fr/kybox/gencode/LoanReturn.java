@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -23,7 +24,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookBorrowed"/&gt;
+ *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,7 +37,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "bookBorrowed"
+    "isbn",
+    "email"
 })
 @XmlRootElement(name = "loanReturn")
 public class LoanReturn
@@ -47,8 +50,14 @@ public class LoanReturn
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected BookBorrowed bookBorrowed;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String isbn;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String email;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -75,27 +84,51 @@ public class LoanReturn
     }
 
     /**
-     * Obtient la valeur de la propriété bookBorrowed.
+     * Obtient la valeur de la propriété isbn.
      * 
      * @return
      *     possible object is
-     *     {@link BookBorrowed }
+     *     {@link String }
      *     
      */
-    public BookBorrowed getBookBorrowed() {
-        return bookBorrowed;
+    public String getIsbn() {
+        return isbn;
     }
 
     /**
-     * Définit la valeur de la propriété bookBorrowed.
+     * Définit la valeur de la propriété isbn.
      * 
      * @param value
      *     allowed object is
-     *     {@link BookBorrowed }
+     *     {@link String }
      *     
      */
-    public void setBookBorrowed(BookBorrowed value) {
-        this.bookBorrowed = value;
+    public void setIsbn(String value) {
+        this.isbn = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété email.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Définit la valeur de la propriété email.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEmail(String value) {
+        this.email = value;
     }
 
 }

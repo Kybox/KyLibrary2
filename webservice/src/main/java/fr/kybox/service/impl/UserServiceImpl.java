@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static fr.kybox.utils.ValueTypes.*;
 
@@ -42,6 +39,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findUserById(int id) {
         return userDao.findById(id);
+    }
+
+    @Override
+    public List<UserEntity> findAllUserByLastNameAndFirstName(String lastName, String firstName) {
+        return userDao.findAllByLastNameContainingAndFirstNameContainingAllIgnoreCase(lastName, firstName);
     }
 
     @Override

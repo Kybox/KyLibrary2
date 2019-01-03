@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -24,8 +23,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,11 +36,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "isbn",
-    "email"
+    "user",
+    "book"
 })
-@XmlRootElement(name = "loanReturn")
-public class LoanReturn
+@XmlRootElement(name = "registerNewLoan")
+public class RegisterNewLoan
     implements Serializable
 {
 
@@ -50,14 +49,10 @@ public class LoanReturn
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String isbn;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String email;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected User user;
+    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
+    protected Book book;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -84,51 +79,51 @@ public class LoanReturn
     }
 
     /**
-     * Obtient la valeur de la propriété isbn.
+     * Obtient la valeur de la propriété user.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link User }
      *     
      */
-    public String getIsbn() {
-        return isbn;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * Définit la valeur de la propriété isbn.
+     * Définit la valeur de la propriété user.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link User }
      *     
      */
-    public void setIsbn(String value) {
-        this.isbn = value;
+    public void setUser(User value) {
+        this.user = value;
     }
 
     /**
-     * Obtient la valeur de la propriété email.
+     * Obtient la valeur de la propriété book.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Book }
      *     
      */
-    public String getEmail() {
-        return email;
+    public Book getBook() {
+        return book;
     }
 
     /**
-     * Définit la valeur de la propriété email.
+     * Définit la valeur de la propriété book.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Book }
      *     
      */
-    public void setEmail(String value) {
-        this.email = value;
+    public void setBook(Book value) {
+        this.book = value;
     }
 
 }

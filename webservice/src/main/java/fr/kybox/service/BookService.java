@@ -36,5 +36,7 @@ public interface BookService {
     List<BorrowedBook> findAllBorrowedBooksByUserOrderByReturnedAsc(UserEntity user);
     List<BorrowedBook> findAllBorrowedBooksNotReturnedAndReturnDateBefore(Date date);
     List<BorrowedBook> findAllBorrowedBooksByBookAndNotReturnedAndOrderByReturnDateAsc(BookEntity book);
+    List<BorrowedBook> findAllBorrowedBooksByBook(BookEntity book);
+    Optional<BorrowedBook> findBorrowedBookByIsbnAndUserEmail(String isbn, String email);
     void saveBorrowedBook(BorrowedBook book);
 }
