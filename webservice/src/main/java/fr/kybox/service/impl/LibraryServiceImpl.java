@@ -620,7 +620,8 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             return response;
         }
 
-        Date dateBefore = new Date(System.currentTimeMillis());
+        Date dateBefore = Converter.DateToSQLDate(parameters.getReturnDate());
+        //Date dateBefore = new Date(System.currentTimeMillis());
         List<BorrowedBook> borrowedBookList = bookService
                 .findAllBorrowedBooksNotReturnedAndReturnDateBefore(dateBefore);
 

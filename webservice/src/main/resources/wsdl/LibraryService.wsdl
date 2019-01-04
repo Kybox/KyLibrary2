@@ -317,6 +317,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="token" type="xs:token"/>
+                        <xs:element name="returnDate" type="xs:date"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
