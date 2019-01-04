@@ -122,6 +122,11 @@
             <interceptor-ref name="authenticatedStack"/>
             <result type="json"/>
         </action>
+
+        <action name="updateAlertSenderStatus" class="fr.kybox.action.UserAction" method="updateAlertSenderStatus">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
         
         <!-- [MANAGER] Action -->
         <action name="manager" class="fr.kybox.action.ManagerAction">

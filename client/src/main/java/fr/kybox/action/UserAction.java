@@ -15,6 +15,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static fr.kybox.utils.ValueTypes.*;
+
 /**
  * @author Kybox
  * @version 1.0
@@ -23,6 +25,7 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
 
     private String tab;
     private String isbn;
+    private boolean status;
     private String actionReturned;
     private HttpServletRequest request;
     private Map<String, Object> session;
@@ -44,7 +47,8 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
 
     public String informations(){
 
-        // Add some notifications ?
+        User user = (User) session.get(LEVEL_CLIENT);
+        logger.info("Alert sender = " + user.isAlertSender());
 
         return ActionSupport.SUCCESS;
     }
@@ -149,6 +153,23 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         else return ActionSupport.ERROR;
     }
 
+    public String updateAlertSenderStatus(){
+
+        UpdateAlertSenderStatus request = new UpdateAlertSenderStatus();
+        request.setToken((String) session.get(TOKEN));
+        request.setStatus(status);
+
+        LibraryService service = ServiceFactory.getLibraryService();
+        int response = service.updateAlertSenderStatus((String) session.get(TOKEN), status);
+
+        if(response == HTTP_CODE_TOKEN_EXPIRED_INVALID){
+            session.clear();
+            return ActionSupport.ERROR;
+        }
+
+        return ActionSupport.SUCCESS;
+    }
+
     public User getUser() {
         return (User) session.get("user");
     }
@@ -164,6 +185,14 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
     public Date getCurrentDate() {
         Calendar cal = Calendar.getInstance();
         return cal.getTime();
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public List<BookBorrowed> getBorrowedBooks() {

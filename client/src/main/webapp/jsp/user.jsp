@@ -6,6 +6,7 @@
     <title>KyLibrary - Compte utilisateur</title>
     <%@ include file="include/head.jsp" %>
     <script src="<s:property value="rootPath"/>js/user.js" charset="UTF-8"></script>
+    <link rel="stylesheet" href="<s:property value="rootPath"/>css/checkbox.css">
 </head>
 <body>
 <%@ include file="include/header.jsp" %>

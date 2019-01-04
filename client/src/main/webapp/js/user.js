@@ -1,3 +1,70 @@
+$(document).ready(function() {
+
+    $("#cBoxAlertSender").on("click", function () {
+        if($(this).is(":checked")){
+            $(this).attr("checked", "checked").change();
+            updateAlertSendStatus(true);
+        }
+        else {
+            $(this).removeAttr("checked").change();
+            updateAlertSendStatus(false);
+        }
+        $(this).prop("disabled", true);
+    });
+});
+
+/**
+ * Update alertSenderStatus
+ */
+function updateAlertSendStatus(status){
+
+    let data = "status=" + status;
+    $.ajax({
+        type: "POST",
+        url: "updateAlertSenderStatus.action",
+        data: data,
+        dataType: "json",
+        success : function () {
+            openAlertSenderModal("success", status);
+        },
+        error : function () {
+            openAlertSenderModal("error");
+        }
+    });
+}
+
+/**
+ * AlertSenderModal
+ */
+function openAlertSenderModal(state, status){
+
+    let alertSenderModal = $("#alertSenderModal");
+    let alert = $("#modalAlertSenderBody");
+    let modalTitle = $("#modalAlertSenderMsgTitle");
+    let modalMsg = $("#modalAlertSenderMessage");
+
+    modalTitle.empty();
+    modalMsg.empty();
+
+    if(state === "success") {
+        alert.attr("class", "alert alert-success");
+        modalTitle.append("<b><i>Confirmation de l'action</i></b>");
+        if(status === true) modalMsg.append("Les notifications par e-mail sont maintenant actives.");
+        else modalMsg.append("Les notifications par e-mail sont d&eacute;sormais inactives.");
+    }
+    else {
+        alert.attr("class", "alert alert-danger");
+        modalTitle.append("<b><i>Une erreur s'est produite</i></b>");
+        modalMsg.append("La modification des notifications par e-mail n'a pas &eacute;t&eacute; enregistrée.")
+    }
+
+    alertSenderModal.modal();
+
+    alertSenderModal.on('hidden.bs.modal', function () {
+        $("#cBoxAlertSender").prop("disabled", false);
+    });
+}
+
 /**
  * Sidebar menu switch active selected item
  */

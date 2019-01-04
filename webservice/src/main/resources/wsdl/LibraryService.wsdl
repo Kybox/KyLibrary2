@@ -2,9 +2,10 @@
 <wsdl:definitions targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
                   xmlns:ws="dd7b026a-d6a2-4089-adb2-596ab0598c73"
-                  name="WebService" xmlns:soad="http://schemas.xmlsoap.org/wsdl/soap/">
+                  name="WebService">
 
     <wsdl:types>
         <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
@@ -21,6 +22,7 @@
                         <xs:element name="postalAddress" type="xs:string" minOccurs="0"/>
                         <xs:element name="tel" type="xs:string" minOccurs="0"/>
                         <xs:element name="level" type="xs:int" minOccurs="0"/>
+                        <xs:element name="alertSender" type="xs:boolean" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -327,7 +329,6 @@
                 </xs:complexType>
             </xs:element>
 
-
             <!-- [USER BOOK LIST] -->
             <xs:element name="userBookList">
                 <xs:complexType>
@@ -361,6 +362,8 @@
                 </xs:complexType>
             </xs:element>
 
+<!-- ===== U S E R  A D M I N ===== -->
+
             <!-- [CREATE USER] -->
             <xs:element name="createUser">
                 <xs:complexType>
@@ -377,6 +380,8 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+<!-- ===== L O A N  A D M I N ===== -->
 
             <!-- [REGISTER A NEW LOAN] -->
             <xs:element name="registerNewLoan">
@@ -407,6 +412,24 @@
                 </xs:complexType>
             </xs:element>
             <xs:element name="loanReturnResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+<!-- ===== A L E R T  S E N D E R ===== -->
+
+            <xs:element name="updateAlertSenderStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="status" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateAlertSenderStatusResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
@@ -522,6 +545,12 @@
     <wsdl:message name="searchBorrowersByIsbnResponse">
         <wsdl:part name="response" element="ws:searchBorrowersByIsbnResponse"/>
     </wsdl:message>
+    <wsdl:message name="updateAlertSenderStatus">
+        <wsdl:part name="parameters" element="ws:updateAlertSenderStatus"/>
+    </wsdl:message>
+    <wsdl:message name="updateAlertSenderStatusResponse">
+        <wsdl:part name="response" element="ws:updateAlertSenderStatusResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -595,6 +624,10 @@
         <wsdl:operation name="searchBorrowersByIsbn">
             <wsdl:input message="ws:searchBorrowersByIsbn"/>
             <wsdl:output message="ws:searchBorrowersByIsbnResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateAlertSenderStatus">
+            <wsdl:input message="ws:updateAlertSenderStatus"/>
+            <wsdl:output message="ws:updateAlertSenderStatusResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -771,6 +804,16 @@
 
         <!-- [PRIVATE] SEARCH BORROWERS BY ISBN -->
         <wsdl:operation name="searchBorrowersByIsbn">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- UPDATE ALERT SENDER STATUS -->
+        <wsdl:operation name="updateAlertSenderStatus">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

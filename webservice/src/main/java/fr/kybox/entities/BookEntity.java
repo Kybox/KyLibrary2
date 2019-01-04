@@ -59,6 +59,7 @@ public class BookEntity extends AbstractEntity {
     @Column(name = "return_date")
     private Date returnDate;
 
+
     public BookEntity() {}
 
     public String getIsbn() {
@@ -162,9 +163,12 @@ public class BookEntity extends AbstractEntity {
                 ", publisher=" + publisher.getName() +
                 ", publishDate=" + publishDate +
                 ", summary='" + summary + '\'' +
-                ", genre=" + genre +
+                ", genre=" + genre.getName() +
                 ", available=" + available +
                 ", cover='" + cover + '\'' +
+                ", nbCopies=" + nbCopies +
+                ", bookable=" + bookable +
+                ", returnDate=" + returnDate +
                 '}';
     }
 }

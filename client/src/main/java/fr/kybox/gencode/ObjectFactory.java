@@ -365,4 +365,20 @@ public class ObjectFactory {
         return new LoanReturnResponse();
     }
 
+    /**
+     * Create an instance of {@link UpdateAlertSenderStatus }
+     * 
+     */
+    public UpdateAlertSenderStatus createUpdateAlertSenderStatus() {
+        return new UpdateAlertSenderStatus();
+    }
+
+    /**
+     * Create an instance of {@link UpdateAlertSenderStatusResponse }
+     * 
+     */
+    public UpdateAlertSenderStatusResponse createUpdateAlertSenderStatusResponse() {
+        return new UpdateAlertSenderStatusResponse();
+    }
+
 }

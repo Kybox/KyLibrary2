@@ -514,7 +514,10 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
         bookService.saveBorrowedBook(borrowedBook);
 
         book.setAvailable(book.getAvailable() - ONE);
-        if(book.getAvailable() == ZERO) book.setBookable(true);
+        if(book.getAvailable() == ZERO) {
+            book.setBookable(true);
+            book.setReturnDate(borrowedBook.getReturnDate());
+        }
         bookService.saveBook(book);
 
         response.setResult(OK);
@@ -645,18 +648,14 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @WebMethod
     public int cancelReservation(String token, String isbn) {
 
-        int response;
-
         Map<String, Object> tokenData = userService.checkTokenData(token);
         if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
-            response = TOKEN_EXPIRED_INVALID;
-            return response;
+            return TOKEN_EXPIRED_INVALID;
         }
 
         Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
         if(!optBookEntity.isPresent()){
-            response = BAD_REQUEST;
-            return response;
+            return BAD_REQUEST;
         }
 
         BookEntity book = optBookEntity.get();
@@ -665,13 +664,25 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
                 .findReservedBookByUserAndBookAndPendingTrue(user, book);
 
         if(!optReservedBook.isPresent()) {
-            response = NOT_MODIFIED;
-            return response;
+            return NOT_MODIFIED;
         }
 
         bookService.deleteReservedBook(optReservedBook.get());
-        response = OK;
-        return response;
+        return OK;
+    }
+
+    @Override
+    public int updateAlertSenderStatus(String token, boolean status) {
+
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
+            return TOKEN_EXPIRED_INVALID;
+        }
+
+        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        user.setAlertSender(status);
+        userService.saveUser(user);
+        return OK;
     }
 
     @Override

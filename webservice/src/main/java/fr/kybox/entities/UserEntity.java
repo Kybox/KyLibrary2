@@ -37,6 +37,9 @@ public class UserEntity extends AbstractEntity {
     @JoinColumn(name = "level_id")
     private Level level;
 
+    @Column(name = "alert_sender")
+    private Boolean alertSender;
+
     public UserEntity() {}
 
     public String getEmail() {
@@ -95,17 +98,26 @@ public class UserEntity extends AbstractEntity {
 
     public void setLevel(Level level) { this.level = level; }
 
+    public Boolean getAlertSender() {
+        return alertSender;
+    }
+
+    public void setAlertSender(Boolean alertSender) {
+        this.alertSender = alertSender;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", first_name='" + firstName + '\'' +
-                ", last_name='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", postalAddress='" + postalAddress + '\'' +
                 ", tel='" + tel + '\'' +
                 ", level=" + level +
+                ", alertSender=" + alertSender +
                 '}';
     }
 }
