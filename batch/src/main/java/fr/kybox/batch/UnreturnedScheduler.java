@@ -1,4 +1,4 @@
-package fr.kybox.config;
+package fr.kybox.batch;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -9,6 +9,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,8 +19,11 @@ import java.util.Date;
 @PropertySource("classpath:application.properties")
 public class UnreturnedScheduler {
 
-    @Autowired JobLauncher jobLauncher;
-    @Autowired Job job;
+    @Autowired private JobLauncher jobLauncher;
+
+    @Qualifier("jobUnreturned")
+    @Autowired private Job job;
+
     @Value("${unreturned.cron}") String cron;
 
     @Scheduled(cron = "${unreturned.cron}")
@@ -27,7 +31,10 @@ public class UnreturnedScheduler {
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
 
-        JobParameters jobParameters = new JobParametersBuilder().addDate("date", new Date()).toJobParameters();
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addDate("date", new Date())
+                .toJobParameters();
+
         jobLauncher.run(job, jobParameters);
 
     }

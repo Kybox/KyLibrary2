@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class ReservationAlertTasklet implements Tasklet, StepExecutionListener {
+public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
     private final LibraryService libraryService = ServiceFactory.getLibraryService();
     private static Logger logger = LogManager.getLogger(UnreturnedTasklet.class);
@@ -40,7 +40,7 @@ public class ReservationAlertTasklet implements Tasklet, StepExecutionListener {
     @Value("${reservation.signature}") private String reminderSignature;
 
     @Autowired
-    public ReservationAlertTasklet(ObjectFactory objectFactory, MailService mailService, Email email) {
+    public ReservationTasklet(ObjectFactory objectFactory, MailService mailService, Email email) {
         this.objectFactory = objectFactory;
         this.mailService = mailService;
         this.email = email;

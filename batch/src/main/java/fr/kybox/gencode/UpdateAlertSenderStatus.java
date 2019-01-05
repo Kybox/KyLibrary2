@@ -2,7 +2,6 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,10 +35,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "returnDate"
+    "status"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "updateAlertSenderStatus")
+public class UpdateAlertSenderStatus
     implements Serializable
 {
 
@@ -48,10 +47,7 @@ public class UnreturnedBookList
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(Adapter2 .class)
-    @XmlSchemaType(name = "date")
-    protected Date returnDate;
+    protected boolean status;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -78,27 +74,19 @@ public class UnreturnedBookList
     }
 
     /**
-     * Obtient la valeur de la propriété returnDate.
+     * Obtient la valeur de la propriété status.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public Date getReturnDate() {
-        return returnDate;
+    public boolean isStatus() {
+        return status;
     }
 
     /**
-     * Définit la valeur de la propriété returnDate.
+     * Définit la valeur de la propriété status.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setReturnDate(Date value) {
-        this.returnDate = value;
+    public void setStatus(boolean value) {
+        this.status = value;
     }
 
 }

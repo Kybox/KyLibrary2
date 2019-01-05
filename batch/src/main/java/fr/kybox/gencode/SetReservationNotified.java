@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +24,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="bookid" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="userid" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="reserveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,10 +38,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "returnDate"
+    "bookid",
+    "userid",
+    "reserveDate"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "setReservationNotified")
+public class SetReservationNotified
     implements Serializable
 {
 
@@ -48,10 +52,12 @@ public class UnreturnedBookList
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
+    protected int bookid;
+    protected int userid;
     @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(Adapter2 .class)
-    @XmlSchemaType(name = "date")
-    protected Date returnDate;
+    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlSchemaType(name = "dateTime")
+    protected LocalDateTime reserveDate;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -78,27 +84,59 @@ public class UnreturnedBookList
     }
 
     /**
-     * Obtient la valeur de la propriété returnDate.
+     * Obtient la valeur de la propriété bookid.
+     * 
+     */
+    public int getBookid() {
+        return bookid;
+    }
+
+    /**
+     * Définit la valeur de la propriété bookid.
+     * 
+     */
+    public void setBookid(int value) {
+        this.bookid = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété userid.
+     * 
+     */
+    public int getUserid() {
+        return userid;
+    }
+
+    /**
+     * Définit la valeur de la propriété userid.
+     * 
+     */
+    public void setUserid(int value) {
+        this.userid = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété reserveDate.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public Date getReturnDate() {
-        return returnDate;
+    public LocalDateTime getReserveDate() {
+        return reserveDate;
     }
 
     /**
-     * Définit la valeur de la propriété returnDate.
+     * Définit la valeur de la propriété reserveDate.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setReturnDate(Date value) {
-        this.returnDate = value;
+    public void setReserveDate(LocalDateTime value) {
+        this.reserveDate = value;
     }
 
 }

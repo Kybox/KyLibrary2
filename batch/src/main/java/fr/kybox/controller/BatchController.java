@@ -1,6 +1,10 @@
 package fr.kybox.controller;
 
+import fr.kybox.batch.UnreturnedScheduler;
+import fr.kybox.batch.result.BatchResult;
 import fr.kybox.entities.Email;
+import fr.kybox.entities.LoginForm;
+import fr.kybox.service.AuthService;
 import fr.kybox.service.MailBuilder;
 import fr.kybox.service.MailService;
 import org.apache.logging.log4j.LogManager;
@@ -9,33 +13,80 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static fr.kybox.utils.ValueTypes.UNAUTHORIZED_MSG;
+
 @Controller
+@SessionAttributes("loginForm")
 @PropertySource("classpath:application.properties")
-public class AppController {
+public class BatchController {
 
-    private static Logger logger = LogManager.getLogger(AppController.class);
+    private static Logger logger = LogManager.getLogger(BatchController.class);
 
-    @Autowired
-    private MailService mailService;
+    private final MailService mailService;
+    private final AuthService authService;
+
+    private final UnreturnedScheduler unreturnedScheduler;
 
     @Value("${file.directory}")
     private String fileDirectory;
 
+    @Autowired
+    public BatchController(MailService mailService, AuthService authService, UnreturnedScheduler unreturnedScheduler) {
+        this.mailService = mailService;
+        this.authService = authService;
+        this.unreturnedScheduler = unreturnedScheduler;
+    }
+
     @GetMapping("/")
     public String index(){
         return "index";
+    }
+
+    @GetMapping("/Unreturned")
+    public ModelAndView unreturned(){
+        ModelAndView modelAndView = new ModelAndView("unreturned");
+        modelAndView.addObject("loginForm", new LoginForm());
+        return modelAndView;
+    }
+
+    @PostMapping("/Unreturned")
+    public ModelAndView unreturnedResult(@ModelAttribute("loginForm") LoginForm form)
+            throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+            JobRestartException, JobInstanceAlreadyCompleteException {
+
+        ModelAndView modelAndView = new ModelAndView("unreturned");
+
+        if(!authService.login(form.getEmail(), form.getPassword())){
+            modelAndView.addObject("error", UNAUTHORIZED_MSG);
+            return modelAndView;
+        }
+
+        unreturnedScheduler.unreturnedScheduler();
+
+        Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
+        modelAndView.addObject("batchResult", batchResult);
+        BatchResult.clear();
+
+        return modelAndView;
     }
 
     @GetMapping("/ReservationAlert")

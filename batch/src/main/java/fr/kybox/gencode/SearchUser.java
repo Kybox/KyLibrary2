@@ -2,7 +2,6 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="keywords" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,10 +35,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "returnDate"
+    "keywords"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "searchUser")
+public class SearchUser
     implements Serializable
 {
 
@@ -48,10 +47,8 @@ public class UnreturnedBookList
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(Adapter2 .class)
-    @XmlSchemaType(name = "date")
-    protected Date returnDate;
+    @XmlElement(required = true)
+    protected String keywords;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -78,27 +75,27 @@ public class UnreturnedBookList
     }
 
     /**
-     * Obtient la valeur de la propriété returnDate.
+     * Obtient la valeur de la propriété keywords.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public Date getReturnDate() {
-        return returnDate;
+    public String getKeywords() {
+        return keywords;
     }
 
     /**
-     * Définit la valeur de la propriété returnDate.
+     * Définit la valeur de la propriété keywords.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setReturnDate(Date value) {
-        this.returnDate = value;
+    public void setKeywords(String value) {
+        this.keywords = value;
     }
 
 }

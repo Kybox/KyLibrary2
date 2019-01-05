@@ -2,7 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}book"/&gt;
  *         &lt;element name="reserveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *         &lt;element name="pending" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="notified" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *         &lt;element name="position" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *         &lt;element name="total" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *       &lt;/sequence&gt;
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "book",
     "reserveDate",
     "pending",
+    "notified",
     "position",
     "total"
 })
@@ -54,8 +56,9 @@ public class BookReserved
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected Date reserveDate;
+    protected LocalDateTime reserveDate;
     protected boolean pending;
+    protected boolean notified;
     protected int position;
     protected int total;
 
@@ -91,7 +94,7 @@ public class BookReserved
      *     {@link String }
      *     
      */
-    public Date getReserveDate() {
+    public LocalDateTime getReserveDate() {
         return reserveDate;
     }
 
@@ -103,7 +106,7 @@ public class BookReserved
      *     {@link String }
      *     
      */
-    public void setReserveDate(Date value) {
+    public void setReserveDate(LocalDateTime value) {
         this.reserveDate = value;
     }
 
@@ -121,6 +124,22 @@ public class BookReserved
      */
     public void setPending(boolean value) {
         this.pending = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété notified.
+     * 
+     */
+    public boolean isNotified() {
+        return notified;
+    }
+
+    /**
+     * Définit la valeur de la propriété notified.
+     * 
+     */
+    public void setNotified(boolean value) {
+        this.notified = value;
     }
 
     /**

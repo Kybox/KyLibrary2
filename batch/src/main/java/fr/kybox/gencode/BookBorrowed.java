@@ -2,6 +2,7 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="extended" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *         &lt;element name="returned" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="borrowingDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -39,7 +41,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "book",
     "returnDate",
     "extended",
-    "returned"
+    "returned",
+    "borrowingDate"
 })
 @XmlRootElement(name = "bookBorrowed")
 public class BookBorrowed
@@ -55,6 +58,10 @@ public class BookBorrowed
     protected Date returnDate;
     protected Boolean extended;
     protected Boolean returned;
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlSchemaType(name = "dateTime")
+    protected LocalDateTime borrowingDate;
 
     /**
      * Obtient la valeur de la propriété book.
@@ -150,6 +157,30 @@ public class BookBorrowed
      */
     public void setReturned(Boolean value) {
         this.returned = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété borrowingDate.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public LocalDateTime getBorrowingDate() {
+        return borrowingDate;
+    }
+
+    /**
+     * Définit la valeur de la propriété borrowingDate.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setBorrowingDate(LocalDateTime value) {
+        this.borrowingDate = value;
     }
 
 }

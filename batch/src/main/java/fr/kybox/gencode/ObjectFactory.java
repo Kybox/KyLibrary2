@@ -62,6 +62,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Borrower }
+     * 
+     */
+    public Borrower createBorrower() {
+        return new Borrower();
+    }
+
+    /**
      * Create an instance of {@link Login }
      * 
      */
@@ -83,6 +91,22 @@ public class ObjectFactory {
      */
     public Logout createLogout() {
         return new Logout();
+    }
+
+    /**
+     * Create an instance of {@link SearchUser }
+     * 
+     */
+    public SearchUser createSearchUser() {
+        return new SearchUser();
+    }
+
+    /**
+     * Create an instance of {@link SearchUserResponse }
+     * 
+     */
+    public SearchUserResponse createSearchUserResponse() {
+        return new SearchUserResponse();
     }
 
     /**
@@ -131,6 +155,22 @@ public class ObjectFactory {
      */
     public ExtendBorrowingResponse createExtendBorrowingResponse() {
         return new ExtendBorrowingResponse();
+    }
+
+    /**
+     * Create an instance of {@link SearchBorrowersByIsbn }
+     * 
+     */
+    public SearchBorrowersByIsbn createSearchBorrowersByIsbn() {
+        return new SearchBorrowersByIsbn();
+    }
+
+    /**
+     * Create an instance of {@link SearchBorrowersByIsbnResponse }
+     * 
+     */
+    public SearchBorrowersByIsbnResponse createSearchBorrowersByIsbnResponse() {
+        return new SearchBorrowersByIsbnResponse();
     }
 
     /**
@@ -206,6 +246,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetReservationNotified }
+     * 
+     */
+    public SetReservationNotified createSetReservationNotified() {
+        return new SetReservationNotified();
+    }
+
+    /**
+     * Create an instance of {@link SetReservationNotifiedResponse }
+     * 
+     */
+    public SetReservationNotifiedResponse createSetReservationNotifiedResponse() {
+        return new SetReservationNotifiedResponse();
+    }
+
+    /**
      * Create an instance of {@link UnreturnedBook }
      * 
      */
@@ -278,6 +334,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RegisterNewLoan }
+     * 
+     */
+    public RegisterNewLoan createRegisterNewLoan() {
+        return new RegisterNewLoan();
+    }
+
+    /**
+     * Create an instance of {@link RegisterNewLoanResponse }
+     * 
+     */
+    public RegisterNewLoanResponse createRegisterNewLoanResponse() {
+        return new RegisterNewLoanResponse();
+    }
+
+    /**
      * Create an instance of {@link LoanReturn }
      * 
      */
@@ -291,6 +363,22 @@ public class ObjectFactory {
      */
     public LoanReturnResponse createLoanReturnResponse() {
         return new LoanReturnResponse();
+    }
+
+    /**
+     * Create an instance of {@link UpdateAlertSenderStatus }
+     * 
+     */
+    public UpdateAlertSenderStatus createUpdateAlertSenderStatus() {
+        return new UpdateAlertSenderStatus();
+    }
+
+    /**
+     * Create an instance of {@link UpdateAlertSenderStatusResponse }
+     * 
+     */
+    public UpdateAlertSenderStatusResponse createUpdateAlertSenderStatusResponse() {
+        return new UpdateAlertSenderStatusResponse();
     }
 
 }

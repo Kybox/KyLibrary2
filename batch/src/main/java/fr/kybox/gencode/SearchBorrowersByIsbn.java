@@ -2,7 +2,6 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -24,7 +24,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element name="returned" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,10 +37,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "returnDate"
+    "isbn",
+    "returned"
 })
-@XmlRootElement(name = "unreturnedBookList")
-public class UnreturnedBookList
+@XmlRootElement(name = "searchBorrowersByIsbn")
+public class SearchBorrowersByIsbn
     implements Serializable
 {
 
@@ -48,10 +50,11 @@ public class UnreturnedBookList
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(Adapter2 .class)
-    @XmlSchemaType(name = "date")
-    protected Date returnDate;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String isbn;
+    protected Boolean returned;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -78,27 +81,51 @@ public class UnreturnedBookList
     }
 
     /**
-     * Obtient la valeur de la propriété returnDate.
+     * Obtient la valeur de la propriété isbn.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public Date getReturnDate() {
-        return returnDate;
+    public String getIsbn() {
+        return isbn;
     }
 
     /**
-     * Définit la valeur de la propriété returnDate.
+     * Définit la valeur de la propriété isbn.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setReturnDate(Date value) {
-        this.returnDate = value;
+    public void setIsbn(String value) {
+        this.isbn = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété returned.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isReturned() {
+        return returned;
+    }
+
+    /**
+     * Définit la valeur de la propriété returned.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setReturned(Boolean value) {
+        this.returned = value;
     }
 
 }
