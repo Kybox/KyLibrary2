@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="f" uri="/kylibrary/functions" %>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Mes réservations en cours</h3>
@@ -14,11 +15,11 @@
                 <th class="text-center">Position</th>
                 <th class="text-center">Action</th>
             </tr>
-            <s:iterator value="reservedBooks">
+            <s:iterator value="reservedBooks" var="reservedBook">
                 <s:if test="pending">
                     <tr>
                         <td id="bookTitle" style="vertical-align: middle;">
-                            <s:property value="book.title"/>
+                            <s:property value="#reservedBook.book.title"/>
                         </td>
                         <td style="vertical-align: middle;">
                             <s:property value="book.author"/>
@@ -27,7 +28,8 @@
                             <s:property value="book.publisher"/>
                         </td>
                         <td class="text-center" style="vertical-align: middle;">
-                            <s:date name="reserveDate" format="dd/MM/yyyy"/>
+                            Le ${f:formatLocalDateTime(reserveDate, "dd / MM / yyyy")}
+                            à ${f:formatLocalDateTime(reserveDate, "HH:mm:ss")}
                         </td>
                         <td class="text-center" style="vertical-align: middle;">
                             <s:property value="position"/> / <s:property value="total"/>

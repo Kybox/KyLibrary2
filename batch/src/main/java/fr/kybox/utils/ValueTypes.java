@@ -3,17 +3,35 @@ package fr.kybox.utils;
 public class ValueTypes {
 
     public static final int HTTP_CODE_OK = 200;
+    public static final int HTTP_CODE_TOKEN_EXPIRED_INVALID = 498;
 
     public static final int ADMIN_LEVEL = 1;
 
     public static final boolean UNAUTHORIZED = false;
     public static final boolean AUTHORIZED = true;
 
+    public static final String JSP_TITLE = "jspTitle";
+    public static final String JSP_UNRETURNED_TITLE = "Batch - Ouvrage non rendus";
+    public static final String JSP_RESERVATION_TITLE = "Batch - Réservations disponibles";
+    public static final String JSP_EXPIRATION_TITLE = "Batch - Prêts arrivant à expiration";
+
+    public static final String ISBN = "Isbn : ";
+    public static final String BOOK_TITLE = "Title : ";
+    public static final String AUTHOR = "Author : ";
+    public static final String BY = " by ";
+
+    public static final String LINE_BREAK = "\n";
+    public static final String DOUBLE_LINE_BREAK = "\n\n";
+    public static final String SPACE = " ";
+    public static final String SLASH = " / ";
+    public static final String HYPHEN = " - ";
+
+    public static final String TOKEN = "Token";
     public static final String UNAUTHORIZED_MSG = "Vous n'êtes pas autorisé à lancer le batch";
     public static final String START_TIME = "Start time";
     public static final String AUTHENTICATION = "Authentication";
     public static final String ATTEMPT_TO_CONNECT = "Attempt to connect";
-    public static final String ERROR = "Error";
+    public static final String ERROR = "Error ";
     public static final String LOGIN_FAILED = "Login failed";
     public static final String CONNECTED = "Connected";
     public static final String LOGIN_SUCCESS = "Login success";
@@ -32,4 +50,12 @@ public class ValueTypes {
     public static final String BATCH_PROCESSING = "Batch processing";
     public static final String COMPLETED = "Completed";
     public static final String END_TIME = "End time";
+    public static final String BATCH_RESULT = "batchResult";
+    public static final String LOGIN_FORM = "loginForm";
+    public static final String RESERVATION = "Reservation";
+    public static final String ON = "On ";
+    public static final String AT = " at ";
+    public static final String NOTIFICATION_REGISTRATION = "Notification registration";
+    public static final String NOTIFICATION_FAILED = "Failed";
+    public static final String NOTIFICATION_SUCCESS = "Success";
 }

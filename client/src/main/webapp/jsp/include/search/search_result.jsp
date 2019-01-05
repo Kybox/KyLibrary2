@@ -24,7 +24,7 @@
                     <br>
                     Date de retour estimée : <s:date name="returnDate" format="dd/MM/yyyy"/>
                     <hr>
-                    <s:if test="#session.user">
+                    <s:if test="#session['client']">
                         <s:url action="reserveSummary" var="urlReserve">
                             <s:param name="isbn"><s:property value="isbn"/></s:param>
                         </s:url>

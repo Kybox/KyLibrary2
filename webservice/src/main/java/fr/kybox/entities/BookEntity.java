@@ -59,6 +59,9 @@ public class BookEntity extends AbstractEntity {
     @Column(name = "return_date")
     private Date returnDate;
 
+    @Column(name = "available_for_booking")
+    private int availableForBooking;
+
 
     public BookEntity() {}
 
@@ -154,6 +157,14 @@ public class BookEntity extends AbstractEntity {
         this.returnDate = returnDate;
     }
 
+    public int getAvailableForBooking() {
+        return availableForBooking;
+    }
+
+    public void setAvailableForBooking(int availableForBooking) {
+        this.availableForBooking = availableForBooking;
+    }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -169,6 +180,7 @@ public class BookEntity extends AbstractEntity {
                 ", nbCopies=" + nbCopies +
                 ", bookable=" + bookable +
                 ", returnDate=" + returnDate +
+                ", availableForBooking=" + availableForBooking +
                 '}';
     }
 }

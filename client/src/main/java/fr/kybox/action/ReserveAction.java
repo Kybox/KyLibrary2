@@ -11,6 +11,9 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
 
+import static fr.kybox.utils.ValueTypes.LEVEL_CLIENT;
+import static fr.kybox.utils.ValueTypes.TOKEN;
+
 public class ReserveAction extends ActionSupport implements SessionAware {
 
     private Logger logger = LogManager.getLogger(this.getClass());
@@ -23,7 +26,7 @@ public class ReserveAction extends ActionSupport implements SessionAware {
 
     @Override
     public void setSession(Map<String, Object> map) {
-        session = session;
+        session = map;
     }
 
     public String summary(){
@@ -37,9 +40,11 @@ public class ReserveAction extends ActionSupport implements SessionAware {
         setBook(response.getBook());
 
         ReservedBookList auth = new ReservedBookList();
-        auth.setToken(Token.getToken());
+        auth.setToken((String) session.get(TOKEN));
         ReservedBookListResponse bookList = service.reservedBookList(auth);
+
         setAuthorizedReservation(true);
+
         for(BookReserved bookReserved : bookList.getBookReserved()) {
             if (bookReserved.getBook().getIsbn().equals(response.getBook().getIsbn()) && bookReserved.isPending()) {
                 setAuthorizedReservation(false);
@@ -59,18 +64,24 @@ public class ReserveAction extends ActionSupport implements SessionAware {
     public String bookReserved() {
 
         LibraryService service = ServiceFactory.getLibraryService();
-        result = service.reserveBook(Token.getToken(), getIsbn());
+        result = service.reserveBook((String) session.get(TOKEN), getIsbn());
         String actionReturn = null;
 
         if(result == ResultCode.OK)
             actionReturn = ActionSupport.SUCCESS;
         else{
-            if(result == ResultCode.BAD_REQUEST)
+            if(result == ResultCode.BAD_REQUEST) {
+                logger.warn("Bad request : "+ result);
                 this.addActionError("Erreur : BAD_REQUEST - La requête est invalide !");
-            else if(result == ResultCode.FORBIDDEN)
+            }
+            else if(result == ResultCode.FORBIDDEN) {
+                logger.warn("Forbidden : "+ result);
                 this.addActionError("Erreur : FORBIDDEN - Vous ne pouvez pas effectuer cette action !");
-
-            actionReturn = ActionSupport.ERROR;
+            }
+            else {
+                logger.warn("Error : "+ result);
+                actionReturn = ActionSupport.ERROR;
+            }
         }
 
         return actionReturn;

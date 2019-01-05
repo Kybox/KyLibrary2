@@ -27,6 +27,9 @@ public class ReservedBook {
     @Column(name = "notified")
     private boolean notified;
 
+    @Column(name = "notification_date")
+    private LocalDateTime notificationDate;
+
     public ReservedBook() {}
 
     public ReservedBookPK getReservedBookPK() {
@@ -75,5 +78,13 @@ public class ReservedBook {
 
     public void setNotified(boolean notified) {
         this.notified = notified;
+    }
+
+    public LocalDateTime getNotificationDate() {
+        return notificationDate;
+    }
+
+    public void setNotificationDate(LocalDateTime notificationDate) {
+        this.notificationDate = notificationDate;
     }
 }

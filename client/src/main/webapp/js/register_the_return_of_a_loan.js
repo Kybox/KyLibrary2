@@ -113,8 +113,6 @@ function displaySearchResult(data) {
 
 function loanReturn(id) {
 
-    alert("id load = " + id);
-
     let email = dataList[id].user.email;
     let data = "isbn=" + isbn + "&email=" + email;
 

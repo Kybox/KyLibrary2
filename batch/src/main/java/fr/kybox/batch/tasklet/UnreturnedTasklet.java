@@ -46,19 +46,25 @@ public class UnreturnedTasklet implements Tasklet, StepExecutionListener {
     private String batchPass;
 
     @Value("${unreturned.subject}")
-    private String reminderSubject;
+    private String mailSubject;
 
     @Value("${unreturned.intro}")
-    private String reminderIntro;
+    private String mailIntro;
 
     @Value("${unreturned.message}")
-    private String reminderMessage;
+    private String mailMsg1;
+
+    @Value("${unreturned.message2}")
+    private String mailMsg2;
 
     @Value("${unreturned.outro}")
-    private String reminderOutro;
+    private String mailOutro;
 
     @Value("${unreturned.signature}")
-    private String reminderSignature;
+    private String mailSignature;
+
+    @Value("${mail.sender}")
+    private String mailSender;
 
     @Autowired
     public UnreturnedTasklet(ObjectFactory objectFactory, MailService mailService, Email email) {
@@ -92,7 +98,7 @@ public class UnreturnedTasklet implements Tasklet, StepExecutionListener {
             return RepeatStatus.FINISHED;
         }
 
-        BatchResult.put(CONNECTED, LOGIN_SUCCESS);
+        BatchResult.put(LOGIN_SUCCESS, CONNECTED);
 
         String token = loginResponse.getToken();
 
@@ -112,7 +118,7 @@ public class UnreturnedTasklet implements Tasklet, StepExecutionListener {
 
         if(response.getUnreturnedBook().isEmpty()) {
             BatchResult.put(NO_BOOK_FOUND, BOOK_LIST_IS_EMPTY);
-            logger.info("The user list is empty !");
+            logger.info(BOOK_LIST_IS_EMPTY);
             libraryService.logout(token);
             return RepeatStatus.FINISHED;
         }
@@ -127,31 +133,30 @@ public class UnreturnedTasklet implements Tasklet, StepExecutionListener {
             Book book = unreturnedBook.getBookBorrowed().getBook();
             User user = unreturnedBook.getUser();
 
-            email.setFrom("no-reply@kylibrary.fr");
+            email.setFrom(mailSender);
             email.setTo(user.getEmail());
-            email.setSubject(reminderSubject);
+            email.setSubject(mailSubject);
 
-            BatchResult.put(USER, user.getFirstName() + " " + user.getLastName());
-            BatchResult.put(BOOK + index + "/" + total, book.getTitle() + " - " + book.getAuthor());
+            BatchResult.put(USER, user.getFirstName() + SPACE + user.getLastName());
+            BatchResult.put(BOOK + index + SLASH + total, book.getTitle() + BY + book.getAuthor());
 
-            String message = reminderIntro + " " + user.getFirstName() + " " + user.getLastName() + "\n\n";
-            message += reminderMessage;
-            message += "ISBN : " + book.getIsbn() + "\n";
-            message += "Titre : " + book.getTitle() + "\n";
-            message += "Auteur : " + book.getAuthor() + "\n\n";
+            String message = mailIntro + SPACE + user.getFirstName() + SPACE + user.getLastName() + DOUBLE_LINE_BREAK;
+            message += mailMsg1;
+            message += ISBN + book.getIsbn() + LINE_BREAK;
+            message += BOOK_TITLE + book.getTitle() + LINE_BREAK;
+            message += AUTHOR + book.getAuthor() + DOUBLE_LINE_BREAK;
 
             Date returnDate = unreturnedBook.getBookBorrowed().getReturnDate();
             String formatedDate = new SimpleDateFormat("dd-MM-yyyy").format(returnDate);
 
-            message += "Ce livre aurait dû être rapporter le " + formatedDate + ".\n\n";
-            message += reminderOutro;
-            message += reminderSignature;
+            message += mailMsg2 + formatedDate + DOUBLE_LINE_BREAK;
+            message += mailOutro;
+            message += mailSignature;
 
             email.setMessage(message);
 
             if(email.checkAll()){
 
-                logger.info("Email.checkAll() returned TRUE");
                 MailBuilder mailBuilder = new MailBuilder();
                 mailBuilder.setEmail(email);
 

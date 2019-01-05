@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="nbCopies" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
  *         &lt;element name="bookable" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *         &lt;element name="returnDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
+ *         &lt;element name="availableForBooking" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -55,7 +56,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "cover",
     "nbCopies",
     "bookable",
-    "returnDate"
+    "returnDate",
+    "availableForBooking"
 })
 @XmlRootElement(name = "book")
 public class Book
@@ -82,6 +84,7 @@ public class Book
     @XmlJavaTypeAdapter(Adapter2 .class)
     @XmlSchemaType(name = "date")
     protected Date returnDate;
+    protected int availableForBooking;
 
     /**
      * Obtient la valeur de la propriété isbn.
@@ -369,6 +372,22 @@ public class Book
      */
     public void setReturnDate(Date value) {
         this.returnDate = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété availableForBooking.
+     * 
+     */
+    public int getAvailableForBooking() {
+        return availableForBooking;
+    }
+
+    /**
+     * Définit la valeur de la propriété availableForBooking.
+     * 
+     */
+    public void setAvailableForBooking(int value) {
+        this.availableForBooking = value;
     }
 
 }

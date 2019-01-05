@@ -43,6 +43,7 @@
                         <xs:element name="nbCopies" type="xs:int" minOccurs="0"/>
                         <xs:element name="bookable" type="xs:boolean" minOccurs="0"/>
                         <xs:element name="returnDate" type="xs:date" minOccurs="0"/>
+                        <xs:element name="availableForBooking" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -286,9 +287,8 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="token" type="xs:token"/>
-                        <xs:element name="bookid" type="xs:int"/>
-                        <xs:element name="userid" type="xs:int"/>
-                        <xs:element name="reserveDate" type="xs:dateTime"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

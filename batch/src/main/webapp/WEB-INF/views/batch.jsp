@@ -5,23 +5,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Batch - Ouvrage non rendus</title>
+    <title><c:out value="${jspTtile}"/></title>
     <%@include file="include/head.jsp"%>
-    <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
 <%@include file="include/header.jsp"%>
 <c:if test="${empty batchResult}">
     <div class="alert alert-warning text-center">
-        <b>Lancer le batch d'envoi d'e-mails aux utilisateurs dont les ouvrages n'ont pas été retournés à temps.</b>
+        <b>Lancer le batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.</b>
     </div>
     <%@ include file="include/form.jsp"%>
-    <c:if test="${not empty error}">
+    <c:if test="${not empty Error}">
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="alert alert-danger text-center">
-                    <b><c:out value="${error}"></c:out></b>
+                    <b><c:out value="${Error}"></c:out></b>
                 </div>
             </div>
             <div class="col-md-3"></div>
@@ -31,7 +30,7 @@
 </c:if>
 <c:if test="${not empty batchResult}">
     <div class="alert alert-warning text-center">
-        <b>Résultats du batch d'envoi d'e-mails aux utilisateurs dont les ouvrages n'ont pas été retournés à temps.</b>
+        <b>Résultats du batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.</b>
     </div>
     <div class="row">
         <div class="row">
@@ -39,12 +38,7 @@
             <div class="col-md-6">
                 <table class="table table-bordered table-hover">
                     <tbody>
-                    <c:forEach items="${batchResult}" var="entry">
-                        <tr>
-                            <td>${entry.key}</td>
-                            <td>${entry.value}</td>
-                        </tr>
-                    </c:forEach>
+                        <%@include file="include/result.jsp"%>
                     </tbody>
                 </table>
             </div>
@@ -52,5 +46,6 @@
         </div>
     </div>
 </c:if>
+<%@ include file="include/modal.jsp"%>
 </body>
 </html>

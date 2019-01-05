@@ -1,38 +1,27 @@
 package fr.kybox.controller;
 
+import fr.kybox.batch.ReservationScheduler;
 import fr.kybox.batch.UnreturnedScheduler;
 import fr.kybox.batch.result.BatchResult;
-import fr.kybox.entities.Email;
+import fr.kybox.controller.view.DefaultModelAndView;
 import fr.kybox.entities.LoginForm;
 import fr.kybox.service.AuthService;
-import fr.kybox.service.MailBuilder;
-import fr.kybox.service.MailService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.mail.MessagingException;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static fr.kybox.utils.ValueTypes.UNAUTHORIZED_MSG;
+import static fr.kybox.utils.ValueTypes.*;
 
 @Controller
 @SessionAttributes("loginForm")
@@ -41,19 +30,19 @@ public class BatchController {
 
     private static Logger logger = LogManager.getLogger(BatchController.class);
 
-    private final MailService mailService;
+    private ModelAndView modelAndView;
+
     private final AuthService authService;
-
-    private final UnreturnedScheduler unreturnedScheduler;
-
-    @Value("${file.directory}")
-    private String fileDirectory;
+    private final UnreturnedScheduler batchUnreturned;
+    private final ReservationScheduler batchReservation;
 
     @Autowired
-    public BatchController(MailService mailService, AuthService authService, UnreturnedScheduler unreturnedScheduler) {
-        this.mailService = mailService;
+    public BatchController(AuthService authService,
+                           UnreturnedScheduler batchUnreturned,
+                           ReservationScheduler batchReservation) {
         this.authService = authService;
-        this.unreturnedScheduler = unreturnedScheduler;
+        this.batchUnreturned = batchUnreturned;
+        this.batchReservation = batchReservation;
     }
 
     @GetMapping("/")
@@ -61,87 +50,88 @@ public class BatchController {
         return "index";
     }
 
+    @GetMapping("/Unreturned/**")
+    public String unreturnedRedirect(){
+        return "redirect";
+    }
+
+    /**
+     * Reach this url to login for trigger the {@link UnreturnedScheduler} batch
+     * @return The <a href="./webapp/WEB-INF/views/batch.jsp">unreturned JSP</a> with the login form
+     */
     @GetMapping("/Unreturned")
     public ModelAndView unreturned(){
-        ModelAndView modelAndView = new ModelAndView("unreturned");
-        modelAndView.addObject("loginForm", new LoginForm());
+        modelAndView = DefaultModelAndView.get();
+        modelAndView.addObject(LOGIN_FORM, new LoginForm());
+        modelAndView.addObject(JSP_TITLE, JSP_UNRETURNED_TITLE);
         return modelAndView;
     }
 
+    /**
+     * Reach this url to trigger the Unreturned scheduled batch
+     * @return The unreturned JSP with the login form
+     */
     @PostMapping("/Unreturned")
-    public ModelAndView unreturnedResult(@ModelAttribute("loginForm") LoginForm form)
+    public ModelAndView unreturnedResult(@ModelAttribute(LOGIN_FORM) LoginForm form)
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
 
-        ModelAndView modelAndView = new ModelAndView("unreturned");
-
-        if(!authService.login(form.getEmail(), form.getPassword())){
-            modelAndView.addObject("error", UNAUTHORIZED_MSG);
+        modelAndView = DefaultModelAndView.get();
+        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED){
+            modelAndView.addObject(ERROR, UNAUTHORIZED_MSG);
             return modelAndView;
         }
 
-        unreturnedScheduler.unreturnedScheduler();
+        batchUnreturned.unreturnedScheduler();
 
         Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
-        modelAndView.addObject("batchResult", batchResult);
+        modelAndView.addObject(BATCH_RESULT, batchResult);
         BatchResult.clear();
 
         return modelAndView;
     }
 
-    @GetMapping("/ReservationAlert")
-    public String reservationAlert(){
-        return "reservation_alert";
+    /**
+     * Reach this url to login for trigger the {@link ReservationScheduler} batch
+     * @return The <a href="./webapp/WEB-INF/views/batch.jsp">batch JSP</a> with the login form
+     */
+    @GetMapping("/Reservation")
+    public ModelAndView reservation(){
+        modelAndView = DefaultModelAndView.get();
+        modelAndView.addObject(LOGIN_FORM, new LoginForm());
+        modelAndView.addObject(JSP_TITLE, JSP_RESERVATION_TITLE);
+        return modelAndView;
     }
 
-    @PostMapping(path = "/ReservationAlert", consumes = "application/json; charset=UTF-8")
-    public ResponseEntity ReservationAlert(@RequestBody String data) {
+    @PostMapping("/Reservation")
+    public ModelAndView reservationResult(@ModelAttribute(LOGIN_FORM) LoginForm form)
+            throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+            JobRestartException, JobInstanceAlreadyCompleteException {
 
-        if(data != null && !data.isEmpty()){
-
-            JSONParser jsonParser = new JSONParser();
-
-            try{
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(data);
-
-                logger.info("TOKEN = " + jsonObject.get("token"));
-                // TODO Vérifier la validité du token
-
-                JSONArray jsonArray = (JSONArray) jsonObject.get("email");
-
-                if(jsonArray != null) {
-
-                    Email email = new Email();
-
-                    for (Object aJsonArray : jsonArray) {
-                        JSONObject object = (JSONObject) aJsonArray;
-                        if (object.containsKey("from")) email.setFrom((String) object.get("from"));
-                        if (object.containsKey("to")) email.setTo((String) object.get("to"));
-                        if (object.containsKey("subject")) email.setSubject((String) object.get("subject"));
-                        if (object.containsKey("message")) email.setMessage((String) object.get("message"));
-                    }
-
-                    if(email.checkAll()){
-                        MailBuilder mailBuilder = new MailBuilder();
-                        mailBuilder.setEmail(email);
-                        mailService.send(mailBuilder);
-
-                        return new ResponseEntity(HttpStatus.OK);
-                    }
-                    else return new ResponseEntity(HttpStatus.BAD_REQUEST);
-                }
-                else return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-            catch (ParseException | MessagingException e) {
-                e.printStackTrace();
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
+        modelAndView = DefaultModelAndView.get();
+        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED){
+            modelAndView.addObject(ERROR, UNAUTHORIZED_MSG);
+            return modelAndView;
         }
-        else return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        batchReservation.reservationScheduler();
+
+        Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
+        modelAndView.addObject(BATCH_RESULT, batchResult);
+        BatchResult.clear();
+
+        return modelAndView;
     }
 
-    @GetMapping("/uploadForm")
-    public String uploadForm(){
-        return "upload";
+    /**
+     * Reach this url to login for trigger the {@link ReservationScheduler} batch
+     * @return The <a href="./webapp/WEB-INF/views/batch.jsp">batch JSP</a> with the login form
+     */
+    @GetMapping("/Expiration")
+    public ModelAndView expiration(){
+        modelAndView = DefaultModelAndView.get();
+        modelAndView.addObject(LOGIN_FORM, new LoginForm());
+        modelAndView.addObject(JSP_TITLE, JSP_EXPIRATION_TITLE);
+        return modelAndView;
     }
 }

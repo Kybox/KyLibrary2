@@ -8,13 +8,18 @@ import fr.kybox.service.AuthService;
 import fr.kybox.utils.ServiceFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static fr.kybox.utils.ValueTypes.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     @Override
-    public boolean login(String email, String password) {
+    public Map<String, Object> login(String email, String password) {
+
+        Map<String, Object> authResult = new HashMap<>();
 
         Login login = new Login();
         login.setLogin(email);
@@ -24,13 +29,27 @@ public class AuthServiceImpl implements AuthService {
 
         LoginResponse response = service.login(login);
 
-        if(response.getResult() != HTTP_CODE_OK)
-            return UNAUTHORIZED;
+        if(response.getResult() != HTTP_CODE_OK) {
+            authResult.put(AUTHENTICATION, UNAUTHORIZED);
+            return authResult;
+        }
 
         User user = response.getUser();
-        if(user == null || user.getLevel() != ADMIN_LEVEL)
-            return UNAUTHORIZED;
+        if(user == null || user.getLevel() != ADMIN_LEVEL) {
+            authResult.put(AUTHENTICATION, UNAUTHORIZED);
+            return authResult;
+        }
 
-        return AUTHORIZED;
+        authResult.put(AUTHENTICATION, AUTHORIZED);
+        authResult.put(TOKEN, response.getToken());
+        return authResult;
+    }
+
+    @Override
+    public boolean connection(String email, String password) {
+
+        Map<String, Object> authResult = login(email, password);
+
+        return authResult.get(AUTHENTICATION).equals(AUTHORIZED);
     }
 }

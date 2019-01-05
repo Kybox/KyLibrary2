@@ -75,6 +75,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Optional<ReservedBook> findFirstReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(BookEntity book) {
+        return reservationDao.findFirstByBookAndPendingTrueOrderByReserveDateAsc(book);
+    }
+
+    @Override
+    public boolean areThereAnyReservationForBook(BookEntity book) {
+
+        return reservationDao.findFirstByBookAndPendingIsTrue(book).isPresent();
+    }
+
+    @Override
     public void saveReservedBook(ReservedBook book) {
         reservationDao.save(book);
     }

@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
+import javax.swing.text.html.Option;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -309,56 +309,47 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         bookService.saveBorrowedBook(borrowedBook);
 
+        // Now check reservations
+        // and update book rendering
+
+        BookEntity book = borrowedBook.getBook();
+        if(!bookService.areThereAnyReservationForBook(book))
+            book.setAvailable(book.getAvailable() + ONE);
+        else book.setAvailableForBooking(book.getAvailableForBooking() + ONE);
+
+        bookService.saveBook(book);
         response = OK;
         return response;
     }
 
     @Override
-    public int setReservationNotified(String token, int bookid, int userid, LocalDateTime reserveDate) {
+    public int setReservationNotified(String token, String isbn, String email) {
 
         int response;
 
         Map<String, Object> tokenData = userService.checkTokenData(token);
-        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
-            response = TOKEN_EXPIRED_INVALID;
-            return response;
-        }
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE) return TOKEN_EXPIRED_INVALID;
 
-        Optional<BookEntity> optBookEntity = bookService.findBookById(bookid);
-        if(!optBookEntity.isPresent()){
-            response = BAD_REQUEST;
-            return response;
-        }
-
-        /**
-         * Warning userID is not the same as the one in the token
-         */
         UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
-        BookEntity book = optBookEntity.get();
+        if(user.getLevel().getId() > MANAGER) return FORBIDDEN;
+
+        Optional<BookEntity> optBook = bookService.findBookByIsbn(isbn);
+        if(!optBook.isPresent()) return BAD_REQUEST;
+
+        Optional<UserEntity> optUser = userService.findUserByEmail(email);
+        if(!optUser.isPresent()) return BAD_REQUEST;
 
         Optional<ReservedBook> optReservedBook = bookService
-                .findReservedBookByUserAndBookAndPendingTrue(user, book);
-        if(!optReservedBook.isPresent()){
-            response = BAD_REQUEST;
-            return response;
-        }
+                .findReservedBookByUserAndBookAndPendingTrue(optUser.get(), optBook.get());
 
-        ReservedBook reservedBook = optReservedBook.get();
+        if(!optReservedBook.isPresent()) return BAD_REQUEST;
 
-        java.util.Date reservationDate = Date.from(reservedBook.getReserveDate()
-                .atZone(ZoneId.systemDefault()).toInstant());
+        ReservedBook book = optReservedBook.get();
 
-        logger.info("Param date = " + reserveDate);
-        logger.info("Object date = " + reservationDate);
-
-        if(!reservationDate.toString().equals(reserveDate.toString())){
-            response = BAD_REQUEST;
-            return response;
-        }
-
-        if(!reservedBook.isNotified()) {
-            reservedBook.setNotified(true);
-            bookService.saveReservedBook(reservedBook);
+        if(!book.isNotified()){
+            book.setNotified(true);
+            book.setNotificationDate(LocalDateTime.now());
+            bookService.saveReservedBook(book);
         }
 
         response = OK;
@@ -430,7 +421,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             BookReserved bookReserved = new BookReserved();
             Book book = (Book) Reflection.EntityToWS(reservedBook.getBook());
             bookReserved.setBook(book);
-            bookReserved.setReserveDate(LocalDateTime.now());
+            bookReserved.setReserveDate(reservedBook.getReserveDate());
             bookReserved.setPending(reservedBook.isPending());
             bookReserved.setNotified(reservedBook.isNotified());
             response.getBookReserved().add(bookReserved);
@@ -574,27 +565,35 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         List<BookEntity> bookList = bookService.findAllBooksByBookable(true);
 
+        logger.info("Found " + bookList.size() + " book(s) currently bookable");
+
         for(BookEntity book : bookList){
 
-            if(book.getAvailable() == 0) continue;
+            if(book.getAvailable() != ZERO) continue;
 
-            List<ReservedBook> reservedBookList = bookService
-                    .findAllReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(book);
+            Optional<ReservedBook> optReservedBook = bookService
+                    .findFirstReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(book);
 
-            for(int i = 0; i < book.getAvailable(); i++){
+            if(!optReservedBook.isPresent()) continue;
 
-                Optional<UserEntity> optUser = userService
-                        .findUserById(reservedBookList.get(i).getUser().getId());
+            ReservedBook reservedBook = optReservedBook.get();
 
-                if(optUser.isPresent()){
+            Optional<UserEntity> optUser = userService
+                    .findUserById(reservedBook.getUser().getId());
 
-                    BookReserved bookReserved = (BookReserved) Reflection.EntityToWS(reservedBookList.get(i));
-                    response.getBookReserved().add(bookReserved);
+            if(!optUser.isPresent()) continue;
 
-                    User user = (User) Reflection.EntityToWS(optUser.get());
-                    response.getUser().add(user);
-                }
-            }
+            BookReserved bookReserved = objectFactory.createBookReserved();
+            bookReserved.setBook((Book) Reflection.EntityToWS(reservedBook.getBook()));
+            bookReserved.setNotified(reservedBook.isNotified());
+            bookReserved.setPosition(ONE);
+            bookReserved.setPending(reservedBook.isPending());
+            bookReserved.setReserveDate(reservedBook.getReserveDate());
+
+            response.getBookReserved().add(bookReserved);
+
+            User user = (User) Reflection.EntityToWS(optUser.get());
+            response.getUser().add(user);
         }
         response.setResult(OK);
         return response;

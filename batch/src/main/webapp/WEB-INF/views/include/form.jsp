@@ -16,7 +16,7 @@
                         <label for="password">Mot de passe :</label>
                         <form:password path="password" cssClass="form-control" id="password" required="required"/>
                     </div>
-                    <input type="submit" class="btn btn-default" value="Connexion">
+                    <input type="submit" class="btn btn-default" value="Connexion" data-toggle="modal" data-target="#processModal">
                 </form:form>
             </div>
         </div>

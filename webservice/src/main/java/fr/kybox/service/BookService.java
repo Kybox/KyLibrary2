@@ -26,6 +26,8 @@ public interface BookService {
     List<ReservedBook> findAllReservedBooksByUser(UserEntity user);
     Optional<ReservedBook> findReservedBookByUserAndBookAndPendingTrue(UserEntity user, BookEntity book);
     List<ReservedBook> findAllReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(BookEntity book);
+    Optional<ReservedBook> findFirstReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(BookEntity book);
+    boolean areThereAnyReservationForBook(BookEntity book);
     void saveReservedBook(ReservedBook book);
     void deleteReservedBook(ReservedBook book);
 

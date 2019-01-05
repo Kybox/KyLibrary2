@@ -2,7 +2,6 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -24,9 +24,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="bookid" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="userid" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element name="reserveDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -38,9 +37,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "token",
-    "bookid",
-    "userid",
-    "reserveDate"
+    "isbn",
+    "email"
 })
 @XmlRootElement(name = "setReservationNotified")
 public class SetReservationNotified
@@ -52,12 +50,12 @@ public class SetReservationNotified
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    protected int bookid;
-    protected int userid;
-    @XmlElement(required = true, type = String.class)
-    @XmlJavaTypeAdapter(Adapter1 .class)
-    @XmlSchemaType(name = "dateTime")
-    protected LocalDateTime reserveDate;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String isbn;
+    @XmlElement(required = true)
+    protected String email;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -84,59 +82,51 @@ public class SetReservationNotified
     }
 
     /**
-     * Obtient la valeur de la propriété bookid.
-     * 
-     */
-    public int getBookid() {
-        return bookid;
-    }
-
-    /**
-     * Définit la valeur de la propriété bookid.
-     * 
-     */
-    public void setBookid(int value) {
-        this.bookid = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété userid.
-     * 
-     */
-    public int getUserid() {
-        return userid;
-    }
-
-    /**
-     * Définit la valeur de la propriété userid.
-     * 
-     */
-    public void setUserid(int value) {
-        this.userid = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété reserveDate.
+     * Obtient la valeur de la propriété isbn.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public LocalDateTime getReserveDate() {
-        return reserveDate;
+    public String getIsbn() {
+        return isbn;
     }
 
     /**
-     * Définit la valeur de la propriété reserveDate.
+     * Définit la valeur de la propriété isbn.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setReserveDate(LocalDateTime value) {
-        this.reserveDate = value;
+    public void setIsbn(String value) {
+        this.isbn = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété email.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Définit la valeur de la propriété email.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEmail(String value) {
+        this.email = value;
     }
 
 }
