@@ -10,10 +10,20 @@ public class ValueTypes {
     public static final boolean UNAUTHORIZED = false;
     public static final boolean AUTHORIZED = true;
 
+    public static final String BATCH = "batch";
+    public static final String DEFAULT = "default";
+    public static final String UNRETURNED = "unreturned";
+    public static final String RESERVATION = "reservation";
+    public static final String EXPIRATION = "expiration";
+
     public static final String JSP_TITLE = "jspTitle";
+    public static final String JSP_MODAL_DESC = "jspModalDesc";
     public static final String JSP_UNRETURNED_TITLE = "Batch - Ouvrage non rendus";
+    public static final String JSP_UNRETURNED__MODAL_DESC = "Processus de récupération des ouvrages non rendus";
     public static final String JSP_RESERVATION_TITLE = "Batch - Réservations disponibles";
+    public static final String JSP_RESERVATION_MODAL_DESC = "Processus de vérification des réservations disponibles";
     public static final String JSP_EXPIRATION_TITLE = "Batch - Prêts arrivant à expiration";
+    public static final String JSP_EXPIRATION_MODAL_DESC = "Processus de notification des prêts arrivant à expiration";
 
     public static final String ISBN = "Isbn : ";
     public static final String BOOK_TITLE = "Title : ";
@@ -52,10 +62,15 @@ public class ValueTypes {
     public static final String END_TIME = "End time";
     public static final String BATCH_RESULT = "batchResult";
     public static final String LOGIN_FORM = "loginForm";
-    public static final String RESERVATION = "Reservation";
+    public static final String BOOK_RESERVED = "Reservation";
     public static final String ON = "On ";
     public static final String AT = " at ";
     public static final String NOTIFICATION_REGISTRATION = "Notification registration";
     public static final String NOTIFICATION_FAILED = "Failed";
     public static final String NOTIFICATION_SUCCESS = "Success";
+    public static final String USER_ALREADY_NOTIFIED = "User already notified";
+    public static final String REMAINING_TIME_BEFORE_DELETION = "Remaining time before deletion";
+    public static final String APPROXIMATELY = "Approximately ";
+    public static final String HOURS = " hours";
+    public static final String MINUTES = " minutes";
 }

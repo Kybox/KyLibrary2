@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +71,9 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
     @Value("${mail.sender}")
     private String mailSender;
+
+    @Value("${reservation.expire}")
+    private int reservationExpire;
 
     @Autowired
     public ReservationTasklet(ObjectFactory objectFactory, MailService mailService, Email email,
@@ -130,7 +138,7 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
         for(int index = 0; index < total; index++){
 
-            BatchResult.put(RESERVATION, (index + 1) + SLASH + total);
+            BatchResult.put(BOOK_RESERVED, (index + 1) + SLASH + total);
 
             String userFirstName = userList.get(index).getFirstName();
             String userLastName = userList.get(index).getLastName();
@@ -142,6 +150,33 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
             BatchResult.put(USER, userFirstName + SPACE + userLastName);
             BatchResult.put(BOOK, bookTitle + BY + bookAuthor);
+
+            BookReserved bookReserved = bookList.get(index);
+
+            if(bookReserved.isNotified()){
+
+                LocalDateTime notificationDate = bookReserved.getNotificationDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd / MM / yyyy - HH:mm:ss");
+
+                String stringDate = bookReserved.getNotificationDate().format(formatter);
+                BatchResult.put(USER_ALREADY_NOTIFIED, ON + stringDate);
+
+                LocalDateTime expirationDate = notificationDate.plusHours(reservationExpire);
+
+                if(expirationDate.isAfter(LocalDateTime.now())){
+
+                    long remainingTime = ChronoUnit.HOURS.between(LocalDateTime.now(), expirationDate);
+
+                    if(remainingTime == 0) {
+                        remainingTime = ChronoUnit.MINUTES.between(LocalDateTime.now(), expirationDate);
+                        BatchResult.put(REMAINING_TIME_BEFORE_DELETION, APPROXIMATELY + remainingTime + MINUTES);
+                    }
+                    else
+                        BatchResult.put(REMAINING_TIME_BEFORE_DELETION, APPROXIMATELY + remainingTime + HOURS);
+                }
+
+                continue;
+            }
 
             email.setFrom(mailSender);
             email.setTo(userEmail);

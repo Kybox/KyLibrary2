@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="notified" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *         &lt;element name="position" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *         &lt;element name="total" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="notificationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -43,7 +44,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "pending",
     "notified",
     "position",
-    "total"
+    "total",
+    "notificationDate"
 })
 @XmlRootElement(name = "bookReserved")
 public class BookReserved
@@ -61,6 +63,10 @@ public class BookReserved
     protected boolean notified;
     protected int position;
     protected int total;
+    @XmlElement(required = true, type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlSchemaType(name = "dateTime")
+    protected LocalDateTime notificationDate;
 
     /**
      * Obtient la valeur de la propriété book.
@@ -172,6 +178,30 @@ public class BookReserved
      */
     public void setTotal(int value) {
         this.total = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété notificationDate.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public LocalDateTime getNotificationDate() {
+        return notificationDate;
+    }
+
+    /**
+     * Définit la valeur de la propriété notificationDate.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNotificationDate(LocalDateTime value) {
+        this.notificationDate = value;
     }
 
 }

@@ -586,6 +586,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
             BookReserved bookReserved = objectFactory.createBookReserved();
             bookReserved.setBook((Book) Reflection.EntityToWS(reservedBook.getBook()));
             bookReserved.setNotified(reservedBook.isNotified());
+            bookReserved.setNotificationDate(reservedBook.getNotificationDate());
             bookReserved.setPosition(ONE);
             bookReserved.setPending(reservedBook.isPending());
             bookReserved.setReserveDate(reservedBook.getReserveDate());

@@ -209,6 +209,7 @@
                         <xs:element name="notified" type="xs:boolean"/>
                         <xs:element name="position" type="xs:int"/>
                         <xs:element name="total" type="xs:int"/>
+                        <xs:element name="notificationDate" type="xs:dateTime"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

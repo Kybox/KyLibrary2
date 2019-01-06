@@ -3,7 +3,7 @@ package fr.kybox.controller;
 import fr.kybox.batch.ReservationScheduler;
 import fr.kybox.batch.UnreturnedScheduler;
 import fr.kybox.batch.result.BatchResult;
-import fr.kybox.controller.view.DefaultModelAndView;
+import fr.kybox.controller.view.BatchModelAndView;
 import fr.kybox.entities.LoginForm;
 import fr.kybox.service.AuthService;
 import org.apache.logging.log4j.LogManager;
@@ -61,30 +61,26 @@ public class BatchController {
      */
     @GetMapping("/Unreturned")
     public ModelAndView unreturned(){
-        modelAndView = DefaultModelAndView.get();
-        modelAndView.addObject(LOGIN_FORM, new LoginForm());
-        modelAndView.addObject(JSP_TITLE, JSP_UNRETURNED_TITLE);
-        return modelAndView;
+        return BatchModelAndView.get(UNRETURNED);
     }
 
     /**
-     * Reach this url to trigger the Unreturned scheduled batch
-     * @return The unreturned JSP with the login form
+     * Reach this url with POST method to trigger the {@link UnreturnedScheduler} batch
+     * @return The unreturned JSP with the {@link BatchResult} otherwise an error message
      */
     @PostMapping("/Unreturned")
     public ModelAndView unreturnedResult(@ModelAttribute(LOGIN_FORM) LoginForm form)
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
 
-        modelAndView = DefaultModelAndView.get();
-        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED){
-            modelAndView.addObject(ERROR, UNAUTHORIZED_MSG);
-            return modelAndView;
-        }
+        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED)
+            return BatchModelAndView.get(ERROR);
 
         batchUnreturned.unreturnedScheduler();
 
         Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
+
+        modelAndView = BatchModelAndView.get(DEFAULT);
         modelAndView.addObject(BATCH_RESULT, batchResult);
         BatchResult.clear();
 
@@ -97,26 +93,26 @@ public class BatchController {
      */
     @GetMapping("/Reservation")
     public ModelAndView reservation(){
-        modelAndView = DefaultModelAndView.get();
-        modelAndView.addObject(LOGIN_FORM, new LoginForm());
-        modelAndView.addObject(JSP_TITLE, JSP_RESERVATION_TITLE);
-        return modelAndView;
+        return BatchModelAndView.get(RESERVATION);
     }
 
+    /**
+     * Reach this url with POST method to trigger the {@link ReservationScheduler} batch
+     * @return The unreturned JSP with the {@link BatchResult} otherwise an error message
+     */
     @PostMapping("/Reservation")
     public ModelAndView reservationResult(@ModelAttribute(LOGIN_FORM) LoginForm form)
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
 
-        modelAndView = DefaultModelAndView.get();
-        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED){
-            modelAndView.addObject(ERROR, UNAUTHORIZED_MSG);
-            return modelAndView;
-        }
+        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED)
+            return BatchModelAndView.get(ERROR);
 
         batchReservation.reservationScheduler();
 
         Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
+
+        modelAndView = BatchModelAndView.get(DEFAULT);
         modelAndView.addObject(BATCH_RESULT, batchResult);
         BatchResult.clear();
 
@@ -129,9 +125,16 @@ public class BatchController {
      */
     @GetMapping("/Expiration")
     public ModelAndView expiration(){
-        modelAndView = DefaultModelAndView.get();
-        modelAndView.addObject(LOGIN_FORM, new LoginForm());
-        modelAndView.addObject(JSP_TITLE, JSP_EXPIRATION_TITLE);
-        return modelAndView;
+        return BatchModelAndView.get(EXPIRATION);
+    }
+
+    @PostMapping("/Expiration")
+    public ModelAndView expirationResult(@ModelAttribute(LOGIN_FORM) LoginForm form){
+
+        if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED)
+            return BatchModelAndView.get(ERROR);
+
+
+        return null;
     }
 }
