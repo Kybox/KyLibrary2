@@ -174,6 +174,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SearchLoansAboutToExpire }
+     * 
+     */
+    public SearchLoansAboutToExpire createSearchLoansAboutToExpire() {
+        return new SearchLoansAboutToExpire();
+    }
+
+    /**
+     * Create an instance of {@link SearchLoansAboutToExpireResponse }
+     * 
+     */
+    public SearchLoansAboutToExpireResponse createSearchLoansAboutToExpireResponse() {
+        return new SearchLoansAboutToExpireResponse();
+    }
+
+    /**
      * Create an instance of {@link BookReserved }
      * 
      */

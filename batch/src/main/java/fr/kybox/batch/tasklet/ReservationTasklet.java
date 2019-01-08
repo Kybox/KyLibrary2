@@ -40,7 +40,7 @@ import static fr.kybox.utils.ValueTypes.*;
 public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
     private final LibraryService libraryService = ServiceFactory.getLibraryService();
-    private static Logger logger = LogManager.getLogger(UnreturnedTasklet.class);
+    private final Logger logger = LogManager.getLogger(UnreturnedTasklet.class);
 
     private final NotificationService notificationService;
     private final ObjectFactory objectFactory;
@@ -112,6 +112,8 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
         CheckReservedBooks checkReservedBooks = objectFactory.createCheckReservedBooks();
         checkReservedBooks.setToken(token);
 
+        BatchResult.put(CHECK_RESERVATIONS, ATTEMPT_TO_CONNECT);
+
         CheckReservedBooksResponse response = libraryService.checkReservedBooks(checkReservedBooks);
 
         int resultCode = response.getResult();
@@ -133,6 +135,8 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
             return RepeatStatus.FINISHED;
         }
 
+        BatchResult.put(CHECK_RESERVATIONS, CHECKING_COMPLETED);
+
         List<User> userList = response.getUser();
         int total = bookList.size();
 
@@ -144,14 +148,14 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
             String userLastName = userList.get(index).getLastName();
             String userEmail = userList.get(index).getEmail();
 
-            String bookIsbn = bookList.get(index).getBook().getIsbn();
-            String bookTitle = bookList.get(index).getBook().getTitle();
-            String bookAuthor = bookList.get(index).getBook().getAuthor();
+            BookReserved bookReserved = bookList.get(index);
+
+            String bookIsbn = bookReserved.getBook().getIsbn();
+            String bookTitle = bookReserved.getBook().getTitle();
+            String bookAuthor = bookReserved.getBook().getAuthor();
 
             BatchResult.put(USER, userFirstName + SPACE + userLastName);
             BatchResult.put(BOOK, bookTitle + BY + bookAuthor);
-
-            BookReserved bookReserved = bookList.get(index);
 
             if(bookReserved.isNotified()){
 
@@ -173,7 +177,38 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
                     }
                     else
                         BatchResult.put(REMAINING_TIME_BEFORE_DELETION, APPROXIMATELY + remainingTime + HOURS);
+
+                    continue;
                 }
+
+                BatchResult.put(CANCEL_RESERVATION, ATTEMPT_TO_CANCEL_RESERVATION);
+                CancelReservation request = objectFactory.createCancelReservation();
+                request.setIsbn(bookIsbn);
+                request.setEmail(userEmail);
+                request.setToken(token);
+
+                CancelReservationResponse responseData = libraryService.cancelReservation(request);
+
+                if(responseData.getResult() != HTTP_CODE_OK){
+                    BatchResult.put(CANCEL_RESERVATION, ERROR + CANCEL_RESERVATION_ERROR);
+                    continue;
+                }
+
+                BookReserved nextBookReserved = responseData.getBookReserved();
+                User nextUserReservation = responseData.getUser();
+
+                if(nextBookReserved == null || nextUserReservation == null) {
+                    BatchResult.put(NEXT_RESERVATION, NO_OTHER_RESERVATION);
+                    continue;
+                }
+
+                BatchResult.put(NEXT_RESERVATION, ANOTHER_RESERVATION_EXISTS);
+                BatchResult.put(ADDING_A_RESERVATION, ADDING_THE_NEW_RESERVATION);
+
+                bookList.add(nextBookReserved);
+                userList.add(nextUserReservation);
+
+                total ++;
 
                 continue;
             }

@@ -12,7 +12,7 @@
 <%@include file="include/header.jsp"%>
 <c:if test="${empty batchResult}">
     <div class="alert alert-warning text-center">
-        <b>Lancer le batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.</b>
+        <b><c:out value="${jspInfo}"/></b>
     </div>
     <%@ include file="include/form.jsp"%>
     <c:if test="${not empty Error}">
@@ -30,7 +30,7 @@
 </c:if>
 <c:if test="${not empty batchResult}">
     <div class="alert alert-warning text-center">
-        <b>Résultats du batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.</b>
+        <b><c:out value="${jspResultInfo}"/></b>
     </div>
     <div class="row">
         <div class="row">

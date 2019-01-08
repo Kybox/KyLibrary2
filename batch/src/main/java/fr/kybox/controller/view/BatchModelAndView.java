@@ -23,14 +23,17 @@ public class BatchModelAndView {
         switch (name){
             case UNRETURNED:
                 modelAndView.addObject(JSP_TITLE, JSP_UNRETURNED_TITLE);
-                modelAndView.addObject(JSP_MODAL_DESC, JSP_UNRETURNED__MODAL_DESC);
+                modelAndView.addObject(JSP_INFO, JSP_UNRETURNED_INFO);
+                modelAndView.addObject(JSP_MODAL_DESC, JSP_UNRETURNED_MODAL_DESC);
                 break;
             case RESERVATION:
                 modelAndView.addObject(JSP_TITLE, JSP_RESERVATION_TITLE);
+                modelAndView.addObject(JSP_INFO, JSP_RESERVATION_INFO);
                 modelAndView.addObject(JSP_MODAL_DESC, JSP_RESERVATION_MODAL_DESC);
                 break;
             case EXPIRATION :
                 modelAndView.addObject(JSP_TITLE, JSP_EXPIRATION_TITLE);
+                modelAndView.addObject(JSP_INFO, JSP_EXPIRATION_INFO);
                 modelAndView.addObject(JSP_MODAL_DESC, JSP_EXPIRATION_MODAL_DESC);
                 break;
         }

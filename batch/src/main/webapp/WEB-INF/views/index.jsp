@@ -20,7 +20,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="${pageContext.request.contextPath}/Unreturned">Batch des ouvrages non rendus à temps</a></li>
                         <li><a href="${pageContext.request.contextPath}/Reservation">Batch des réservations disponibles</a></li>
-                        <li><a href="#">Batch des prêts arrivant à expiration</a></li>
+                        <li><a href="${pageContext.request.contextPath}/Expiration">Batch des prêts arrivant à expiration</a></li>
                     </ul>
                 </div>
             </div>

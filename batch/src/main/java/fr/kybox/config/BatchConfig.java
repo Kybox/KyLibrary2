@@ -1,7 +1,9 @@
 package fr.kybox.config;
 
+import fr.kybox.batch.ExpirationScheduler;
 import fr.kybox.batch.ReservationScheduler;
 import fr.kybox.batch.UnreturnedScheduler;
+import fr.kybox.batch.tasklet.ExpirationTasklet;
 import fr.kybox.batch.tasklet.ReservationTasklet;
 import fr.kybox.batch.tasklet.UnreturnedTasklet;
 import org.springframework.batch.core.Job;
@@ -20,22 +22,27 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 @Configuration
 @EnableScheduling
 @EnableBatchProcessing
-@Import({UnreturnedScheduler.class, ReservationScheduler.class})
+@Import({UnreturnedScheduler.class, ReservationScheduler.class, ExpirationScheduler.class})
 public class BatchConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final UnreturnedTasklet unreturnedTasklet;
     private final ReservationTasklet reservationTasklet;
+    private final ExpirationTasklet expirationTasklet;
 
     @Autowired
     public BatchConfig(JobBuilderFactory jobBuilderFactory,
                        StepBuilderFactory stepBuilderFactory,
-                       UnreturnedTasklet unreturnedTasklet, ReservationTasklet reservationTasklet) {
+                       UnreturnedTasklet unreturnedTasklet,
+                       ReservationTasklet reservationTasklet,
+                       ExpirationTasklet expirationTasklet) {
+
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.unreturnedTasklet = unreturnedTasklet;
         this.reservationTasklet = reservationTasklet;
+        this.expirationTasklet = expirationTasklet;
     }
 
     @Bean
@@ -68,6 +75,20 @@ public class BatchConfig {
     public Step stepReservation(){
         return stepBuilderFactory.get("stepReservation")
                 .tasklet(reservationTasklet)
+                .build();
+    }
+
+    @Bean
+    public Job jobExpiration(){
+        return jobBuilderFactory.get("jobExpiration")
+                .start(stepExpiration())
+                .build();
+    }
+
+    @Bean
+    public Step stepExpiration(){
+        return stepBuilderFactory.get("stepExpiration")
+                .tasklet(expirationTasklet)
                 .build();
     }
 }

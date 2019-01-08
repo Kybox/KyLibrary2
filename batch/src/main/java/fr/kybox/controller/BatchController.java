@@ -1,5 +1,6 @@
 package fr.kybox.controller;
 
+import fr.kybox.batch.ExpirationScheduler;
 import fr.kybox.batch.ReservationScheduler;
 import fr.kybox.batch.UnreturnedScheduler;
 import fr.kybox.batch.result.BatchResult;
@@ -30,19 +31,21 @@ public class BatchController {
 
     private static Logger logger = LogManager.getLogger(BatchController.class);
 
-    private ModelAndView modelAndView;
-
     private final AuthService authService;
     private final UnreturnedScheduler batchUnreturned;
     private final ReservationScheduler batchReservation;
+    private final ExpirationScheduler batchExpiration;
 
     @Autowired
     public BatchController(AuthService authService,
                            UnreturnedScheduler batchUnreturned,
-                           ReservationScheduler batchReservation) {
+                           ReservationScheduler batchReservation,
+                           ExpirationScheduler batchExpiration) {
+
         this.authService = authService;
         this.batchUnreturned = batchUnreturned;
         this.batchReservation = batchReservation;
+        this.batchExpiration = batchExpiration;
     }
 
     @GetMapping("/")
@@ -80,8 +83,9 @@ public class BatchController {
 
         Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
 
-        modelAndView = BatchModelAndView.get(DEFAULT);
+        ModelAndView modelAndView = BatchModelAndView.get(DEFAULT);
         modelAndView.addObject(BATCH_RESULT, batchResult);
+        modelAndView.addObject(JSP_RESULT_INFO, JSP_UNRETURNED_RESULT_INFO);
         BatchResult.clear();
 
         return modelAndView;
@@ -112,8 +116,9 @@ public class BatchController {
 
         Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
 
-        modelAndView = BatchModelAndView.get(DEFAULT);
+        ModelAndView modelAndView = BatchModelAndView.get(DEFAULT);
         modelAndView.addObject(BATCH_RESULT, batchResult);
+        modelAndView.addObject(JSP_RESULT_INFO, JSP_RESERVATION_RESULT_INFO);
         BatchResult.clear();
 
         return modelAndView;
@@ -129,12 +134,22 @@ public class BatchController {
     }
 
     @PostMapping("/Expiration")
-    public ModelAndView expirationResult(@ModelAttribute(LOGIN_FORM) LoginForm form){
+    public ModelAndView expirationResult(@ModelAttribute(LOGIN_FORM) LoginForm form)
+            throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+            JobRestartException, JobInstanceAlreadyCompleteException {
 
         if(authService.connection(form.getEmail(), form.getPassword()) == UNAUTHORIZED)
             return BatchModelAndView.get(ERROR);
 
+        batchExpiration.expirationScheduler();
 
-        return null;
+        Map<String, Object> batchResult = new LinkedHashMap<>(BatchResult.getMap());
+
+        ModelAndView modelAndView = BatchModelAndView.get(DEFAULT);
+        modelAndView.addObject(BATCH_RESULT, batchResult);
+        modelAndView.addObject(JSP_RESULT_INFO, JSP_EXPIRATION_RESULT_INFO);
+        BatchResult.clear();
+
+        return modelAndView;
     }
 }

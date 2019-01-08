@@ -17,12 +17,20 @@ public class ValueTypes {
     public static final String EXPIRATION = "expiration";
 
     public static final String JSP_TITLE = "jspTitle";
+    public static final String JSP_INFO = "jspInfo";
+    public static final String JSP_RESULT_INFO = "jspResultInfo";
     public static final String JSP_MODAL_DESC = "jspModalDesc";
     public static final String JSP_UNRETURNED_TITLE = "Batch - Ouvrage non rendus";
-    public static final String JSP_UNRETURNED__MODAL_DESC = "Processus de récupération des ouvrages non rendus";
+    public static final String JSP_UNRETURNED_INFO = "Lancer le batch d'envoi d'e-mails aux utilisateurs dont n'ayant pas retourné leurs emprunts à temps.";
+    public static final String JSP_UNRETURNED_RESULT_INFO = "Résultats du batch d'envoi d'e-mails aux utilisateurs n'ayant pas retourné leurs emprunts à temps.";
+    public static final String JSP_UNRETURNED_MODAL_DESC = "Processus de récupération des ouvrages non rendus";
     public static final String JSP_RESERVATION_TITLE = "Batch - Réservations disponibles";
+    public static final String JSP_RESERVATION_INFO = "Lancer le batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.";
+    public static final String JSP_RESERVATION_RESULT_INFO = "Résultats du batch d'envoi d'e-mails aux utilisateurs dont la réservation est disponible.";
     public static final String JSP_RESERVATION_MODAL_DESC = "Processus de vérification des réservations disponibles";
     public static final String JSP_EXPIRATION_TITLE = "Batch - Prêts arrivant à expiration";
+    public static final String JSP_EXPIRATION_INFO = "Lancer le batch d'envoi d'e-mails aux utilisateurs dont les emprunts arrivent à expiration.";
+    public static final String JSP_EXPIRATION_RESULT_INFO = "Résultats du batch d'envoi d'e-mails aux utilisateurs dont les emprunts arrivent à expiration.";
     public static final String JSP_EXPIRATION_MODAL_DESC = "Processus de notification des prêts arrivant à expiration";
 
     public static final String ISBN = "Isbn : ";
@@ -73,4 +81,24 @@ public class ValueTypes {
     public static final String APPROXIMATELY = "Approximately ";
     public static final String HOURS = " hours";
     public static final String MINUTES = " minutes";
+    public static final String CANCEL_RESERVATION = "Cancel reservation";
+    public static final String ATTEMPT_TO_CANCEL_RESERVATION = "Attempt to cancel reservation";
+    public static final String CANCEL_RESERVATION_ERROR = "the reservation could not be canceled";
+    public static final String NEXT_RESERVATION = "Next reservation";
+    public static final String ANOTHER_RESERVATION_EXISTS = "There is another book reservation";
+    public static final String NO_OTHER_RESERVATION = "There is no other reservation";
+    public static final String ADDING_A_RESERVATION = "Adding a reservation";
+    public static final String ADDING_THE_NEW_RESERVATION = "Adding the new reservation in the batch";
+    public static final String LOAN = "Loan ";
+    public static final String DAYS = "jours";
+    public static final String DAY = "jour";
+    public static final String CHECK_RESERVATIONS = "Check reservations";
+    public static final String CHECKING_COMPLETED = "Checking completed";
+    public static final String CHECKING_CURRENT_LOANS = "Checking current loans";
+    public static final String LOAN_STATUS = "Status of the loan";
+    public static final String LOAN_NOT_RETURNED = "The loan has not been returned";
+    public static final String PROCESS_DELEGATION = "Process delegation";
+    public static final String BATCH_OF_UNRETURNED_BOOKS = "Batch of unreturned books";
+    public static final String TIME_TO_EXPIRY = "Time to expiry of the loan";
+    public static final String LOAN_EXPIRE_IN = "the loan expires in";
 }
