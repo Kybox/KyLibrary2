@@ -2,6 +2,8 @@
 package fr.kybox.gencode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -20,8 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}bookReserved"/&gt;
- *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}user"/&gt;
+ *         &lt;element ref="{dd7b026a-d6a2-4089-adb2-596ab0598c73}borrower" maxOccurs="unbounded"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -33,20 +34,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "result",
-    "bookReserved",
-    "user"
+    "borrower"
 })
-@XmlRootElement(name = "cancelReservationResponse")
-public class CancelReservationResponse
+@XmlRootElement(name = "searchLoansAboutToExpireResponse")
+public class SearchLoansAboutToExpireResponse
     implements Serializable
 {
 
     private final static long serialVersionUID = 1L;
     protected int result;
     @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected BookReserved bookReserved;
-    @XmlElement(namespace = "dd7b026a-d6a2-4089-adb2-596ab0598c73", required = true)
-    protected User user;
+    protected List<Borrower> borrower;
 
     /**
      * Obtient la valeur de la propriété result.
@@ -65,51 +63,32 @@ public class CancelReservationResponse
     }
 
     /**
-     * Obtient la valeur de la propriété bookReserved.
+     * Gets the value of the borrower property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BookReserved }
-     *     
-     */
-    public BookReserved getBookReserved() {
-        return bookReserved;
-    }
-
-    /**
-     * Définit la valeur de la propriété bookReserved.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the borrower property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BookReserved }
-     *     
-     */
-    public void setBookReserved(BookReserved value) {
-        this.bookReserved = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété user.
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getBorrower().add(newItem);
+     * </pre>
      * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Définit la valeur de la propriété user.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Borrower }
+     * 
+     * 
      */
-    public void setUser(User value) {
-        this.user = value;
+    public List<Borrower> getBorrower() {
+        if (borrower == null) {
+            borrower = new ArrayList<Borrower>();
+        }
+        return this.borrower;
     }
 
 }

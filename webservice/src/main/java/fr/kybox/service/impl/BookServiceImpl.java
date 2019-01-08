@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +123,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public Optional<BorrowedBook> findBorrowedBookByIsbnAndUserEmail(String isbn, String email) {
         return borrowingDao.findByBook_IsbnAndUser_EmailAndAndReturnedFalse(isbn, email);
+    }
+
+    public List<BorrowedBook> findAllBorrowedBooksUnreturnedAndReturnDateBefore(Date date) {
+        return borrowingDao.findAllByReturnedIsFalseAndReturnDateBefore(date);
     }
 
     @Override

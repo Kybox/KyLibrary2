@@ -5,7 +5,7 @@ import fr.kybox.entities.BorrowedBook;
 import fr.kybox.entities.ReservedBook;
 import fr.kybox.entities.UserEntity;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,5 +40,6 @@ public interface BookService {
     List<BorrowedBook> findAllBorrowedBooksByBookAndNotReturnedAndOrderByReturnDateAsc(BookEntity book);
     List<BorrowedBook> findAllBorrowedBooksByBook(BookEntity book);
     Optional<BorrowedBook> findBorrowedBookByIsbnAndUserEmail(String isbn, String email);
+    List<BorrowedBook> findAllBorrowedBooksUnreturnedAndReturnDateBefore(Date date);
     void saveBorrowedBook(BorrowedBook book);
 }

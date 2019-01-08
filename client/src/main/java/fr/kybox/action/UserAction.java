@@ -148,7 +148,18 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
     public String cancelReservation(){
 
         LibraryService service = ServiceFactory.getLibraryService();
-        if(service.cancelReservation(Token.getToken(), getIsbn()) == ResultCode.OK)
+        CancelReservation request = new CancelReservation();
+
+        String token = (String) session.get(TOKEN);
+        User user = (User) session.get(LEVEL_CLIENT);
+
+        request.setToken(token);
+        request.setEmail(user.getEmail());
+        request.setIsbn(getIsbn());
+
+        CancelReservationResponse response = service.cancelReservation(request);
+
+        if(response.getResult() == ResultCode.OK)
             return ActionSupport.SUCCESS;
         else return ActionSupport.ERROR;
     }

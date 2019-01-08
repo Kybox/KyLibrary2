@@ -44,6 +44,9 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     @Value("${settings.multiplierReservation}")
     private int multiplierReservation;
 
+    @Value("${loans.expire}")
+    private int loanExpirationAlert;
+
     @Autowired private ObjectFactory objectFactory;
     @Autowired private BookService bookService;
     @Autowired private UserService userService;
@@ -646,30 +649,101 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    @WebMethod
-    public int cancelReservation(String token, String isbn) {
+    public CancelReservationResponse cancelReservation(CancelReservation parameters) {
 
+        CancelReservationResponse response = objectFactory.createCancelReservationResponse();
+
+        String token = parameters.getToken();
         Map<String, Object> tokenData = userService.checkTokenData(token);
         if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
-            return TOKEN_EXPIRED_INVALID;
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
         }
 
-        Optional<BookEntity> optBookEntity = bookService.findBookByIsbn(isbn);
-        if(!optBookEntity.isPresent()){
-            return BAD_REQUEST;
+        String isbn = parameters.getIsbn();
+        if(isbn == null || isbn.isEmpty()){
+            response.setResult(BAD_REQUEST);
+            return response;
         }
 
-        BookEntity book = optBookEntity.get();
-        UserEntity user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        Optional<BookEntity> optBook = bookService.findBookByIsbn(isbn);
+        if(!optBook.isPresent()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
+
+        String email = parameters.getEmail();
+        if(email == null || email.isEmpty()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
+
+        Optional<UserEntity> optUser = userService.findUserByEmail(email);
+        if(!optUser.isPresent()){
+            response.setResult(BAD_REQUEST);
+            return response;
+        }
+
+        BookEntity book = optBook.get();
+        UserEntity user = optUser.get();
         Optional<ReservedBook> optReservedBook = bookService
                 .findReservedBookByUserAndBookAndPendingTrue(user, book);
 
         if(!optReservedBook.isPresent()) {
-            return NOT_MODIFIED;
+            response.setResult(NOT_MODIFIED);
+            return response;
         }
 
         bookService.deleteReservedBook(optReservedBook.get());
-        return OK;
+
+        if(!bookService.areThereAnyReservationForBook(book)){
+
+            if(book.getBookable() && book.getAvailableForBooking() > ZERO){
+
+                book.setAvailableForBooking(book.getAvailableForBooking() - ONE);
+                book.setAvailable(book.getAvailable() + ONE);
+                book.setBookable(false);
+                book.setReturnDate(null);
+
+                bookService.saveBook(book);
+
+                response.setResult(OK);
+                return response;
+            }
+        }
+        else{
+
+            user = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+            if(user.getLevel().getId() <= MANAGER){
+
+                optReservedBook = bookService
+                        .findFirstReservedBooksByBookAndPendingTrueOrderByReserveDateAsc(book);
+
+                if(!optReservedBook.isPresent()){
+                    response.setResult(INTERNAL_SERVER_ERROR);
+                    return response;
+                }
+
+                ReservedBook reservedBook = optReservedBook.get();
+
+                BookReserved bookReserved = objectFactory.createBookReserved();
+                bookReserved.setBook((Book) Reflection.EntityToWS(reservedBook.getBook()));
+                bookReserved.setNotified(reservedBook.isNotified());
+                bookReserved.setNotificationDate(reservedBook.getNotificationDate());
+                bookReserved.setPosition(ONE);
+                bookReserved.setPending(reservedBook.isPending());
+                bookReserved.setReserveDate(reservedBook.getReserveDate());
+
+                response.setBookReserved(bookReserved);
+                response.setUser((User) Reflection.EntityToWS(reservedBook.getUser()));
+                response.setResult(OK);
+
+                return response;
+            }
+        }
+
+        response.setResult(OK);
+        return response;
     }
 
     @Override
@@ -726,6 +800,59 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
+    public SearchLoansAboutToExpireResponse searchLoansAboutToExpire(SearchLoansAboutToExpire parameter) {
+
+        SearchLoansAboutToExpireResponse response = objectFactory.createSearchLoansAboutToExpireResponse();
+
+        String token = parameter.getToken();
+        Map<String, Object> tokenData = userService.checkTokenData(token);
+        if(tokenData.get(TOKEN_ACTIVE) == Boolean.FALSE){
+            response.setResult(TOKEN_EXPIRED_INVALID);
+            return response;
+        }
+
+        UserEntity userEntity = (UserEntity) tokenData.get(USER_FROM_TOKEN);
+        if(userEntity.getLevel().getId() > MANAGER){
+            response.setResult(FORBIDDEN);
+            return response;
+        }
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime = localDateTime.plusDays(loanExpirationAlert);
+        Date dateBefore = Date.valueOf(localDateTime.toLocalDate());
+
+        List<BorrowedBook> bookList = bookService
+                .findAllBorrowedBooksUnreturnedAndReturnDateBefore(dateBefore);
+
+        if(bookList.isEmpty()){
+            response.setResult(NO_CONTENT);
+            return response;
+        }
+
+        for(BorrowedBook book : bookList){
+
+            Borrower borrower = new Borrower();
+
+            BookBorrowed bookBorrowed = new BookBorrowed();
+            bookBorrowed.setBook((Book) Reflection.EntityToWS(book.getBook()));
+            bookBorrowed.setBorrowingDate(book.getBorrowingDate());
+            bookBorrowed.setReturned(book.getReturned());
+            bookBorrowed.setExtended(book.getExtended());
+            bookBorrowed.setReturnDate(book.getReturnDate());
+
+            User user = (User) Reflection.EntityToWS(book.getUser());
+
+            borrower.setBookBorrowed(bookBorrowed);
+            borrower.setUser(user);
+
+            response.getBorrower().add(borrower);
+        }
+
+        response.setResult(OK);
+        return response;
+    }
+
+    @Override
     @WebMethod
     public SearchBookResponse searchBook(SearchBook parameters) {
 
@@ -753,7 +880,7 @@ public class LibraryServiceImpl extends SpringBeanAutowiringSupport implements L
 
         if(reservedBookList.size() >= maxReservedBook) {
             book.setBookable(false);
-            book.setReturnDate(null);
+            //book.setReturnDate(null);
         }
         else {
             book.setBookable(true);

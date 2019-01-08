@@ -12,6 +12,7 @@ public class ValueTypes {
     public final static int OK = 200;
     public final static int NOT_MODIFIED = 304;
     public final static int TOKEN_EXPIRED_INVALID = 498;
+    public final static int NO_CONTENT = 204;
 
     public final static int ADMIN = 1;
     public final static int MANAGER = 2;

@@ -197,6 +197,23 @@
                 </xs:complexType>
             </xs:element>
 
+            <!-- [SEARCH LOANS ABOUT TO EXPIRE] -->
+            <xs:element name="searchLoansAboutToExpire">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchLoansAboutToExpireResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:borrower" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
 <!-- ===== R E S E R V A T I O N ===== -->
 
             <!-- [RESERVED BOOK] -->
@@ -254,6 +271,7 @@
                     <xs:sequence>
                         <xs:element name="token" type="xs:token"/>
                         <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -261,6 +279,8 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:bookReserved"/>
+                        <xs:element ref="ws:user"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -553,6 +573,12 @@
     <wsdl:message name="updateAlertSenderStatusResponse">
         <wsdl:part name="response" element="ws:updateAlertSenderStatusResponse"/>
     </wsdl:message>
+    <wsdl:message name="searchLoansAboutToExpire">
+        <wsdl:part name="parameter" element="ws:searchLoansAboutToExpire"/>
+    </wsdl:message>
+    <wsdl:message name="searchLoansAboutToExpireResponse">
+        <wsdl:part name="response" element="ws:searchLoansAboutToExpireResponse"/>
+    </wsdl:message>
 
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
@@ -630,6 +656,10 @@
         <wsdl:operation name="updateAlertSenderStatus">
             <wsdl:input message="ws:updateAlertSenderStatus"/>
             <wsdl:output message="ws:updateAlertSenderStatusResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchLoansAboutToExpire">
+            <wsdl:input message="ws:searchLoansAboutToExpire"/>
+            <wsdl:output message="ws:searchLoansAboutToExpireResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -816,6 +846,15 @@
 
         <!-- UPDATE ALERT SENDER STATUS -->
         <wsdl:operation name="updateAlertSenderStatus">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="searchLoansAboutToExpire">
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

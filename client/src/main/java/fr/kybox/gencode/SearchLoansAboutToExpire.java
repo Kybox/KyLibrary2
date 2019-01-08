@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -24,8 +23,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}token"/&gt;
- *         &lt;element name="isbn" type="{http://www.w3.org/2001/XMLSchema}normalizedString"/&gt;
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,12 +33,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "token",
-    "isbn",
-    "email"
+    "token"
 })
-@XmlRootElement(name = "cancelReservation")
-public class CancelReservation
+@XmlRootElement(name = "searchLoansAboutToExpire")
+public class SearchLoansAboutToExpire
     implements Serializable
 {
 
@@ -50,12 +45,6 @@ public class CancelReservation
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String token;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String isbn;
-    @XmlElement(required = true)
-    protected String email;
 
     /**
      * Obtient la valeur de la propriété token.
@@ -79,54 +68,6 @@ public class CancelReservation
      */
     public void setToken(String value) {
         this.token = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété isbn.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getIsbn() {
-        return isbn;
-    }
-
-    /**
-     * Définit la valeur de la propriété isbn.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setIsbn(String value) {
-        this.isbn = value;
-    }
-
-    /**
-     * Obtient la valeur de la propriété email.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Définit la valeur de la propriété email.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEmail(String value) {
-        this.email = value;
     }
 
 }
