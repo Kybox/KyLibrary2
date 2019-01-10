@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebMethod;
+import javax.jws.WebService;
 import javax.swing.text.html.Option;
 import java.sql.Date;
 import java.time.LocalDate;
