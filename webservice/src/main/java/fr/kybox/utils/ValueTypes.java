@@ -22,4 +22,11 @@ public class ValueTypes {
 
     public final static int ZERO = 0;
     public final static int ONE = 1;
+    public final static int FIRST_ONE_LIST = 0;
+
+    public final static String GET = "get";
+    public final static String SET = "set";
+    public final static String IS = "is";
+    public final static String JAVA_PACKAGE = "java";
+    public final static String HIBERNATE_PACKAGE = "org.hibernate";
 }

@@ -18,4 +18,5 @@ public interface BorrowedBookRepository extends JpaRepository<BorrowedBook, Inte
     List<BorrowedBook> findAllByBook(BookEntity bookEntity);
     Optional<BorrowedBook> findByBook_IsbnAndUser_EmailAndAndReturnedFalse(String isbn, String email);
     List<BorrowedBook> findAllByReturnedIsFalseAndReturnDateBefore(Date date);
+    List<BorrowedBook> findAllByUserAndReturnedFalse(UserEntity user);
 }

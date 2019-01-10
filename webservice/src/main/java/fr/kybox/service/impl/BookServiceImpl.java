@@ -130,6 +130,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BorrowedBook> findAllBorrowedBooksUnreturnedByUser(UserEntity user) {
+        return borrowingDao.findAllByUserAndReturnedFalse(user);
+    }
+
+    @Override
     public void saveBorrowedBook(BorrowedBook book) {
         borrowingDao.save(book);
     }
