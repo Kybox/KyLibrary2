@@ -6,6 +6,8 @@ import fr.kybox.gencode.LoginResponse;
 import fr.kybox.gencode.User;
 import fr.kybox.service.AuthService;
 import fr.kybox.utils.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,6 +17,8 @@ import static fr.kybox.utils.ValueTypes.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     @Override
     public Map<String, Object> login(String email, String password) {
@@ -35,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = response.getUser();
+
         if(user == null || user.getLevel() != ADMIN_LEVEL) {
             authResult.put(AUTHENTICATION, UNAUTHORIZED);
             return authResult;

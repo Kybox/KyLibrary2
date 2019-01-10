@@ -44,6 +44,8 @@ public class ValueTypes {
     public static final String SLASH = " / ";
     public static final String HYPHEN = " - ";
 
+    public static final String RESERVATION_TITLE = "Reservation ";
+    public static final String RESERVATION_DATE = "Reservation date ";
     public static final String TOKEN = "Token";
     public static final String UNAUTHORIZED_MSG = "Vous n'êtes pas autorisé à lancer le batch";
     public static final String START_TIME = "Start time";

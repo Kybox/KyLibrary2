@@ -139,31 +139,37 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
         List<User> userList = response.getUser();
         int total = bookList.size();
+        String emptyKey = " ";
 
         for(int index = 0; index < total; index++){
 
-            BatchResult.put(BOOK_RESERVED, (index + 1) + SLASH + total);
+            int position = index + 1;
+            BookReserved bookReserved = bookList.get(index);
+            for(int i = 0; i <= index; i++) emptyKey += emptyKey;
+
+            BatchResult.put(emptyKey, RESERVATION_TITLE + position);
+
+            LocalDateTime reservationDate = bookReserved.getReserveDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd / MM / yyyy - HH:mm:ss");
+            BatchResult.put(position + HYPHEN + RESERVATION_DATE, ON + reservationDate.format(formatter));
 
             String userFirstName = userList.get(index).getFirstName();
             String userLastName = userList.get(index).getLastName();
             String userEmail = userList.get(index).getEmail();
 
-            BookReserved bookReserved = bookList.get(index);
-
             String bookIsbn = bookReserved.getBook().getIsbn();
             String bookTitle = bookReserved.getBook().getTitle();
             String bookAuthor = bookReserved.getBook().getAuthor();
 
-            BatchResult.put(USER, userFirstName + SPACE + userLastName);
-            BatchResult.put(BOOK, bookTitle + BY + bookAuthor);
+            BatchResult.put(position + HYPHEN + USER, userFirstName + SPACE + userLastName);
+            BatchResult.put(position + HYPHEN + BOOK, bookTitle + BY + bookAuthor);
 
             if(bookReserved.isNotified()){
 
                 LocalDateTime notificationDate = bookReserved.getNotificationDate();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd / MM / yyyy - HH:mm:ss");
 
                 String stringDate = bookReserved.getNotificationDate().format(formatter);
-                BatchResult.put(USER_ALREADY_NOTIFIED, ON + stringDate);
+                BatchResult.put(position + HYPHEN + USER_ALREADY_NOTIFIED, ON + stringDate);
 
                 LocalDateTime expirationDate = notificationDate.plusHours(reservationExpire);
 
@@ -173,15 +179,17 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
 
                     if(remainingTime == 0) {
                         remainingTime = ChronoUnit.MINUTES.between(LocalDateTime.now(), expirationDate);
-                        BatchResult.put(REMAINING_TIME_BEFORE_DELETION, APPROXIMATELY + remainingTime + MINUTES);
+                        BatchResult.put(position + HYPHEN + REMAINING_TIME_BEFORE_DELETION,
+                                APPROXIMATELY + remainingTime + MINUTES);
                     }
                     else
-                        BatchResult.put(REMAINING_TIME_BEFORE_DELETION, APPROXIMATELY + remainingTime + HOURS);
+                        BatchResult.put(position + HYPHEN + REMAINING_TIME_BEFORE_DELETION,
+                                APPROXIMATELY + remainingTime + HOURS);
 
                     continue;
                 }
 
-                BatchResult.put(CANCEL_RESERVATION, ATTEMPT_TO_CANCEL_RESERVATION);
+                BatchResult.put(position + HYPHEN + CANCEL_RESERVATION, ATTEMPT_TO_CANCEL_RESERVATION);
                 CancelReservation request = objectFactory.createCancelReservation();
                 request.setIsbn(bookIsbn);
                 request.setEmail(userEmail);
@@ -190,7 +198,7 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
                 CancelReservationResponse responseData = libraryService.cancelReservation(request);
 
                 if(responseData.getResult() != HTTP_CODE_OK){
-                    BatchResult.put(CANCEL_RESERVATION, ERROR + CANCEL_RESERVATION_ERROR);
+                    BatchResult.put(position + HYPHEN + CANCEL_RESERVATION, ERROR + CANCEL_RESERVATION_ERROR);
                     continue;
                 }
 
@@ -198,12 +206,12 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
                 User nextUserReservation = responseData.getUser();
 
                 if(nextBookReserved == null || nextUserReservation == null) {
-                    BatchResult.put(NEXT_RESERVATION, NO_OTHER_RESERVATION);
+                    BatchResult.put(position + HYPHEN + NEXT_RESERVATION, NO_OTHER_RESERVATION);
                     continue;
                 }
 
-                BatchResult.put(NEXT_RESERVATION, ANOTHER_RESERVATION_EXISTS);
-                BatchResult.put(ADDING_A_RESERVATION, ADDING_THE_NEW_RESERVATION);
+                BatchResult.put(position + HYPHEN + NEXT_RESERVATION, ANOTHER_RESERVATION_EXISTS);
+                BatchResult.put(position + HYPHEN + ADDING_A_RESERVATION, ADDING_THE_NEW_RESERVATION);
 
                 bookList.add(nextBookReserved);
                 userList.add(nextUserReservation);
@@ -232,18 +240,18 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
                 MailBuilder mailBuilder = new MailBuilder();
                 mailBuilder.setEmail(email);
 
-                BatchResult.put(ATTEMPT_TO_SEND, TO + userEmail);
+                BatchResult.put(position + HYPHEN + ATTEMPT_TO_SEND, TO + userEmail);
 
                 if(!mailService.send(mailBuilder)) {
-                    BatchResult.put(SENDING_FAIL, NOTIFICATION_NOT_SENT);
+                    BatchResult.put(position + HYPHEN + SENDING_FAIL, NOTIFICATION_NOT_SENT);
                     continue;
                 }
 
-                BatchResult.put(SUCCESSFUL_SENDING, NOTIFICATION_SENT);
+                BatchResult.put(position + HYPHEN + SUCCESSFUL_SENDING, NOTIFICATION_SENT);
 
                 if(!notificationService
                         .setReservationAvailable(token, bookIsbn, userEmail)){
-                    BatchResult.put(NOTIFICATION_REGISTRATION, NOTIFICATION_FAILED);
+                    BatchResult.put(position + HYPHEN + NOTIFICATION_REGISTRATION, NOTIFICATION_FAILED);
                     continue;
                 }
 
@@ -253,8 +261,8 @@ public class ReservationTasklet implements Tasklet, StepExecutionListener {
                 dateFormat = new SimpleDateFormat("HH:mm");
                 String currentTime = dateFormat.format(date);
 
-                BatchResult.put(NOTIFICATION_REGISTRATION,
-                        NOTIFICATION_SUCCESS + SPACE + ON + currentDate + AT + currentTime);
+                BatchResult.put(position + HYPHEN + NOTIFICATION_REGISTRATION,
+                        NOTIFICATION_SUCCESS + HYPHEN + ON + currentDate + AT + currentTime);
             }
         }
 
