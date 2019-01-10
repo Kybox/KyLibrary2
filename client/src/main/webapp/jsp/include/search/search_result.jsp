@@ -22,6 +22,8 @@
                 Exemplaire(s) disponible(s) : <s:property value="available"/> / <s:property value="nbCopies"/>
                 <s:if test="bookable">
                     <br>
+                    Nombre de réservations : <s:property value="nbReservations"/>
+                    <br>
                     Date de retour estimée : <s:date name="returnDate" format="dd/MM/yyyy"/>
                     <hr>
                     <s:if test="#session['client']">

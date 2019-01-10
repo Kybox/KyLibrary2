@@ -11,7 +11,7 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th class="text-center">Edition</th>
-                <th class="text-center">Date de réservation</th>
+                <th class="text-center">Date de retour prévue</th>
                 <th class="text-center">Position</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -28,8 +28,7 @@
                             <s:property value="book.publisher"/>
                         </td>
                         <td class="text-center" style="vertical-align: middle;">
-                            Le ${f:formatLocalDateTime(reserveDate, "dd / MM / yyyy")}
-                            à ${f:formatLocalDateTime(reserveDate, "HH:mm:ss")}
+                            Le <s:date name="book.returnDate" format="dd / MM / yyyy"/>
                         </td>
                         <td class="text-center" style="vertical-align: middle;">
                             <s:property value="position"/> / <s:property value="total"/>

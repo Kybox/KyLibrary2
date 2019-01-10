@@ -40,13 +40,18 @@
                             </s:if>
                         </td>
                         <td class="text-center">
-                            <s:if test="extended!=true">
+                            <s:if test="returnDate.before(currentDate)">
+                                <button class="btn btn-primary" disabled>
+                                    Non autorisé
+                                </button>
+                            </s:if>
+                            <s:elseif test="extended!=true">
                                 <button class="btn btn-primary"
                                         id="btnExtend<s:property value="book.isbn"/>"
                                         onclick="extend('<s:property value="book.isbn"/>')">
                                     + 4 semaines
                                 </button>
-                            </s:if>
+                            </s:elseif>
                             <s:else>
                                 <button class="btn btn-default" disabled>
                                     Durée déjà prolongée
