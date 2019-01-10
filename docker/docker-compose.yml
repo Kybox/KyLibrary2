@@ -1,23 +1,6 @@
 version: '3'
 services:
 
-    #=====================#
-    # POSTGRESQL DATABASE #
-    #=====================#
-    postgres:
-      image: postgres:latest
-      ports:
-        - '18081:5432'
-      network_mode: bridge
-      container_name: KyLibraryDB
-      environment:
-        POSTGRES_DB: kylibrary
-        POSTGRES_USER: kybox
-        POSTGRES_PASSWORD: kybox-db:kylibrary
-      volumes:
-        - './db:/docker-entrypoint-initdb.d'
-      restart: always
-
     #==================================#
     # KyLibrary (GIT + MAVEN + TOMCAT) #
     # Main steps :                     #

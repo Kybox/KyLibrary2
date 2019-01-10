@@ -50,6 +50,21 @@ public class BookEntity extends AbstractEntity {
     @Column
     private String cover;
 
+    @Column(name = "nb_copies")
+    private int nbCopies;
+
+    @Column
+    private Boolean bookable;
+
+    @Column(name = "return_date")
+    private Date returnDate;
+
+    @Column(name = "available_for_booking")
+    private Integer availableForBooking;
+
+    @Column(name = "reservations")
+    private Integer nbReservations;
+
     public BookEntity() {}
 
     public String getIsbn() {
@@ -120,6 +135,46 @@ public class BookEntity extends AbstractEntity {
 
     public void setCover(String cover) { this.cover = cover; }
 
+    public int getNbCopies() {
+        return nbCopies;
+    }
+
+    public void setNbCopies(int nbCopies) {
+        this.nbCopies = nbCopies;
+    }
+
+    public Boolean getBookable() {
+        return bookable;
+    }
+
+    public void setBookable(Boolean bookable) {
+        this.bookable = bookable;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public int getAvailableForBooking() {
+        return availableForBooking;
+    }
+
+    public void setAvailableForBooking(Integer availableForBooking) {
+        this.availableForBooking = availableForBooking;
+    }
+
+    public int getNbReservations() {
+        return nbReservations;
+    }
+
+    public void setNbReservations(Integer nbReservations) {
+        this.nbReservations = nbReservations;
+    }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -129,9 +184,14 @@ public class BookEntity extends AbstractEntity {
                 ", publisher=" + publisher.getName() +
                 ", publishDate=" + publishDate +
                 ", summary='" + summary + '\'' +
-                ", genre=" + genre +
+                ", genre=" + genre.getName() +
                 ", available=" + available +
                 ", cover='" + cover + '\'' +
+                ", nbCopies=" + nbCopies +
+                ", bookable=" + bookable +
+                ", returnDate=" + returnDate +
+                ", availableForBooking=" + availableForBooking +
+                ", nbReservations=" + nbReservations +
                 '}';
     }
 }

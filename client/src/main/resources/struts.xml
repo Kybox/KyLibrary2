@@ -41,7 +41,8 @@
         <action name="login" class="fr.kybox.action.AuthAction" method="login">
             <result name="input">jsp/login.jsp</result>
             <result name="error">jsp/login.jsp</result>
-            <result name="success" type="redirectAction">user</result>
+            <result name="success" type="redirectAction">userInfo</result>
+            <result name="admin" type="redirectAction">adminDefault</result>
         </action>
         
         <!-- [LOGOUT] Action -->
@@ -62,17 +63,67 @@
     </package>
     
     <package name="private" extends="default, json-default">
-    
-        <!-- [USER] Action -->
-        <action name="user" class="fr.kybox.action.UserAction">
+
+        <!-- [USER INFO] Action -->
+        <action name="userInfo" class="fr.kybox.action.UserAction" method="informations">
             <interceptor-ref name="authenticatedStack"/>
             <result name="success">jsp/user.jsp</result>
             <result name="login" type="redirectAction">login</result>
             <result name="error" type="redirectAction">error</result>
         </action>
-        
+
+        <!-- [USER RESERVATION] Action -->
+        <action name="userReservations" class="fr.kybox.action.UserAction" method="reservations">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
+        <!-- [USER BORROWING] Action -->
+        <action name="userBorrowing" class="fr.kybox.action.UserAction" method="borrowing">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
+        <!-- [USER HISTORY] Action -->
+        <action name="userHistory" class="fr.kybox.action.UserAction" method="history">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/user.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+            <result name="error" type="redirectAction">error</result>
+        </action>
+
         <!-- [EXTEND BORROWING] Action -->
         <action name="extendBorrowing" class="fr.kybox.action.UserAction" method="extendBorrowing">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [RESERVE SUMMARY] Action -->
+        <action name="reserveSummary" class="fr.kybox.action.ReserveAction" method="summary">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/reserve.jsp</result>
+            <result name="error">jsp/error.jsp</result>
+        </action>
+
+        <!-- [RESERVE] Action -->
+        <action name="reserve" class="fr.kybox.action.ReserveAction" method="bookReserved">
+            <interceptor-ref name="authenticatedStack"/>
+            <result name="success">jsp/reserve.jsp</result>
+            <result name="error">jsp/error.jsp</result>
+            <result name="login" type="redirectAction">login</result>
+        </action>
+
+        <!-- [CANCEL RESERVATION] Action -->
+        <action name="cancelReservation" class="fr.kybox.action.UserAction" method="cancelReservation">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <action name="updateAlertSenderStatus" class="fr.kybox.action.UserAction" method="updateAlertSenderStatus">
             <interceptor-ref name="authenticatedStack"/>
             <result type="json"/>
         </action>
@@ -81,6 +132,60 @@
         <action name="manager" class="fr.kybox.action.ManagerAction">
             <interceptor-ref name="authenticatedStack"/>
             <result>jsp/manager.jsp</result>
+        </action>
+
+        <!-- [ADMIN] Action -->
+        <action name="adminDefault" class="fr.kybox.action.admin.AdminAction">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
+        </action>
+
+        <!-- [ADMIN AJAX SEARCH BOOK BY ISBN] Action -->
+        <action name="searchBookByIsbn" class="fr.kybox.action.SearchAction" method="searchBookByIsbn">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [ADMIN REGISTER NEW LOAN DEFAULT] Action -->
+        <action name="registerNewLoanDefault" class="fr.kybox.action.admin.RegisterNewLoanAction">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
+        </action>
+
+        <!-- [ADMIN AJAX SEARCH USER BY NAME] Action -->
+        <action name="searchUserByName" class="fr.kybox.action.admin.RegisterNewLoanAction" method="searchUserByName">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [ADMIN AJAX REGISTER NEW LOAN] Action -->
+        <action name="registerNewLoan" class="fr.kybox.action.admin.RegisterNewLoanAction" method="registerNewLoan">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [ADMIN REGISTER THE RETURN OF A LOAN DEFAULT] Action -->
+        <action name="registerTheReturnOfALoanDefault" class="fr.kybox.action.admin.RegisterTheReturnOfALoan">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
+        </action>
+
+        <!-- [ADMIN SEARCH BORROWERS BY ISBN] Action -->
+        <action name="searchBorrowersByIsbn" class="fr.kybox.action.SearchAction" method="searchBorrowersByIsbn">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [ADMIN REGISTER THE RETURN OF A LOAN] Action -->
+        <action name="registerTheReturnOfALoan" class="fr.kybox.action.admin.RegisterTheReturnOfALoan" method="registerAReturn">
+            <interceptor-ref name="authenticatedStack"/>
+            <result type="json"/>
+        </action>
+
+        <!-- [ADMIN LIST ALL BOOK LOANS] Action -->
+        <action name="listAllBookLoans">
+            <interceptor-ref name="authenticatedStack"/>
+            <result>jsp/admin.jsp</result>
         </action>
     </package>
 </struts>

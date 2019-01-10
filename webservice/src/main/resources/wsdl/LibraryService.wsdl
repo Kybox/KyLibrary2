@@ -2,56 +2,31 @@
 <wsdl:definitions targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
                   xmlns:ws="dd7b026a-d6a2-4089-adb2-596ab0598c73"
-                  name="WebService" xmlns:soad="http://schemas.xmlsoap.org/wsdl/soap/">
-    
+                  name="WebService">
+
     <wsdl:types>
         <xs:schema targetNamespace="dd7b026a-d6a2-4089-adb2-596ab0598c73">
-            
+
             <!-- [USER] -->
             <xs:element name="user">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="id" type="xs:int" minOccurs="0"/>
+                        <xs:element name="email" type="xs:string"/>
                         <xs:element name="firstName" type="xs:string" minOccurs="0"/>
                         <xs:element name="lastName" type="xs:string"/>
                         <xs:element name="birthday" type="xs:date" minOccurs="0"/>
                         <xs:element name="postalAddress" type="xs:string" minOccurs="0"/>
                         <xs:element name="tel" type="xs:string" minOccurs="0"/>
-                        <xs:element name="email" type="xs:string"/>
                         <xs:element name="level" type="xs:int" minOccurs="0"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
-            <!-- [LOGIN USER] -->
-            <xs:element name="login">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="login" type="xs:string"/>
-                        <xs:element name="password" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="loginResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element ref="ws:user"/>
-                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="alertSender" type="xs:boolean" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
 
-            <!-- [LOGOUT USER] -->
-            <xs:element name="logout">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="token" type="xs:token"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            
             <!-- [BOOK] -->
             <xs:element name="book">
                 <xs:complexType>
@@ -65,11 +40,15 @@
                         <xs:element name="genre" type="xs:string" minOccurs="0"/>
                         <xs:element name="available" type="xs:int" minOccurs="0"/>
                         <xs:element name="cover" type="xs:string" minOccurs="0"/>
-                        <xs:element name="nbcopies" type="xs:int" minOccurs="0"/>
+                        <xs:element name="nbCopies" type="xs:int" minOccurs="0"/>
+                        <xs:element name="bookable" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="returnDate" type="xs:date" minOccurs="0"/>
+                        <xs:element name="availableForBooking" type="xs:int" minOccurs="0"/>
+                        <xs:element name="nbReservations" type="xs:int" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
             <!-- [BOOK LIST] -->
             <xs:element name="bookList">
                 <xs:complexType>
@@ -78,18 +57,110 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
             <!-- [BOOK BORROWED] -->
             <xs:element name="bookBorrowed">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:book"/>
-                        <xs:element name="returndate" type="xs:date"/>
-                        <xs:element name="extended" type="xs:boolean"/>
-                        <xs:element name="returned" type="xs:boolean"/>
+                        <xs:element name="returnDate" type="xs:date"/>
+                        <xs:element name="extended" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="borrowingDate" type="xs:dateTime"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+            <!-- [BORROWER] -->
+            <xs:element name="borrower">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ws:user"/>
+                        <xs:element ref="ws:bookBorrowed"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [LOGIN USER] -->
+            <xs:element name="login">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="login" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0"/>
+                        <xs:element name="token" type="xs:token" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [LOGOUT USER] -->
+            <xs:element name="logout">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SEARCH USER] -->
+            <xs:element name="searchUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="keywords" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [CHECK TOKEN] -->
+            <xs:element name="checkToken">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="checkTokenResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [GET BOOK] -->
+            <xs:element name="getBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getBookResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:book"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+<!-- ===== B O R R O W I N G ===== -->
 
             <!-- [EXTEND BORROWING] -->
             <xs:element name="extendBorrowing">
@@ -108,14 +179,55 @@
                 </xs:complexType>
             </xs:element>
 
+            <!-- [SEARCH BORROWERS BY ISBN] -->
+            <xs:element name="searchBorrowersByIsbn">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="returned" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchBorrowersByIsbnResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:borrower" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SEARCH LOANS ABOUT TO EXPIRE] -->
+            <xs:element name="searchLoansAboutToExpire">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchLoansAboutToExpireResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:borrower" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+<!-- ===== R E S E R V A T I O N ===== -->
 
             <!-- [RESERVED BOOK] -->
-            <xs:element name="reservedBook">
+            <xs:element name="bookReserved">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element ref="ws:book"/>
-                        <xs:element name="reservedate" type="xs:dateTime"/>
-                        <xs:element name="pending" type="xs:boolean"/>
+                        <xs:element name="reserveDate" type="xs:dateTime"/>
+                        <xs:element name="pending" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="notified" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="position" type="xs:int"/>
+                        <xs:element name="total" type="xs:int"/>
+                        <xs:element name="notificationDate" type="xs:dateTime"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -132,11 +244,86 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="result" type="xs:int"/>
-                        <xs:element ref="ws:reservedBook" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element ref="ws:bookReserved" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
+            <!-- [RESERVE BOOK] -->
+            <xs:element name="reserveBook">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reserveBookResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [CANCEL RESERVATION] -->
+            <xs:element name="cancelReservation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cancelReservationResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:bookReserved"/>
+                        <xs:element ref="ws:user"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [CHECK RESERVED BOOKS] -->
+            <xs:element name="checkReservedBooks">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="checkReservedBooksResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                        <xs:element ref="ws:user" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element ref="ws:bookReserved" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- [SET RESERVATION NOTIFIED] -->
+            <xs:element name="setReservationNotified">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="setReservationNotifiedResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+<!-- ===== U N R E T U R N E D ===== -->
+
             <!-- [UNRETURNED BOOK] -->
             <xs:element name="unreturnedBook">
                 <xs:complexType>
@@ -146,12 +333,13 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
             <!-- [UNRETURNED BOOKLIST] -->
             <xs:element name="unreturnedBookList">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:login"/>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="returnDate" type="xs:date"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -163,8 +351,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
-            
+
             <!-- [USER BOOK LIST] -->
             <xs:element name="userBookList">
                 <xs:complexType>
@@ -181,7 +368,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
             <!-- [SEARCH BOOK] -->
             <xs:element name="searchBook">
                 <xs:complexType>
@@ -197,7 +384,9 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
+<!-- ===== U S E R  A D M I N ===== -->
+
             <!-- [CREATE USER] -->
             <xs:element name="createUser">
                 <xs:complexType>
@@ -214,14 +403,34 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            
+
+<!-- ===== L O A N  A D M I N ===== -->
+
+            <!-- [REGISTER A NEW LOAN] -->
+            <xs:element name="registerNewLoan">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element ref="ws:user"/>
+                        <xs:element ref="ws:book"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="registerNewLoanResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <!-- [LOAN RETURN] -->
             <xs:element name="loanReturn">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ws:login"/>
-                        <xs:element ref="ws:user"/>
-                        <xs:element ref="ws:bookBorrowed"/>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="isbn" type="xs:normalizedString"/>
+                        <xs:element name="email" type="xs:normalizedString"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -232,9 +441,27 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+<!-- ===== A L E R T  S E N D E R ===== -->
+
+            <xs:element name="updateAlertSenderStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:token"/>
+                        <xs:element name="status" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateAlertSenderStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
-    
+
     <!-- [MESSAGES] -->
     <wsdl:message name="login">
         <wsdl:part name="parameters" element="ws:login"/>
@@ -244,6 +471,12 @@
     </wsdl:message>
     <wsdl:message name="logout">
         <wsdl:part name="parameter" element="ws:logout"/>
+    </wsdl:message>
+    <wsdl:message name="getBook">
+        <wsdl:part name="parameter" element="ws:getBook"/>
+    </wsdl:message>
+    <wsdl:message name="getBookResponse">
+        <wsdl:part name="response" element="ws:getBookResponse"/>
     </wsdl:message>
     <wsdl:message name="userBookList">
         <wsdl:part name="parameter" element="ws:userBookList"/>
@@ -287,7 +520,67 @@
     <wsdl:message name="reservedBookListResponse">
         <wsdl:part name="response" element="ws:reservedBookListResponse"/>
     </wsdl:message>
-    
+    <wsdl:message name="reserveBook">
+        <wsdl:part name="parameters" element="ws:reserveBook"/>
+    </wsdl:message>
+    <wsdl:message name="reserveBookResponse">
+        <wsdl:part name="response" element="ws:reserveBookResponse"/>
+    </wsdl:message>
+    <wsdl:message name="cancelReservation">
+        <wsdl:part name="parameters" element="ws:cancelReservation"/>
+    </wsdl:message>
+    <wsdl:message name="cancelReservationResponse">
+        <wsdl:part name="response" element="ws:cancelReservationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="checkToken">
+        <wsdl:part name="parameter" element="ws:checkToken"/>
+    </wsdl:message>
+    <wsdl:message name="checkTokenResponse">
+        <wsdl:part name="response" element="ws:checkTokenResponse"/>
+    </wsdl:message>
+    <wsdl:message name="checkReservedBooks">
+        <wsdl:part name="parameter" element="ws:checkReservedBooks"/>
+    </wsdl:message>
+    <wsdl:message name="checkReservedBooksResponse">
+        <wsdl:part name="response" element="ws:checkReservedBooksResponse"/>
+    </wsdl:message>
+    <wsdl:message name="setReservationNotified">
+        <wsdl:part name="parameters" element="ws:setReservationNotified"/>
+    </wsdl:message>
+    <wsdl:message name="setReservationNotifiedResponse">
+        <wsdl:part name="response" element="ws:setReservationNotifiedResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchUser">
+        <wsdl:part name="parameters" element="ws:searchUser"/>
+    </wsdl:message>
+    <wsdl:message name="searchUserResponse">
+        <wsdl:part name="response" element="ws:searchUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="registerNewLoan">
+        <wsdl:part name="parameters" element="ws:registerNewLoan"/>
+    </wsdl:message>
+    <wsdl:message name="registerNewLoanResponse">
+        <wsdl:part name="response" element="ws:registerNewLoanResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchBorrowersByIsbn">
+        <wsdl:part name="parameters" element="ws:searchBorrowersByIsbn"/>
+    </wsdl:message>
+    <wsdl:message name="searchBorrowersByIsbnResponse">
+        <wsdl:part name="response" element="ws:searchBorrowersByIsbnResponse"/>
+    </wsdl:message>
+    <wsdl:message name="updateAlertSenderStatus">
+        <wsdl:part name="parameters" element="ws:updateAlertSenderStatus"/>
+    </wsdl:message>
+    <wsdl:message name="updateAlertSenderStatusResponse">
+        <wsdl:part name="response" element="ws:updateAlertSenderStatusResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchLoansAboutToExpire">
+        <wsdl:part name="parameter" element="ws:searchLoansAboutToExpire"/>
+    </wsdl:message>
+    <wsdl:message name="searchLoansAboutToExpireResponse">
+        <wsdl:part name="response" element="ws:searchLoansAboutToExpireResponse"/>
+    </wsdl:message>
+
     <!-- [PORT TYPE] -->
     <wsdl:portType name="LibraryService">
         <wsdl:operation name="login">
@@ -296,6 +589,10 @@
         </wsdl:operation>
         <wsdl:operation name="logout">
             <wsdl:input message="ws:logout"/>
+        </wsdl:operation>
+        <wsdl:operation name="getBook">
+            <wsdl:input message="ws:getBook"/>
+            <wsdl:output message="ws:getBookResponse"/>
         </wsdl:operation>
         <wsdl:operation name="userBookList">
             <wsdl:input message="ws:userBookList"/>
@@ -325,12 +622,52 @@
             <wsdl:input message="ws:reservedBookList"/>
             <wsdl:output message="ws:reservedBookListResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="reserveBook">
+            <wsdl:input message="ws:reserveBook"/>
+            <wsdl:output message="ws:reserveBookResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="cancelReservation">
+            <wsdl:input message="ws:cancelReservation"/>
+            <wsdl:output message="ws:cancelReservationResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkToken">
+            <wsdl:input message="ws:checkToken"/>
+            <wsdl:output message="ws:checkTokenResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkReservedBooks">
+            <wsdl:input message="ws:checkReservedBooks"/>
+            <wsdl:output message="ws:checkReservedBooksResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="setReservationNotified">
+            <wsdl:input message="ws:setReservationNotified"/>
+            <wsdl:output message="ws:setReservationNotifiedResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchUser">
+            <wsdl:input message="ws:searchUser"/>
+            <wsdl:output message="ws:searchUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="registerNewLoan">
+            <wsdl:input message="ws:registerNewLoan"/>
+            <wsdl:output message="ws:registerNewLoanResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchBorrowersByIsbn">
+            <wsdl:input message="ws:searchBorrowersByIsbn"/>
+            <wsdl:output message="ws:searchBorrowersByIsbnResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateAlertSenderStatus">
+            <wsdl:input message="ws:updateAlertSenderStatus"/>
+            <wsdl:output message="ws:updateAlertSenderStatusResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchLoansAboutToExpire">
+            <wsdl:input message="ws:searchLoansAboutToExpire"/>
+            <wsdl:output message="ws:searchLoansAboutToExpireResponse"/>
+        </wsdl:operation>
     </wsdl:portType>
-    
+
     <!-- [BINDING] -->
     <wsdl:binding name="LibraryServicePortBinding" type="ws:LibraryService">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        
+
         <!-- LOGIN USER -->
         <wsdl:operation name="login">
             <wsdl:input>
@@ -347,7 +684,17 @@
                 <soap:body use="literal"/>
             </wsdl:input>
         </wsdl:operation>
-        
+
+        <!-- GET BOOK -->
+        <wsdl:operation name="getBook">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
         <!-- USER BOOK LIST -->
         <wsdl:operation name="userBookList">
             <wsdl:input>
@@ -357,7 +704,7 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
         <!-- EXTEND BORROWING -->
         <wsdl:operation name="extendBorrowing">
             <wsdl:input>
@@ -367,7 +714,7 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
         <!-- SEARCH BOOK -->
         <wsdl:operation name="searchBook">
             <wsdl:input>
@@ -377,7 +724,17 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
+        <!-- CHECK TOKEN -->
+        <wsdl:operation name="checkToken">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
         <!-- [PRIVATE] CREATE USER -->
         <wsdl:operation name="createUser">
             <wsdl:input>
@@ -387,7 +744,7 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
         <!-- [PRIVATE] LOAN RETURN -->
         <wsdl:operation name="loanReturn">
             <wsdl:input>
@@ -397,7 +754,7 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
         <!-- [PRIVATE] UNRETURNED BOOKLIST -->
         <wsdl:operation name="unreturnedBookList">
             <wsdl:input>
@@ -417,20 +774,108 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        
+
+        <!-- [PRIVATE] RESERVE BOOK -->
+        <wsdl:operation name="reserveBook">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] CANCEL RESERVATION -->
+        <wsdl:operation name="cancelReservation">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] CHECK RESERVED BOOKS -->
+        <wsdl:operation name="checkReservedBooks">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] SET RESERVATION NOTIFIED -->
+        <wsdl:operation name="setReservationNotified">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] SEARCH USER -->
+        <wsdl:operation name="searchUser">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] REGISTER A NEW LOAN -->
+        <wsdl:operation name="registerNewLoan">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- [PRIVATE] SEARCH BORROWERS BY ISBN -->
+        <wsdl:operation name="searchBorrowersByIsbn">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <!-- UPDATE ALERT SENDER STATUS -->
+        <wsdl:operation name="updateAlertSenderStatus">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="searchLoansAboutToExpire">
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
     </wsdl:binding>
-    
+
     <!-- [SERVICE] -->
     <wsdl:service name="LibraryWebService">
         <wsdl:documentation>
-            Provides services from KyLibrary
+            Provide services from KyLibrary
         </wsdl:documentation>
         <wsdl:port name="LibraryServicePort" binding="ws:LibraryServicePortBinding">
             <!-- DEV WSDL Address -->
-            <soap:address location="http://localhost:18080/KyLibrary/WebService/SOAP/LibraryWebService"/>
-            <!-- PROD WSDL Location -->
-            <!-- <soap:address location="http://5.196.95.68:18080/KyLibrary/WebService/SOAP/LibraryWebService"/> -->
+            <!-- <soap:address location="http://localhost:18080/KyLibrary/WebService/SOAP/LibraryWebService"/> -->
+            <soap:address location="https://kylibrary.kybox.fr/WebService/SOAP/LibraryWebService"/>
         </wsdl:port>
     </wsdl:service>
-    
+
 </wsdl:definitions>

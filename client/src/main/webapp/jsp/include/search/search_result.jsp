@@ -13,18 +13,26 @@
                 <h4><s:property value="author"/></h4>
                 ISBN : <s:property value="isbn"/>
                 <hr>
-                Edition <s:property value="publisher"/>
+                Edition : <s:property value="publisher"/>
                 <br>
-                Date de parution : <s:date name="publishDate.toGregorianCalendar()" format="dd/MM/yyyy"/>
+                Date de parution : <s:date name="publishDate" format="dd/MM/yyyy"/>
                 <br>
                 Genre littéraire : <s:property value="genre"/>
                 <br>
-                Exemplaire(s) disponible(s) : <s:property value="available"/>
-                <s:if test="available == 0">
+                Exemplaire(s) disponible(s) : <s:property value="available"/> / <s:property value="nbCopies"/>
+                <s:if test="bookable">
                     <br>
+                    Nombre de réservations : <s:property value="nbReservations"/>
+                    <br>
+                    Date de retour estimée : <s:date name="returnDate" format="dd/MM/yyyy"/>
                     <hr>
-                    <s:if test="#session.user">
-                        <button class="btn btn-primary" type="submit">Réserver un emprunt</button>
+                    <s:if test="#session['client']">
+                        <s:url action="reserveSummary" var="urlReserve">
+                            <s:param name="isbn"><s:property value="isbn"/></s:param>
+                        </s:url>
+                        <s:a href="%{urlReserve}">
+                            <button class="btn btn-primary" type="submit">Réserver un emprunt</button>
+                        </s:a>
                     </s:if>
                     <s:else>
                         <button class="btn btn-primary" type="submit" disabled>

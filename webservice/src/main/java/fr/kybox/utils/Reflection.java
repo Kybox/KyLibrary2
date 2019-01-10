@@ -2,8 +2,10 @@ package fr.kybox.utils;
 
 import fr.kybox.entities.BookEntity;
 import fr.kybox.entities.Level;
+import fr.kybox.entities.ReservedBook;
 import fr.kybox.entities.UserEntity;
 import fr.kybox.gencode.Book;
+import fr.kybox.gencode.ObjectFactory;
 import fr.kybox.gencode.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Date;
+
+import static fr.kybox.utils.ValueTypes.*;
 
 /**
  * @author Kybox
@@ -36,7 +40,9 @@ public class Reflection {
 
                 String methodName = method.getName();
 
-                if(!methodName.startsWith("get")) continue;
+                logger.debug("Method name : " + methodName);
+
+                if(!methodName.startsWith(GET)) continue;
 
                 currentMethod = method;
                 object = currentMethod.invoke(wsObject);
@@ -50,7 +56,7 @@ public class Reflection {
                 }
 
                 if(!currentMethod.getName().equals("getId")) {
-                    String setterName = "set" + methodName.substring(3);
+                    String setterName = SET + methodName.substring(3);
                     if (objEntity != null) {
                         currentMethod = objEntity.getClass().getMethod(setterName, object.getClass());
                         currentMethod.invoke(objEntity, object);
@@ -69,9 +75,11 @@ public class Reflection {
     public static Object EntityToWS(Object entity){
 
         Object wsObject = null;
+        ObjectFactory factory = new ObjectFactory();
 
-        if(entity instanceof BookEntity) wsObject = new Book();
-        else if(entity instanceof UserEntity) wsObject = new User();
+        if(entity instanceof BookEntity) wsObject = factory.createBook();
+        if(entity instanceof UserEntity) wsObject = factory.createUser();
+        if(entity instanceof ReservedBook) wsObject = factory.createBookReserved();
 
         for(Method method : entity.getClass().getDeclaredMethods()){
 
@@ -82,37 +90,70 @@ public class Reflection {
 
                 String methodName = method.getName();
 
-                if(!methodName.startsWith("get")) continue;
+                logger.info("------------------------------------");
+                logger.debug("Method name : " + methodName);
+
+                if(!methodName.startsWith(GET) && !methodName.startsWith(IS)) continue;
 
                 currentMethod = method;
+
+                logger.debug("Method call : " + currentMethod.getName() + "(from " + entity.getClass().getSimpleName() + ")");
+
                 object = currentMethod.invoke(entity);
 
-                boolean javaName = object.getClass().getName().startsWith("java");
-                boolean hibernateName = object.getClass().getName().startsWith("org.hibernate");
+                if(object != null) {
 
-                if(!javaName && !hibernateName){
+                    logger.debug("Object package : " + object.getClass().getName());
 
-                    if(object.getClass().getSimpleName().equals("Level")) {
-                        currentMethod = object.getClass().getMethod("getId");
+                    boolean javaName = object.getClass().getName().startsWith(JAVA_PACKAGE);
+                    boolean hibernateName = object.getClass().getName().startsWith(HIBERNATE_PACKAGE);
+
+                    logger.debug("Object class = " + object.getClass().getSimpleName());
+
+                    if(object.getClass().getSimpleName().equals("UserEntity"))
+                        continue;
+
+                    if(object.getClass().getSimpleName().equals("BookEntity"))
+                        continue;
+
+                    if(object.getClass().getSimpleName().equals("ReservedBookPK"))
+                        continue;
+
+                    if (!javaName && !hibernateName) {
+
+                        logger.debug("Object class !Java & !Hibernate");
+
+                        if (object.getClass().getSimpleName().equals("Level")) {
+                            currentMethod = object.getClass().getMethod("getId");
+                        }
+                        else currentMethod = object.getClass().getMethod("getName");
+
+                        object = currentMethod.invoke(object);
+
                     }
-                    else currentMethod = object.getClass().getMethod("getName");
-
-                    object = currentMethod.invoke(object);
-                }
-                else{
-                    if(object.getClass().getName().startsWith("java.sql")) {
-                        Date date = (Date) object;
-                        object = new java.util.Date(date.getTime());
+                    else {
+                        if (object.getClass().getName().startsWith("java.sql")) {
+                            Date date = (Date) object;
+                            object = new java.util.Date(date.getTime());
+                        }
                     }
-                }
 
-                if(!methodName.substring(3).equals("Password")) {
-                    String setterName = "set" + methodName.substring(3);
-                    if (wsObject != null) {
-                        currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
-                        currentMethod.invoke(wsObject, object);
+                    if (!methodName.substring(3).equals("Password")) {
+
+                        String setterName = SET;
+
+                        if (methodName.startsWith(GET)) setterName += methodName.substring(3);
+                        else if (methodName.startsWith(IS)) setterName += methodName.substring(2);
+
+                        logger.info("Setter called = " + setterName);
+
+                        if (wsObject != null) {
+
+                            currentMethod = wsObject.getClass().getMethod(setterName, object.getClass());
+
+                            currentMethod.invoke(wsObject, object);
+                        } else logger.error("wsObject is null !");
                     }
-                    else logger.error("wsObject is null !");
                 }
             }
             catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

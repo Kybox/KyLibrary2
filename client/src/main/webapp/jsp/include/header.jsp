@@ -13,9 +13,9 @@
             Rechercher un livre
         </button>
     </a>
-    <s:if test="#session.user">
+    <s:if test="#session.client">
         <span class="glyphicon glyphicon-minus"></span>
-        <a href="user.action">
+        <a href="userInfo.action">
             <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
                 Mon compte
@@ -32,6 +32,22 @@
     <s:elseif test="#session.manager">
         <span class="glyphicon glyphicon-minus"></span>
         <a href="manager.action">
+            <button class="btn btn-info">
+                <span class="glyphicon glyphicon-user"></span>
+                Administrer
+            </button>
+        </a>
+        <span class="glyphicon glyphicon-minus"></span>
+        <a href="logout.action">
+            <button class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove"></span>
+                Déconnexion
+            </button>
+        </a>
+    </s:elseif>
+    <s:elseif test="#session.admin">
+        <span class="glyphicon glyphicon-minus"></span>
+        <a href="adminDefault.action">
             <button class="btn btn-info">
                 <span class="glyphicon glyphicon-user"></span>
                 Administrer

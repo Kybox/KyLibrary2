@@ -23,7 +23,7 @@
         <spring.security.version>5.0.5.RELEASE</spring.security.version>
         <spring.batch.version>4.0.1.RELEASE</spring.batch.version>
         <spring.data.version>2.0.7.RELEASE</spring.data.version>
-        <hibernate.version>5.2.17.Final</hibernate.version>
+        <hibernate.version>5.3.7.Final</hibernate.version>
         <postgresql.version>42.2.2</postgresql.version>
         <spring.version>5.0.6.RELEASE</spring.version>
         <struts.version>2.5.16</struts.version>
@@ -165,14 +165,14 @@
                                 <sourceRoot>${basedir}/src/main/java</sourceRoot>
                                 <wsdlOptions>
                                     <wsdlOption>
-                                        <wsdl>http://kybox.fr/kylibrary/test/wsdl/LibraryService.wsdl</wsdl>
+                                        <wsdl>https://kybox.fr/kylibrary/wsdl/LibraryService.wsdl</wsdl>
                                         <extraargs>
                                             <extraarg>-p</extraarg>
                                             <extraarg>fr.kybox.gencode</extraarg>
                                         </extraargs>
                                         <bindingFiles>
                                             <bindingFile>
-                                                http://kybox.fr/kylibrary/test/wsdl/binding/LibraryServiceBinding.xml
+                                                https://kybox.fr/kylibrary/wsdl/binding/LibraryServiceBinding.xml
                                             </bindingFile>
                                         </bindingFiles>
                                     </wsdlOption>

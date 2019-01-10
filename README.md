@@ -17,7 +17,7 @@ Projet 7 : Développez le nouveau système d’information d’une bibliothèque
 - Spring Security 5.0.5
 - Spring Batch 4.0.1
 - Spring Data 2.0.7
-- Hibernate 5.2.17
+- Hibernate 5.0.6
 - Apache Struts 2.5.16
 - Apache CXF 3.2.4
 - Apache Log4J 2.11.0
@@ -60,7 +60,7 @@ mail.smtp.starttls.enable=true
 mail.smtp.auth=true
 
 # Authentication
-mail.auth.user=email@gmail.com
+mail.auth.user=alertSender@gmail.com
 mail.auth.pass=***
 ```
 

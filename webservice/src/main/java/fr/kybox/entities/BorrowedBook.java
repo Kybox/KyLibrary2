@@ -2,6 +2,7 @@ package fr.kybox.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author Kybox
@@ -31,6 +32,9 @@ public class BorrowedBook {
 
     @Column
     private Boolean returned;
+
+    @Column(name = "borrowing_date")
+    private LocalDateTime borrowingDate;
 
     public BorrowedBook() {}
 
@@ -77,4 +81,12 @@ public class BorrowedBook {
     public Boolean getReturned() { return returned; }
 
     public void setReturned(Boolean returned) { this.returned = returned; }
+
+    public LocalDateTime getBorrowingDate() {
+        return borrowingDate;
+    }
+
+    public void setBorrowingDate(LocalDateTime borrowingDate) {
+        this.borrowingDate = borrowingDate;
+    }
 }

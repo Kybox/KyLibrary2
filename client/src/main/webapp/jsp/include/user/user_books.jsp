@@ -29,25 +29,29 @@
                         <td><s:property value="book.author"/></td>
                         <td class="text-center"><s:property value="book.publisher"/></td>
                         <td class="text-center">
-                            <s:if test="returndate.after(currentDate)">
-                                <s:date name="returndate" format="dd/MM/yyyy"/>
+                            <s:if test="returnDate.after(currentDate)">
+                                <s:date name="returnDate" format="dd/MM/yyyy"/>
                             </s:if>
-                            <s:if test="returndate.before(currentDate)">
+                            <s:if test="returnDate.before(currentDate)">
                                 <p class="text-danger">
-                                    <span class="glyphicon glyphicon-exclamation-sign">
-                                    </span>
-                                    <s:date name="returndate" format="dd/MM/yyyy"/>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    <s:date name="returnDate" format="dd/MM/yyyy"/>
                                 </p>
                             </s:if>
                         </td>
                         <td class="text-center">
-                            <s:if test="extended!=true && returndate.before(currentDate)">
+                            <s:if test="returnDate.before(currentDate)">
+                                <button class="btn btn-primary" disabled>
+                                    Non autorisé
+                                </button>
+                            </s:if>
+                            <s:elseif test="extended!=true">
                                 <button class="btn btn-primary"
                                         id="btnExtend<s:property value="book.isbn"/>"
                                         onclick="extend('<s:property value="book.isbn"/>')">
                                     + 4 semaines
                                 </button>
-                            </s:if>
+                            </s:elseif>
                             <s:else>
                                 <button class="btn btn-default" disabled>
                                     Durée déjà prolongée

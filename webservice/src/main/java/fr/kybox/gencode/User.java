@@ -23,13 +23,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="firstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="lastName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="birthday" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/&gt;
  *         &lt;element name="postalAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="tel" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="level" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="alertSender" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -41,13 +42,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "id",
+    "email",
     "firstName",
     "lastName",
     "birthday",
     "postalAddress",
     "tel",
-    "email",
-    "level"
+    "level",
+    "alertSender"
 })
 @XmlRootElement(name = "user")
 public class User
@@ -56,18 +58,19 @@ public class User
 
     private final static long serialVersionUID = 1L;
     protected Integer id;
+    @XmlElement(required = true)
+    protected String email;
     protected String firstName;
     @XmlElement(required = true)
     protected String lastName;
     @XmlElement(type = String.class)
-    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlJavaTypeAdapter(Adapter2 .class)
     @XmlSchemaType(name = "date")
     protected Date birthday;
     protected String postalAddress;
     protected String tel;
-    @XmlElement(required = true)
-    protected String email;
     protected Integer level;
+    protected Boolean alertSender;
 
     /**
      * Obtient la valeur de la propriété id.
@@ -91,6 +94,30 @@ public class User
      */
     public void setId(Integer value) {
         this.id = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété email.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Définit la valeur de la propriété email.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEmail(String value) {
+        this.email = value;
     }
 
     /**
@@ -214,30 +241,6 @@ public class User
     }
 
     /**
-     * Obtient la valeur de la propriété email.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Définit la valeur de la propriété email.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEmail(String value) {
-        this.email = value;
-    }
-
-    /**
      * Obtient la valeur de la propriété level.
      * 
      * @return
@@ -259,6 +262,30 @@ public class User
      */
     public void setLevel(Integer value) {
         this.level = value;
+    }
+
+    /**
+     * Obtient la valeur de la propriété alertSender.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAlertSender() {
+        return alertSender;
+    }
+
+    /**
+     * Définit la valeur de la propriété alertSender.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAlertSender(Boolean value) {
+        this.alertSender = value;
     }
 
 }
