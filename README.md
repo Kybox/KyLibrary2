@@ -3,6 +3,9 @@ Parcours : OpenclassRooms - DA Java/JEE
 
 Projet 7 : Développez le nouveau système d’information d’une bibliothèque
 
+#### Accès : https://kylibrary.kybox.fr/KyLibrary
+#### Login : lou@lou.fr / lou
+
 ### Architecture
 
 #### Maven
